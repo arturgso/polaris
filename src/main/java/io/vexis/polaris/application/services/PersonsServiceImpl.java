@@ -8,9 +8,11 @@ import io.vexis.polaris.domain.models.dtos.persons.NewPersonDTO;
 import io.vexis.polaris.domain.models.dtos.persons.PersonDTO;
 import io.vexis.polaris.domain.models.dtos.persons.UpdatePersonDTO;
 import io.vexis.polaris.domain.models.entities.person.Person;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,16 +35,28 @@ public class PersonsServiceImpl implements PersonsService {
 
     @Override
     public List<PersonDTO> getAll() {
-        return List.of();
+        List<Person> personsList = repository.findAll();
+        List<PersonDTO> response = new ArrayList<>();
+
+        for (Person person : personsList) {
+            response.add(mapper.toDTO(person));
+        }
+
+        return response;
     }
 
+    @Transactional
     @Override
     public void update(UpdatePersonDTO dto, UUID id) {
+        var person = repository.findById(id).orElseThrow(() -> new RuntimeException("Person not found"));
+        person = mapper.update(dto, person);
 
+        repository.save(person);
     }
 
+    @Transactional
     @Override
     public void delete(UUID id) {
-
+        repository.deleteById(id);
     }
 }
