@@ -1,4 +1,4 @@
-package io.vexis.polaris.models.entities.person;
+package io.vexis.polaris.domain.models.entities.person;
 
 import jakarta.persistence.*;
 import lombok.*;

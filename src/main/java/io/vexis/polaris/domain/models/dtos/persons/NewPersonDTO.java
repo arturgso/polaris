@@ -1,4 +1,4 @@
-package io.vexis.polaris.models.dtos.persons;
+package io.vexis.polaris.domain.models.dtos.persons;
 
 import jakarta.validation.constraints.NotBlank;
 
