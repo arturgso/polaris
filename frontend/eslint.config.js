@@ -25,6 +25,11 @@ export default [
       globals: {
         document: 'readonly',
         getComputedStyle: 'readonly',
+        HTMLElement: 'readonly',
+        HTMLInputElement: 'readonly',
+        KeyboardEvent: 'readonly',
+        localStorage: 'readonly',
+        window: 'readonly',
       },
     },
     plugins: {
