@@ -1,6 +1,6 @@
 package io.vexis.polaris.application.factories;
 
-import io.vexis.polaris.domain.models.entities.person.Person;
+import io.vexis.polaris.domain.models.entities.Person;
 import org.springframework.stereotype.Component;
 
 @Component

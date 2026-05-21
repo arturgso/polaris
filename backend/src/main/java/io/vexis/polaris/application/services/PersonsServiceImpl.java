@@ -7,7 +7,7 @@ import io.vexis.polaris.domain.interfaces.services.PersonsService;
 import io.vexis.polaris.domain.models.dtos.persons.NewPersonDTO;
 import io.vexis.polaris.domain.models.dtos.persons.PersonDTO;
 import io.vexis.polaris.domain.models.dtos.persons.UpdatePersonDTO;
-import io.vexis.polaris.domain.models.entities.person.Person;
+import io.vexis.polaris.domain.models.entities.Person;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

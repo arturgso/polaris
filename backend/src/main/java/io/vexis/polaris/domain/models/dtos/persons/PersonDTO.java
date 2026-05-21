@@ -1,6 +1,6 @@
 package io.vexis.polaris.domain.models.dtos.persons;
 
-import io.vexis.polaris.domain.models.entities.person.Person;
+import io.vexis.polaris.domain.models.entities.Person;
 
 import java.time.Instant;
 import java.util.UUID;

@@ -2,7 +2,7 @@ package io.vexis.polaris.domain.interfaces.mappers;
 
 import io.vexis.polaris.domain.models.dtos.persons.PersonDTO;
 import io.vexis.polaris.domain.models.dtos.persons.UpdatePersonDTO;
-import io.vexis.polaris.domain.models.entities.person.Person;
+import io.vexis.polaris.domain.models.entities.Person;
 import org.mapstruct.*;
 
 @Mapper(
