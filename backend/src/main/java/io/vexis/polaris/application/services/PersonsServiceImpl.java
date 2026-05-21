@@ -45,6 +45,11 @@ public class PersonsServiceImpl implements PersonsService {
         return response;
     }
 
+    @Override
+    public Person getEntity(UUID personId) {
+        return repository.findById(personId).orElseThrow(() -> new RuntimeException("Not Gound"));
+    }
+
     @Transactional
     @Override
     public void update(UpdatePersonDTO dto, UUID id) {

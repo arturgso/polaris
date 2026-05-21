@@ -10,7 +10,7 @@ import java.util.UUID;
 public record NewGiftDTO(
         @NotBlank String title,
         String link,
-        @NotBlank String giftFor,
+        @NotBlank String personId,
         Events event,
         GiftStatus status
 ) {
