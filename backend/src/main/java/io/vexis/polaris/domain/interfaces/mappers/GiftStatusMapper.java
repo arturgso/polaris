@@ -10,11 +10,12 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
-        unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        componentModel = MappingConstants.ComponentModel.SPRING,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    unmappedTargetPolicy = ReportingPolicy.IGNORE,
+    componentModel = MappingConstants.ComponentModel.SPRING,
+    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface GiftStatusMapper {
 
-    GiftStatusDTO toDTO(GiftStatus giftStatus);
-    GiftStatus update(UpdateGiftStatusDTO update, @MappingTarget GiftStatus giftStatus);
+  GiftStatusDTO toDTO(GiftStatus giftStatus);
+
+  GiftStatus update(UpdateGiftStatusDTO update, @MappingTarget GiftStatus giftStatus);
 }

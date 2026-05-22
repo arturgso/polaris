@@ -1,6 +1,3 @@
 package io.vexis.polaris.domain.models.dtos.giftstatus;
 
-public record UpdateGiftStatusDTO(
-        String name
-) {
-}
+public record UpdateGiftStatusDTO(String name) {}

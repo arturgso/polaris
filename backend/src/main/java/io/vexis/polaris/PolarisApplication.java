@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class PolarisApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(PolarisApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(PolarisApplication.class, args);
+  }
 
-    @GetMapping
-    public String hello() {
-        return "Hello";
-    }
-
+  @GetMapping
+  public String hello() {
+    return "Hello";
+  }
 }

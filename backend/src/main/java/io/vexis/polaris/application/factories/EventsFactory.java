@@ -7,13 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventsFactory {
 
-    public Event create(String name) {
-        return Event.builder()
-                .name(normalizeName(name))
-                .build();
-    }
+  public Event create(String name) {
+    return Event.builder().name(normalizeName(name)).build();
+  }
 
-    public String normalizeName(String name) {
-        return TextUitls.normalizeText(name).toUpperCase();
-    }
+  public String normalizeName(String name) {
+    return TextUitls.normalizeText(name).toUpperCase();
+  }
 }

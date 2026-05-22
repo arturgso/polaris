@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.Instant;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,9 +17,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Table(name = "tab_gifts")
@@ -28,27 +27,26 @@ import java.util.UUID;
 @Builder
 public class Gift {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    private String title;
-    private String link;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id")
-    private Person giftFor;
+  private String title;
+  private String link;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private Event event;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "person_id")
+  private Person giftFor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id")
-    private GiftStatus status;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "event_id")
+  private Event event;
 
-    @CreationTimestamp
-    private Instant createdAt;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "status_id")
+  private GiftStatus status;
 
-    @UpdateTimestamp
-    private Instant updatedAt;
+  @CreationTimestamp private Instant createdAt;
+
+  @UpdateTimestamp private Instant updatedAt;
 }

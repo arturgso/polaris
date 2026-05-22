@@ -5,6 +5,7 @@ import io.vexis.polaris.domain.models.dtos.giftstatus.GiftStatusDTO;
 import io.vexis.polaris.domain.models.dtos.giftstatus.NewGiftStatusDTO;
 import io.vexis.polaris.domain.models.dtos.giftstatus.UpdateGiftStatusDTO;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,34 +18,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/gift-status")
 @RequiredArgsConstructor
 public class GiftStatusController {
 
-    private final GiftStatusService service;
+  private final GiftStatusService service;
 
-    @PostMapping
-    public ResponseEntity<GiftStatusDTO> create(@RequestBody @Valid NewGiftStatusDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
-    }
+  @PostMapping
+  public ResponseEntity<GiftStatusDTO> create(@RequestBody @Valid NewGiftStatusDTO dto) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
+  }
 
-    @GetMapping
-    public ResponseEntity<List<GiftStatusDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
-    }
+  @GetMapping
+  public ResponseEntity<List<GiftStatusDTO>> getAll() {
+    return ResponseEntity.ok(service.getAll());
+  }
 
-    @PatchMapping("{id}")
-    public ResponseEntity<Void> update(@RequestBody UpdateGiftStatusDTO dto, @PathVariable Long id) {
-        service.update(dto, id);
-        return ResponseEntity.ok().body(null);
-    }
+  @PatchMapping("{id}")
+  public ResponseEntity<Void> update(@RequestBody UpdateGiftStatusDTO dto, @PathVariable Long id) {
+    service.update(dto, id);
+    return ResponseEntity.ok().body(null);
+  }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.ok().body(null);
-    }
+  @DeleteMapping("{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    service.delete(id);
+    return ResponseEntity.ok().body(null);
+  }
 }

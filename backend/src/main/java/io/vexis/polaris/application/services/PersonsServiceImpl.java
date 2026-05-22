@@ -9,59 +9,58 @@ import io.vexis.polaris.domain.models.dtos.persons.PersonDTO;
 import io.vexis.polaris.domain.models.dtos.persons.UpdatePersonDTO;
 import io.vexis.polaris.domain.models.entities.Person;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class PersonsServiceImpl implements PersonsService {
 
-    private final PersonsRepository repository;
-    private final PersonsFactory factory;
-    private final PersonsMapper mapper;
+  private final PersonsRepository repository;
+  private final PersonsFactory factory;
+  private final PersonsMapper mapper;
 
-    @Override
-    public PersonDTO create(NewPersonDTO dto) {
-        Person person = repository.save(
-                factory.create(dto.name(), dto.birthdayDay(), dto.birthdayMonth())
-        );
+  @Override
+  public PersonDTO create(NewPersonDTO dto) {
+    Person person =
+        repository.save(factory.create(dto.name(), dto.birthdayDay(), dto.birthdayMonth()));
 
-        return mapper.toDTO(person);
+    return mapper.toDTO(person);
+  }
+
+  @Override
+  public List<PersonDTO> getAll() {
+    List<Person> personsList = repository.findAll();
+    List<PersonDTO> response = new ArrayList<>();
+
+    for (Person person : personsList) {
+      response.add(mapper.toDTO(person));
     }
 
-    @Override
-    public List<PersonDTO> getAll() {
-        List<Person> personsList = repository.findAll();
-        List<PersonDTO> response = new ArrayList<>();
+    return response;
+  }
 
-        for (Person person : personsList) {
-            response.add(mapper.toDTO(person));
-        }
+  @Override
+  public Person getEntity(UUID personId) {
+    return repository.findById(personId).orElseThrow(() -> new RuntimeException("Not Gound"));
+  }
 
-        return response;
-    }
+  @Transactional
+  @Override
+  public void update(UpdatePersonDTO dto, UUID id) {
+    var person =
+        repository.findById(id).orElseThrow(() -> new RuntimeException("Person not found"));
+    person = mapper.update(dto, person);
 
-    @Override
-    public Person getEntity(UUID personId) {
-        return repository.findById(personId).orElseThrow(() -> new RuntimeException("Not Gound"));
-    }
+    repository.save(person);
+  }
 
-    @Transactional
-    @Override
-    public void update(UpdatePersonDTO dto, UUID id) {
-        var person = repository.findById(id).orElseThrow(() -> new RuntimeException("Person not found"));
-        person = mapper.update(dto, person);
-
-        repository.save(person);
-    }
-
-    @Transactional
-    @Override
-    public void delete(UUID id) {
-        repository.deleteById(id);
-    }
+  @Transactional
+  @Override
+  public void delete(UUID id) {
+    repository.deleteById(id);
+  }
 }

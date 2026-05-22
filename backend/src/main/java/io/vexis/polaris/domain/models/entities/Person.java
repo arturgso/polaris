@@ -1,12 +1,11 @@
 package io.vexis.polaris.domain.models.entities;
 
 import jakarta.persistence.*;
+import java.time.Instant;
+import java.util.UUID;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Table(name = "tab_persons")
@@ -17,16 +16,15 @@ import java.util.UUID;
 @Builder
 public class Person {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    private String name;
-    private Short birthdayMonth;
-    private Short birthdayDay;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
-    @CreationTimestamp
-    private Instant createdAt;
+  private String name;
+  private Short birthdayMonth;
+  private Short birthdayDay;
 
-    @UpdateTimestamp
-    private Instant updatedAt;
+  @CreationTimestamp private Instant createdAt;
+
+  @UpdateTimestamp private Instant updatedAt;
 }
