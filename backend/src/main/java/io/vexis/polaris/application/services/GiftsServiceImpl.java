@@ -7,9 +7,13 @@ import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.interfaces.services.PersonsService;
 import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.NewGiftDTO;
+import io.vexis.polaris.domain.models.dtos.gifts.UpdateGiftDTO;
+import io.vexis.polaris.domain.models.entities.Gift;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,16 +44,28 @@ public class GiftsServiceImpl implements GiftsService {
 
     @Override
     public List<GiftDTO> getAllFromPerson(UUID personId) {
-        return List.of();
+        var giftList = repository.findAllByGiftForId(personId);
+        List<GiftDTO> response = new ArrayList<>();
+
+        for (Gift gift : giftList) {
+            response.add(mapper.toDTO(gift));
+        }
+
+        return response;
     }
 
+    @Transactional
     @Override
-    public void updateGift(UUID giftId) {
+    public void updateGift(UpdateGiftDTO dto, UUID giftId) {
+        var gift = repository.findById(giftId).orElseThrow(() -> new RuntimeException("Not found"));
+        gift = mapper.update(dto, gift);
 
+        repository.save(gift);
     }
 
+    @Transactional
     @Override
     public void deleteGift(UUID giftId) {
-
+        repository.deleteById(giftId);
     }
 }
