@@ -13,8 +13,12 @@ import io.vexis.polaris.domain.models.entities.Gift;
 public interface GiftsMapper {
 
     @Mapping(target = "giftFor", source = "giftFor.name")
+    @Mapping(target = "event", source = "event.name")
+    @Mapping(target = "status", source = "status.name")
     GiftDTO toDTO(Gift gift);
 
     @Mapping(target = "giftFor", ignore = true)
+    @Mapping(target = "event", ignore = true)
+    @Mapping(target = "status", ignore = true)
     Gift update(UpdateGiftDTO update, @MappingTarget Gift gift);
 }

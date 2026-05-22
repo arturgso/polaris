@@ -3,7 +3,9 @@ package io.vexis.polaris.application.services;
 import io.vexis.polaris.application.factories.GiftsFactory;
 import io.vexis.polaris.domain.interfaces.mappers.GiftsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
+import io.vexis.polaris.domain.interfaces.services.EventsService;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
+import io.vexis.polaris.domain.interfaces.services.GiftStatusService;
 import io.vexis.polaris.domain.interfaces.services.PersonsService;
 import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.NewGiftDTO;
@@ -21,7 +23,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GiftsServiceImpl implements GiftsService {
 
+    private static final String DEFAULT_EVENT = "NONE";
+    private static final String DEFAULT_STATUS = "IDEA";
+
     private final PersonsService personsService;
+    private final EventsService eventsService;
+    private final GiftStatusService giftStatusService;
 
     private final GiftsRepository repository;
     private final GiftsFactory factory;
@@ -30,12 +37,19 @@ public class GiftsServiceImpl implements GiftsService {
     @Override
     public GiftDTO create(NewGiftDTO dto) {
         var person = personsService.getEntity(UUID.fromString(dto.personId()));
+        var event = dto.event() == null
+                ? eventsService.getEntityByName(DEFAULT_EVENT)
+                : eventsService.getEntityByName(dto.event());
+        var status = dto.status() == null
+                ? giftStatusService.getEntityByName(DEFAULT_STATUS)
+                : giftStatusService.getEntityByName(dto.status());
+
         var gift = factory.create(
             dto.title(), 
             dto.link(), 
             person, 
-            dto.event(), 
-            dto.status()
+            event,
+            status
         );
 
         gift = repository.save(gift);
@@ -59,6 +73,14 @@ public class GiftsServiceImpl implements GiftsService {
     public void updateGift(UpdateGiftDTO dto, UUID giftId) {
         var gift = repository.findById(giftId).orElseThrow(() -> new RuntimeException("Not found"));
         gift = mapper.update(dto, gift);
+
+        if (dto.event() != null) {
+            gift.setEvent(eventsService.getEntityByName(dto.event()));
+        }
+
+        if (dto.status() != null) {
+            gift.setStatus(giftStatusService.getEntityByName(dto.status()));
+        }
 
         repository.save(gift);
     }

@@ -3,8 +3,8 @@ create table tab_persons (
     name            varchar(100) not null,
     birthday_month  smallint not null check(birthday_month between 1 and 12),
     birthday_day    smallint not null check(birthday_day between 1 and 31),
-    created_at      timestamptz not null default current_timestamp,
-    updated_at      timestamptz not null default current_timestamp,
+    created_at      timestamp with time zone not null default current_timestamp,
+    updated_at      timestamp with time zone not null default current_timestamp,
 
     constraint date_validate check (
         (birthday_month, birthday_day) not in (

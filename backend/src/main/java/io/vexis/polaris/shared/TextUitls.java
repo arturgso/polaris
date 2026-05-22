@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 public class TextUitls {
 
     public static String normalizeText(String text) {
+        if (text == null) {
+            return null;
+        }
         return text.toLowerCase();
     }
 }
