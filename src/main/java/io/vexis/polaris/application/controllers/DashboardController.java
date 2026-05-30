@@ -1,7 +1,10 @@
 package io.vexis.polaris.application.controllers;
 
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemService;
+import io.vexis.polaris.domain.models.dtos.dashboard.DashboardMetricsDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
+
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,4 +23,15 @@ public class DashboardController {
   public ResponseEntity<List<ShoppingItemDTO>> listRecently() {
     return ResponseEntity.ok(shoppingItemService.listRecently());
   }
+
+  @GetMapping("/metrics")
+  public ResponseEntity<DashboardMetricsDTO> getMetrics() {
+
+    return ResponseEntity.ok(new DashboardMetricsDTO(
+            shoppingItemService.countAll(),
+            shoppingItemService.getTotalPrice()
+    ));
+  }
+
+
 }

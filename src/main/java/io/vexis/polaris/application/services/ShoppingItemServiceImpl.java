@@ -10,6 +10,8 @@ import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingIte
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.UpdateShoppingItemDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.specs.ShoppingItemsSpec;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,16 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   public List<ShoppingItemDTO> listRecently() {
     List<ShoppingItem> itemList = repository.findRecentlyInserts();
     return createResponseList(itemList);
+  }
+
+  @Override
+  public Long countAll() {
+    return repository.count();
+  }
+
+  @Override
+  public BigDecimal getTotalPrice() {
+    return repository.getTotalPrice();
   }
 
   @Override
