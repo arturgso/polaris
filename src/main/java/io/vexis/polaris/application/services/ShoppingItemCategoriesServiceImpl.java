@@ -42,9 +42,7 @@ public class ShoppingItemCategoriesServiceImpl implements ShoppingItemCategories
 
   @Override
   public ShoppingItemCategory getEntity(Long id) {
-    return repository
-        .findById(id)
-        .orElseThrow(ShoppingItemCategoryNotFoundException::new);
+    return repository.findById(id).orElseThrow(ShoppingItemCategoryNotFoundException::new);
   }
 
   @Transactional

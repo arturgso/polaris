@@ -11,5 +11,4 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class ShoppingItemCategory extends ShoppingItemAttribute {
-}
+public class ShoppingItemCategory extends ShoppingItemAttribute {}

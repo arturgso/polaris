@@ -56,8 +56,7 @@ public class GiftStatusServiceImpl implements GiftStatusService {
   @Transactional
   @Override
   public void update(UpdateGiftStatusDTO dto, Long id) {
-    var giftStatus =
-        repository.findById(id).orElseThrow(GiftStatusNotFoundException::new);
+    var giftStatus = repository.findById(id).orElseThrow(GiftStatusNotFoundException::new);
     giftStatus = mapper.update(dto, giftStatus);
 
     if (dto.name() != null) {

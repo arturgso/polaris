@@ -9,11 +9,11 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
-        unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        componentModel = MappingConstants.ComponentModel.SPRING,
-uses = ShoppingItemStatusMapper.class)
+    unmappedTargetPolicy = ReportingPolicy.IGNORE,
+    componentModel = MappingConstants.ComponentModel.SPRING,
+    uses = ShoppingItemStatusMapper.class)
 public interface ShoppingItemMapper {
-    ShoppingItemDTO toDTO(ShoppingItem item);
+  ShoppingItemDTO toDTO(ShoppingItem item);
 
-    ShoppingItem partialUpdate(UpdateShoppingItemDTO dto, @MappingTarget ShoppingItem item);
+  ShoppingItem partialUpdate(UpdateShoppingItemDTO dto, @MappingTarget ShoppingItem item);
 }

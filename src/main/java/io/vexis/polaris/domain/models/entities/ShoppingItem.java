@@ -1,13 +1,11 @@
 package io.vexis.polaris.domain.models.entities;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.time.Instant;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Table(name = "tab_shopping_items")
@@ -18,24 +16,24 @@ import java.util.UUID;
 @Builder
 public class ShoppingItem {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String title;
-    private String link;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private ShoppingItemCategory category;
-    private BigDecimal price;
+  private String title;
+  private String link;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id")
-    private ShoppingItemStatus status;
+  @ManyToOne
+  @JoinColumn(name = "category_id")
+  private ShoppingItemCategory category;
 
-    @CreationTimestamp
-    private Instant createdAt;
+  private BigDecimal price;
 
-    @UpdateTimestamp
-    private Instant updatedAt;
+  @ManyToOne
+  @JoinColumn(name = "status_id")
+  private ShoppingItemStatus status;
+
+  @CreationTimestamp private Instant createdAt;
+
+  @UpdateTimestamp private Instant updatedAt;
 }
