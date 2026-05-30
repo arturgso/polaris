@@ -10,7 +10,6 @@ import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingIte
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.UpdateShoppingItemDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.specs.ShoppingItemsSpec;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

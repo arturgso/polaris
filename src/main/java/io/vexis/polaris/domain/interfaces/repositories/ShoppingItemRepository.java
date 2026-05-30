@@ -1,7 +1,6 @@
 package io.vexis.polaris.domain.interfaces.repositories;
 
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
-
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,14 +11,18 @@ public interface ShoppingItemRepository
     extends JpaRepository<ShoppingItem, Long>, JpaSpecificationExecutor<ShoppingItem> {
   List<ShoppingItem> findAll();
 
-  @Query(value = """
+  @Query(
+      value =
+          """
     select * from tab_shopping_items
-    order by id 
+    order by id
     desc limit 5
-    """ , nativeQuery = true)
+    """,
+      nativeQuery = true)
   List<ShoppingItem> findRecentlyInserts();
 
-  @Query("""
+  @Query(
+      """
     select coalesce(sum(itm.price), 0)
         from ShoppingItem  itm
     """)
