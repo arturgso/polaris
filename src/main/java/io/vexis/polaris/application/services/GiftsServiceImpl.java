@@ -1,6 +1,7 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.GiftsFactory;
+import io.vexis.polaris.domain.exceptions.GiftNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.GiftsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.services.EventsService;
@@ -66,7 +67,7 @@ public class GiftsServiceImpl implements GiftsService {
   @Transactional
   @Override
   public void updateGift(UpdateGiftDTO dto, UUID giftId) {
-    var gift = repository.findById(giftId).orElseThrow(() -> new RuntimeException("Not found"));
+    var gift = repository.findById(giftId).orElseThrow(GiftNotFoundException::new);
     gift = mapper.update(dto, gift);
 
     if (dto.event() != null) {

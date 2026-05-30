@@ -1,6 +1,7 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.EventsFactory;
+import io.vexis.polaris.domain.exceptions.EventNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.EventsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
 import io.vexis.polaris.domain.interfaces.services.EventsService;
@@ -42,20 +43,20 @@ public class EventsServiceImpl implements EventsService {
 
   @Override
   public Event getEntity(Long id) {
-    return repository.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
+    return repository.findById(id).orElseThrow(EventNotFoundException::new);
   }
 
   @Override
   public Event getEntityByName(String name) {
     return repository
         .findByName(factory.normalizeName(name))
-        .orElseThrow(() -> new RuntimeException("Event not found"));
+        .orElseThrow(EventNotFoundException::new);
   }
 
   @Transactional
   @Override
   public void update(UpdateEventDTO dto, Long id) {
-    var event = repository.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
+    var event = repository.findById(id).orElseThrow(EventNotFoundException::new);
     event = mapper.update(dto, event);
 
     if (dto.name() != null) {

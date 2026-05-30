@@ -1,6 +1,7 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.GiftStatusFactory;
+import io.vexis.polaris.domain.exceptions.GiftStatusNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.GiftStatusMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftStatusRepository;
 import io.vexis.polaris.domain.interfaces.services.GiftStatusService;
@@ -42,21 +43,21 @@ public class GiftStatusServiceImpl implements GiftStatusService {
 
   @Override
   public GiftStatus getEntity(Long id) {
-    return repository.findById(id).orElseThrow(() -> new RuntimeException("Gift status not found"));
+    return repository.findById(id).orElseThrow(GiftStatusNotFoundException::new);
   }
 
   @Override
   public GiftStatus getEntityByName(String name) {
     return repository
         .findByName(factory.normalizeName(name))
-        .orElseThrow(() -> new RuntimeException("Gift status not found"));
+        .orElseThrow(GiftStatusNotFoundException::new);
   }
 
   @Transactional
   @Override
   public void update(UpdateGiftStatusDTO dto, Long id) {
     var giftStatus =
-        repository.findById(id).orElseThrow(() -> new RuntimeException("Gift status not found"));
+        repository.findById(id).orElseThrow(GiftStatusNotFoundException::new);
     giftStatus = mapper.update(dto, giftStatus);
 
     if (dto.name() != null) {

@@ -1,6 +1,7 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.PersonsFactory;
+import io.vexis.polaris.domain.exceptions.PersonNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.PersonsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.PersonsRepository;
 import io.vexis.polaris.domain.interfaces.services.PersonsService;
@@ -45,14 +46,13 @@ public class PersonsServiceImpl implements PersonsService {
 
   @Override
   public Person getEntity(UUID personId) {
-    return repository.findById(personId).orElseThrow(() -> new RuntimeException("Not Gound"));
+    return repository.findById(personId).orElseThrow(PersonNotFoundException::new);
   }
 
   @Transactional
   @Override
   public void update(UpdatePersonDTO dto, UUID id) {
-    var person =
-        repository.findById(id).orElseThrow(() -> new RuntimeException("Person not found"));
+    var person = repository.findById(id).orElseThrow(PersonNotFoundException::new);
     person = mapper.update(dto, person);
 
     repository.save(person);

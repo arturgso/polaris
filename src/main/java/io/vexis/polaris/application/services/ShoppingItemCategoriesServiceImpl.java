@@ -1,6 +1,7 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.ShoppingItemCategoryFactory;
+import io.vexis.polaris.domain.exceptions.ShoppingItemCategoryNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.ShoppingItemCategoryMapper;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemCategoriesRepository;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemCategoriesService;
@@ -43,7 +44,7 @@ public class ShoppingItemCategoriesServiceImpl implements ShoppingItemCategories
   public ShoppingItemCategory getEntity(Long id) {
     return repository
         .findById(id)
-        .orElseThrow(() -> new RuntimeException("Shopping item category not found"));
+        .orElseThrow(ShoppingItemCategoryNotFoundException::new);
   }
 
   @Transactional
