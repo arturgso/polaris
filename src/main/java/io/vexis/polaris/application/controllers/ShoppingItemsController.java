@@ -33,11 +33,6 @@ public class ShoppingItemsController {
     return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
   }
 
-  @GetMapping("/dashboard")
-  public ResponseEntity<List<ShoppingItemDTO>> listRecently() {
-    return ResponseEntity.ok(service.listRecently());
-  }
-
   @GetMapping
   public ResponseEntity<List<ShoppingItemDTO>> list(
       @RequestParam(required = false) Long statusId,
