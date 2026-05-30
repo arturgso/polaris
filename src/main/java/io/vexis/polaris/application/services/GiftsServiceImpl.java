@@ -17,10 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GiftsServiceImpl implements GiftsService {
 
   private static final String DEFAULT_EVENT = "NONE";
@@ -36,6 +38,7 @@ public class GiftsServiceImpl implements GiftsService {
 
   @Override
   public GiftDTO create(NewGiftDTO dto) {
+    log.info("Creating gift for personId={}", dto.personId());
     var person = personsService.getEntity(UUID.fromString(dto.personId()));
     var event =
         dto.event() == null
@@ -49,11 +52,13 @@ public class GiftsServiceImpl implements GiftsService {
     var gift = factory.create(dto.title(), dto.link(), person, event, status);
 
     gift = repository.save(gift);
+    log.info("Gift created with id={} for personId={}", gift.getId(), person.getId());
     return mapper.toDTO(gift);
   }
 
   @Override
   public List<GiftDTO> getAllFromPerson(UUID personId) {
+    log.debug("Listing gifts for personId={}", personId);
     var giftList = repository.findAllByGiftForId(personId);
     List<GiftDTO> response = new ArrayList<>();
 
@@ -61,12 +66,14 @@ public class GiftsServiceImpl implements GiftsService {
       response.add(mapper.toDTO(gift));
     }
 
+    log.debug("Found {} gifts for personId={}", response.size(), personId);
     return response;
   }
 
   @Transactional
   @Override
   public void updateGift(UpdateGiftDTO dto, UUID giftId) {
+    log.info("Updating gift id={}", giftId);
     var gift = repository.findById(giftId).orElseThrow(GiftNotFoundException::new);
     gift = mapper.update(dto, gift);
 
@@ -79,11 +86,14 @@ public class GiftsServiceImpl implements GiftsService {
     }
 
     repository.save(gift);
+    log.info("Gift updated id={}", giftId);
   }
 
   @Transactional
   @Override
   public void deleteGift(UUID giftId) {
+    log.info("Deleting gift id={}", giftId);
     repository.deleteById(giftId);
+    log.info("Gift deleted id={}", giftId);
   }
 }

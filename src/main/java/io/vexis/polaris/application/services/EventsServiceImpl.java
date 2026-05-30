@@ -13,10 +13,12 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EventsServiceImpl implements EventsService {
 
   private final EventsRepository repository;
@@ -25,12 +27,15 @@ public class EventsServiceImpl implements EventsService {
 
   @Override
   public EventDTO create(NewEventDTO dto) {
+    log.info("Creating event");
     var event = repository.save(factory.create(dto.name()));
+    log.info("Event created with id={}", event.getId());
     return mapper.toDTO(event);
   }
 
   @Override
   public List<EventDTO> getAll() {
+    log.debug("Listing events");
     List<Event> eventList = repository.findAll();
     List<EventDTO> response = new ArrayList<>();
 
@@ -38,16 +43,19 @@ public class EventsServiceImpl implements EventsService {
       response.add(mapper.toDTO(event));
     }
 
+    log.debug("Found {} events", response.size());
     return response;
   }
 
   @Override
   public Event getEntity(Long id) {
+    log.debug("Loading event id={}", id);
     return repository.findById(id).orElseThrow(EventNotFoundException::new);
   }
 
   @Override
   public Event getEntityByName(String name) {
+    log.debug("Loading event by name");
     return repository
         .findByName(factory.normalizeName(name))
         .orElseThrow(EventNotFoundException::new);
@@ -56,6 +64,7 @@ public class EventsServiceImpl implements EventsService {
   @Transactional
   @Override
   public void update(UpdateEventDTO dto, Long id) {
+    log.info("Updating event id={}", id);
     var event = repository.findById(id).orElseThrow(EventNotFoundException::new);
     event = mapper.update(dto, event);
 
@@ -64,11 +73,14 @@ public class EventsServiceImpl implements EventsService {
     }
 
     repository.save(event);
+    log.info("Event updated id={}", id);
   }
 
   @Transactional
   @Override
   public void delete(Long id) {
+    log.info("Deleting event id={}", id);
     repository.deleteById(id);
+    log.info("Event deleted id={}", id);
   }
 }
