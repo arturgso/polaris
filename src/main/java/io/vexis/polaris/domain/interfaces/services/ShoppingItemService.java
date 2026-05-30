@@ -10,6 +10,7 @@ public interface ShoppingItemService {
   ShoppingItemDTO create(NewShoppingItemDTO dto);
 
   List<ShoppingItemDTO> list(ShoppingItemFiltersDTO filtersDTO);
+  List<ShoppingItemDTO> listRecently();
 
   void update(UpdateShoppingItemDTO dto, Long itemId);
 

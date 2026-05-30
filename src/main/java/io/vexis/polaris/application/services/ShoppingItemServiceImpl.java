@@ -35,13 +35,13 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   @Override
   public List<ShoppingItemDTO> list(ShoppingItemFiltersDTO filtersDTO) {
     List<ShoppingItem> itemList = repository.findAll(ShoppingItemsSpec.byFilters(filtersDTO));
-    List<ShoppingItemDTO> responseList = new ArrayList<>();
+    return createResponseList(itemList);
+  }
 
-    for (ShoppingItem item : itemList) {
-      responseList.add(mapper.toDTO(item));
-    }
-
-    return responseList;
+  @Override
+  public List<ShoppingItemDTO> listRecently() {
+    List<ShoppingItem> itemList = repository.findRecentlyInserts();
+    return createResponseList(itemList);
   }
 
   @Override
@@ -49,4 +49,15 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
 
   @Override
   public void delete(Long itemId) {}
+
+  private List<ShoppingItemDTO> createResponseList(List<ShoppingItem> shoppingItems) {
+
+    List<ShoppingItemDTO> responseList = new ArrayList<>();
+
+    for (ShoppingItem item : shoppingItems) {
+      responseList.add(mapper.toDTO(item));
+    }
+
+    return responseList;
+  }
 }
