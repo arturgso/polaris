@@ -1,6 +1,5 @@
 package io.vexis.polaris.application.controllers;
 
-import io.vexis.polaris.domain.exceptions.OperationNotImplementedException;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemService;
 import io.vexis.polaris.domain.models.dtos.filters.ShoppingItemFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.NewShoppingItemDTO;
@@ -44,11 +43,13 @@ public class ShoppingItemsController {
   @PatchMapping("{itemId}")
   public ResponseEntity<Void> update(
       @RequestBody UpdateShoppingItemDTO dto, @PathVariable Long itemId) {
-    throw new OperationNotImplementedException("Shopping item update not implemented");
+    service.update(dto, itemId);
+    return ResponseEntity.ok(null);
   }
 
   @DeleteMapping("{itemId}")
   public ResponseEntity<Void> delete(@PathVariable Long itemId) {
-    throw new OperationNotImplementedException("Shopping item delete not implemented");
+    service.delete(itemId);
+    return ResponseEntity.ok(null);
   }
 }

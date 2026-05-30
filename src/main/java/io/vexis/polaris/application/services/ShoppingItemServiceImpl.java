@@ -1,15 +1,20 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.ShoppingItemFactory;
+import io.vexis.polaris.domain.exceptions.ShoppingItemNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.ShoppingItemMapper;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
+import io.vexis.polaris.domain.interfaces.services.ShoppingItemCategoriesService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemService;
+import io.vexis.polaris.domain.interfaces.services.ShoppingItemStatusesService;
 import io.vexis.polaris.domain.models.dtos.filters.ShoppingItemFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.NewShoppingItemDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.UpdateShoppingItemDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.specs.ShoppingItemsSpec;
+import io.vexis.polaris.shared.TextUitls;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   private final ShoppingItemRepository repository;
   private final ShoppingItemMapper mapper;
   private final ShoppingItemFactory factory;
+  private final ShoppingItemStatusesService statusesService;
+  private final ShoppingItemCategoriesService categoriesService;
 
   @Override
   public ShoppingItemDTO create(NewShoppingItemDTO dto) {
@@ -55,11 +62,33 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
     return repository.getTotalPrice();
   }
 
+  @Transactional
   @Override
-  public void update(UpdateShoppingItemDTO dto, Long itemId) {}
+  public void update(UpdateShoppingItemDTO dto, Long itemId) {
+    var item = repository.findById(itemId).orElseThrow(ShoppingItemNotFoundException::new);
+    item = mapper.partialUpdate(dto, item);
 
+    if (dto.title() != null) {
+      item.setTitle(TextUitls.normalizeText(dto.title()));
+    }
+
+    if (dto.categoryId() != null) {
+      item.setCategory(categoriesService.getEntity(dto.categoryId()));
+    }
+
+    if (dto.statusId() != null) {
+      item.setStatus(statusesService.getEntity(dto.statusId()));
+    }
+
+    repository.save(item);
+  }
+
+  @Transactional
   @Override
-  public void delete(Long itemId) {}
+  public void delete(Long itemId) {
+    var item = repository.findById(itemId).orElseThrow(ShoppingItemNotFoundException::new);
+    repository.delete(item);
+  }
 
   private List<ShoppingItemDTO> createResponseList(List<ShoppingItem> shoppingItems) {
 
