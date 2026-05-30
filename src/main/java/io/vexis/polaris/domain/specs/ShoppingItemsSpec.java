@@ -4,18 +4,13 @@ import io.vexis.polaris.domain.models.dtos.filters.ShoppingItemFiltersDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Objects;
-
 public class ShoppingItemsSpec {
 
     private static Specification<ShoppingItem> byStatusId(Long statusId) {
-        return ((root, query, criteriaBuilder) -> {
-          if (Objects.nonNull(statusId)) {
-              return criteriaBuilder.equal(root.get("status").get("id"), statusId);
-          }
-
-          return null;
-        });
+        return ((root, query, cb) ->
+                statusId == null
+                        ? null
+                        : cb.equal(root.get("status").get("id"), statusId));
     }
 
     private static Specification<ShoppingItem> byCategoryId(Long categoryId) {
@@ -25,7 +20,19 @@ public class ShoppingItemsSpec {
                         : cb.equal(root.get("category").get("id"), categoryId));
     }
 
+    private static Specification<ShoppingItem> byTitle(String title) {
+        return (root, query, cb) ->
+                title == null || title.isBlank()
+                ? null
+                : cb.like(cb.lower(root.get("title")),
+                       "%" + title.toLowerCase() + "%"
+        );
+    }
+
     public static Specification<ShoppingItem> byFilters(ShoppingItemFiltersDTO filters) {
-        return Specification.where(byStatusId(filters.statusId())).and(byCategoryId(filters.categoryId()));
+        return Specification.where(
+                byTitle(filters.title())
+                        .and(byStatusId(filters.statusId())))
+                .and(byCategoryId(filters.categoryId()));
     }
 }
