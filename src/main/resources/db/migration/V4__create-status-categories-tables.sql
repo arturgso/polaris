@@ -2,7 +2,7 @@ create table tab_shopping_item_categories (
     id bigint generated always as identity primary key,
     name varchar(20) not null unique,
     color varchar(9) not null,
-    created_at timestamptz not null default current_timestamp
+    created_at timestamp with time zone not null default current_timestamp
 );
 
 insert into tab_shopping_item_categories (name, color)
@@ -12,9 +12,11 @@ values
     ('MAKEUP', '#EC4899'),
     ('OTHER', '#6B7280');
 
-create table tab_shopping_item_statuses
-(
-    like tab_shopping_item_categories including all
+create table tab_shopping_item_statuses (
+    id bigint generated always as identity primary key,
+    name varchar(20) not null unique,
+    color varchar(9) not null,
+    created_at timestamp with time zone not null default current_timestamp
 );
 
 insert into tab_shopping_item_statuses (name, color)
@@ -32,8 +34,8 @@ create table tab_shopping_items (
     category_id bigint not null,
     price decimal(10,2) not null,
     status_id bigint not null,
-    created_at timestamptz not null default current_timestamp,
-    updated_at timestamptz not null default current_timestamp,
+    created_at timestamp with time zone not null default current_timestamp,
+    updated_at timestamp with time zone not null default current_timestamp,
 
     constraint fk_shopping_item_category
         foreign key (category_id)
