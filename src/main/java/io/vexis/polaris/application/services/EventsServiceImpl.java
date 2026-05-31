@@ -28,7 +28,7 @@ public class EventsServiceImpl implements EventsService {
   @Override
   public EventDTO create(NewEventDTO dto) {
     log.info("Creating event");
-    var event = repository.save(factory.create(dto.name()));
+    var event = repository.save(factory.create(dto.name(), dto.color()));
     log.info("Event created with id={}", event.getId());
     return mapper.toDTO(event);
   }
@@ -70,6 +70,10 @@ public class EventsServiceImpl implements EventsService {
 
     if (dto.name() != null) {
       event.setName(factory.normalizeName(dto.name()));
+    }
+
+    if (dto.color() != null) {
+      event.setColor(factory.normalizeColor(dto.color()));
     }
 
     repository.save(event);

@@ -15,7 +15,6 @@ import io.vexis.polaris.domain.models.entities.Gift;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,7 @@ public class GiftsServiceImpl implements GiftsService {
   @Override
   public GiftDTO create(NewGiftDTO dto) {
     log.info("Creating gift for personId={}", dto.personId());
-    var person = personsService.getEntity(UUID.fromString(dto.personId()));
+    var person = personsService.getEntity(dto.personId());
     var event =
         dto.event() == null
             ? eventsService.getEntityByName(DEFAULT_EVENT)
@@ -57,8 +56,9 @@ public class GiftsServiceImpl implements GiftsService {
   }
 
   @Override
-  public List<GiftDTO> getAllFromPerson(UUID personId) {
+  public List<GiftDTO> getAllFromPerson(Long personId) {
     log.debug("Listing gifts for personId={}", personId);
+    personsService.getEntity(personId);
     var giftList = repository.findAllByGiftForId(personId);
     List<GiftDTO> response = new ArrayList<>();
 
@@ -72,10 +72,14 @@ public class GiftsServiceImpl implements GiftsService {
 
   @Transactional
   @Override
-  public void updateGift(UpdateGiftDTO dto, UUID giftId) {
+  public void updateGift(UpdateGiftDTO dto, Long giftId) {
     log.info("Updating gift id={}", giftId);
     var gift = repository.findById(giftId).orElseThrow(GiftNotFoundException::new);
     gift = mapper.update(dto, gift);
+
+    if (dto.giftFor() != null) {
+      gift.setGiftFor(personsService.getEntity(dto.giftFor()));
+    }
 
     if (dto.event() != null) {
       gift.setEvent(eventsService.getEntityByName(dto.event()));
@@ -91,8 +95,11 @@ public class GiftsServiceImpl implements GiftsService {
 
   @Transactional
   @Override
-  public void deleteGift(UUID giftId) {
+  public void deleteGift(Long giftId) {
     log.info("Deleting gift id={}", giftId);
+    if (!repository.existsById(giftId)) {
+      throw new GiftNotFoundException();
+    }
     repository.deleteById(giftId);
     log.info("Gift deleted id={}", giftId);
   }

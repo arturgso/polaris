@@ -5,16 +5,17 @@ import io.vexis.polaris.domain.models.dtos.persons.PersonDTO;
 import io.vexis.polaris.domain.models.dtos.persons.UpdatePersonDTO;
 import io.vexis.polaris.domain.models.entities.Person;
 import java.util.List;
-import java.util.UUID;
 
 public interface PersonsService {
   PersonDTO create(NewPersonDTO dto);
 
   List<PersonDTO> getAll();
 
-  Person getEntity(UUID personId);
+  PersonDTO getById(Long id);
 
-  void update(UpdatePersonDTO dto, UUID id);
+  Person getEntity(Long personId);
 
-  void delete(UUID id);
+  void update(UpdatePersonDTO dto, Long id);
+
+  void delete(Long id);
 }

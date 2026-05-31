@@ -1,10 +1,9 @@
 package io.vexis.polaris.domain.models.dtos.gifts;
 
 import java.time.Instant;
-import java.util.UUID;
 
 public record GiftDTO(
-    UUID id,
+    Long id,
     String title,
     String link,
     String giftFor,

@@ -6,7 +6,6 @@ import io.vexis.polaris.domain.models.dtos.gifts.NewGiftDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.UpdateGiftDTO;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,19 +30,19 @@ public class GiftsController {
   }
 
   @GetMapping("{personId}")
-  public ResponseEntity<List<GiftDTO>> getAll(@PathVariable String personId) {
-    return ResponseEntity.ok(service.getAllFromPerson(UUID.fromString(personId)));
+  public ResponseEntity<List<GiftDTO>> getAll(@PathVariable Long personId) {
+    return ResponseEntity.ok(service.getAllFromPerson(personId));
   }
 
   @PatchMapping("{giftId}")
-  public ResponseEntity<Void> update(@RequestBody UpdateGiftDTO dto, @PathVariable String giftId) {
-    service.updateGift(dto, UUID.fromString(giftId));
+  public ResponseEntity<Void> update(@RequestBody UpdateGiftDTO dto, @PathVariable Long giftId) {
+    service.updateGift(dto, giftId);
     return ResponseEntity.ok(null);
   }
 
   @DeleteMapping("{giftId}")
-  public ResponseEntity<Void> delete(@PathVariable String giftId) {
-    service.deleteGift(UUID.fromString(giftId));
+  public ResponseEntity<Void> delete(@PathVariable Long giftId) {
+    service.deleteGift(giftId);
     return ResponseEntity.ok(null);
   }
 }

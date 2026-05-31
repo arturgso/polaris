@@ -32,10 +32,11 @@ class CatalogControllersIntegrationTests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                         """
-                                {"name":"graduation"}
+                                {"name":"graduation","color":"#111827"}
                                 """))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.name").value("GRADUATION"))
+            .andExpect(jsonPath("$.color").value("#111827"))
             .andReturn()
             .getResponse()
             .getContentAsString();
@@ -74,10 +75,11 @@ class CatalogControllersIntegrationTests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                         """
-                                {"name":"wrapped"}
+                                {"name":"wrapped","color":"#F97316"}
                                 """))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.name").value("WRAPPED"))
+            .andExpect(jsonPath("$.color").value("#F97316"))
             .andReturn()
             .getResponse()
             .getContentAsString();

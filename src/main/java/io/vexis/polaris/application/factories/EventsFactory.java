@@ -7,8 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventsFactory {
 
-  public Event create(String name) {
-    return Event.builder().name(normalizeName(name)).build();
+  private static final String DEFAULT_COLOR = "#6B7280";
+
+  public Event create(String name, String color) {
+    return Event.builder().name(normalizeName(name)).color(normalizeColor(color)).build();
+  }
+
+  public String normalizeColor(String color) {
+    return color == null ? DEFAULT_COLOR : color;
   }
 
   public String normalizeName(String name) {

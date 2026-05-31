@@ -12,7 +12,6 @@ import io.vexis.polaris.domain.models.entities.Person;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,17 +49,26 @@ public class PersonsServiceImpl implements PersonsService {
     return response;
   }
 
+  public PersonDTO getById(Long id) {
+    log.debug("Loading person DTO id={}", id);
+    return mapper.toDTO(getEntity(id));
+  }
+
   @Override
-  public Person getEntity(UUID personId) {
+  public Person getEntity(Long personId) {
     log.debug("Loading person id={}", personId);
     return repository.findById(personId).orElseThrow(PersonNotFoundException::new);
   }
 
   @Transactional
   @Override
-  public void update(UpdatePersonDTO dto, UUID id) {
+  public void update(UpdatePersonDTO dto, Long id) {
     log.info("Updating person id={}", id);
     var person = repository.findById(id).orElseThrow(PersonNotFoundException::new);
+    var birthdayDay = dto.birthdayDay() == null ? person.getBirthdayDay() : dto.birthdayDay();
+    var birthdayMonth =
+        dto.birthdayMonth() == null ? person.getBirthdayMonth() : dto.birthdayMonth();
+    factory.validateBirthday(birthdayDay, birthdayMonth);
     person = mapper.update(dto, person);
 
     repository.save(person);
@@ -69,8 +77,11 @@ public class PersonsServiceImpl implements PersonsService {
 
   @Transactional
   @Override
-  public void delete(UUID id) {
+  public void delete(Long id) {
     log.info("Deleting person id={}", id);
+    if (!repository.existsById(id)) {
+      throw new PersonNotFoundException();
+    }
     repository.deleteById(id);
     log.info("Person deleted id={}", id);
   }

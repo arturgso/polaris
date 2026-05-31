@@ -28,7 +28,7 @@ public class GiftStatusServiceImpl implements GiftStatusService {
   @Override
   public GiftStatusDTO create(NewGiftStatusDTO dto) {
     log.info("Creating gift status");
-    var giftStatus = repository.save(factory.create(dto.name()));
+    var giftStatus = repository.save(factory.create(dto.name(), dto.color()));
     log.info("Gift status created with id={}", giftStatus.getId());
     return mapper.toDTO(giftStatus);
   }
@@ -70,6 +70,10 @@ public class GiftStatusServiceImpl implements GiftStatusService {
 
     if (dto.name() != null) {
       giftStatus.setName(factory.normalizeName(dto.name()));
+    }
+
+    if (dto.color() != null) {
+      giftStatus.setColor(factory.normalizeColor(dto.color()));
     }
 
     repository.save(giftStatus);
