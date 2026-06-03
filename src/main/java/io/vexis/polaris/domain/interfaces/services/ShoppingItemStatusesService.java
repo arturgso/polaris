@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ShoppingItemStatusesService {
 
-  List<ShoppingItemStatusDTO> getAll();
+  List<ShoppingItemStatusDTO> list();
 
   ShoppingItemStatus getEntity(Long statusId);
 }

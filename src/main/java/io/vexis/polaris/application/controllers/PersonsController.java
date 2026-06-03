@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("persons")
+@RequestMapping("/persons")
 @RequiredArgsConstructor
 public class PersonsController {
 
@@ -24,8 +24,8 @@ public class PersonsController {
   }
 
   @GetMapping
-  public ResponseEntity<List<PersonDTO>> getAll() {
-    return ResponseEntity.ok(service.getAll());
+  public ResponseEntity<List<PersonDTO>> list() {
+    return ResponseEntity.ok(service.list());
   }
 
   @GetMapping("{id}")

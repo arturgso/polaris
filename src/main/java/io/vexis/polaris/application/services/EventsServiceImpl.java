@@ -34,7 +34,7 @@ public class EventsServiceImpl implements EventsService {
   }
 
   @Override
-  public List<EventDTO> getAll() {
+  public List<EventDTO> list() {
     log.debug("Listing events");
     List<Event> eventList = repository.findAll();
     List<EventDTO> response = new ArrayList<>();

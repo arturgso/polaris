@@ -9,7 +9,7 @@ import java.util.List;
 public interface PersonsService {
   PersonDTO create(NewPersonDTO dto);
 
-  List<PersonDTO> getAll();
+  List<PersonDTO> list();
 
   PersonDTO getById(Long id);
 

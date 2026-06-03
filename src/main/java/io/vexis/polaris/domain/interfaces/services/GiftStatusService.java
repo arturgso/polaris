@@ -9,7 +9,7 @@ import java.util.List;
 public interface GiftStatusService {
   GiftStatusDTO create(NewGiftStatusDTO dto);
 
-  List<GiftStatusDTO> getAll();
+  List<GiftStatusDTO> list();
 
   GiftStatus getEntity(Long id);
 

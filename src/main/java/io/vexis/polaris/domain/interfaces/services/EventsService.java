@@ -9,7 +9,7 @@ import java.util.List;
 public interface EventsService {
   EventDTO create(NewEventDTO dto);
 
-  List<EventDTO> getAll();
+  List<EventDTO> list();
 
   Event getEntity(Long id);
 

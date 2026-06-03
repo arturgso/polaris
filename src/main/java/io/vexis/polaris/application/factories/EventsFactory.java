@@ -1,7 +1,7 @@
 package io.vexis.polaris.application.factories;
 
 import io.vexis.polaris.domain.models.entities.Event;
-import io.vexis.polaris.shared.TextUitls;
+import io.vexis.polaris.shared.TextUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,11 +13,13 @@ public class EventsFactory {
     return Event.builder().name(normalizeName(name)).color(normalizeColor(color)).build();
   }
 
+  // TODO: Consolidate duplicated catalog color normalization with GiftStatusFactory.
   public String normalizeColor(String color) {
     return color == null ? DEFAULT_COLOR : color;
   }
 
+  // TODO: Consolidate duplicated catalog name normalization with other factories.
   public String normalizeName(String name) {
-    return TextUitls.normalizeText(name).toUpperCase();
+    return TextUtils.normalizeText(name).toUpperCase();
   }
 }

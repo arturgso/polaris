@@ -9,7 +9,7 @@ public interface ShoppingItemCategoriesService {
 
   CategoryDTO create(NewCategoryDTO dto);
 
-  List<CategoryDTO> getAll();
+  List<CategoryDTO> list();
 
   ShoppingItemCategory getEntity(Long id);
 

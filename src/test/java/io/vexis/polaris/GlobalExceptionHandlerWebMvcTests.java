@@ -62,14 +62,26 @@ class GlobalExceptionHandlerWebMvcTests {
   }
 
   @Test
-  void shouldReturnFriendlyErrorWhenGiftIdIsInvalid() throws Exception {
+  void shouldReturnFriendlyErrorWhenGiftPersonIdIsInvalid() throws Exception {
     mockMvc
-        .perform(get("/gifts/{personId}", "not-a-number"))
+        .perform(get("/gifts/by-person").param("personId", "not-a-number"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.status").value(400))
         .andExpect(jsonPath("$.error").value("Bad Request"))
         .andExpect(jsonPath("$.message").value("Algum dado enviado é inválido."))
-        .andExpect(jsonPath("$.path").value("/gifts/not-a-number"))
+        .andExpect(jsonPath("$.path").value("/gifts/by-person"))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturnFriendlyErrorWhenGiftPersonIdIsMissing() throws Exception {
+    mockMvc
+        .perform(get("/gifts/by-person"))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.status").value(400))
+        .andExpect(jsonPath("$.error").value("Bad Request"))
+        .andExpect(jsonPath("$.message").value("Algum dado enviado é inválido."))
+        .andExpect(jsonPath("$.path").value("/gifts/by-person"))
         .andExpect(jsonPath("$.timestamp").exists());
   }
 }

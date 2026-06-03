@@ -19,7 +19,7 @@ public interface ShoppingItemRepository
     desc limit 5
     """,
       nativeQuery = true)
-  List<ShoppingItem> findRecentlyInserts();
+  List<ShoppingItem> findRecentlyInserted();
 
   @Query(
       """

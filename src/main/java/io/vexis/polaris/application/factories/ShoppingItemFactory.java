@@ -3,7 +3,7 @@ package io.vexis.polaris.application.factories;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemCategoriesService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemStatusesService;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
-import io.vexis.polaris.shared.TextUitls;
+import io.vexis.polaris.shared.TextUtils;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class ShoppingItemFactory {
   public ShoppingItem create(
       String title, String link, Long categoryId, BigDecimal price, Long statusId) {
     return ShoppingItem.builder()
-        .title(TextUitls.normalizeText(title))
+        .title(TextUtils.normalizeText(title))
         .link(link)
         .category(categoriesService.getEntity(categoryId))
         .price(price)

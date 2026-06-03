@@ -29,8 +29,8 @@ public class ShoppingItemCategoriesController {
   }
 
   @GetMapping
-  public ResponseEntity<List<CategoryDTO>> getAll() {
-    return ResponseEntity.ok(service.getAll());
+  public ResponseEntity<List<CategoryDTO>> list() {
+    return ResponseEntity.ok(service.list());
   }
 
   @DeleteMapping("{id}")

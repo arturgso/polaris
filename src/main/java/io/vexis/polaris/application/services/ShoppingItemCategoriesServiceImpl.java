@@ -33,7 +33,7 @@ public class ShoppingItemCategoriesServiceImpl implements ShoppingItemCategories
   }
 
   @Override
-  public List<CategoryDTO> getAll() {
+  public List<CategoryDTO> list() {
     log.debug("Listing shopping item categories");
     List<ShoppingItemCategory> shoppingItemCategoryList = repository.findAll();
     List<CategoryDTO> response = new ArrayList<>();

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/gift-status")
+@RequestMapping("/gift-statuses")
 @RequiredArgsConstructor
 public class GiftStatusController {
 
@@ -31,8 +31,8 @@ public class GiftStatusController {
   }
 
   @GetMapping
-  public ResponseEntity<List<GiftStatusDTO>> getAll() {
-    return ResponseEntity.ok(service.getAll());
+  public ResponseEntity<List<GiftStatusDTO>> list() {
+    return ResponseEntity.ok(service.list());
   }
 
   @PatchMapping("{id}")

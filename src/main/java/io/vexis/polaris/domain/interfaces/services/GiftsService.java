@@ -13,7 +13,7 @@ public interface GiftsService {
 
   List<GiftDTO> listByPerson(GiftFiltersDTO filtersDTO);
 
-  void updateGift(UpdateGiftDTO dto, Long giftId);
+  void update(UpdateGiftDTO dto, Long id);
 
-  void deleteGift(Long giftId);
+  void delete(Long id);
 }

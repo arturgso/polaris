@@ -20,7 +20,7 @@ public class ShoppingItemStatusesServiceImpl implements ShoppingItemStatusesServ
   private final ShoppingItemStatusMapper mapper;
 
   @Override
-  public List<ShoppingItemStatusDTO> getAll() {
+  public List<ShoppingItemStatusDTO> list() {
     log.debug("Listing shopping item statuses");
     List<ShoppingItemStatus> shoppingItemStatusList = repository.findAll();
     List<ShoppingItemStatusDTO> response = new ArrayList<>();

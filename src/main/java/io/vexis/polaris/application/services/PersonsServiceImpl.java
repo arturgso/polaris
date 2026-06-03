@@ -36,7 +36,7 @@ public class PersonsServiceImpl implements PersonsService {
   }
 
   @Override
-  public List<PersonDTO> getAll() {
+  public List<PersonDTO> list() {
     log.debug("Listing persons");
     List<Person> personsList = repository.findAll();
     List<PersonDTO> response = new ArrayList<>();

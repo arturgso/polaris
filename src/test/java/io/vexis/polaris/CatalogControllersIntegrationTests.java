@@ -71,7 +71,7 @@ class CatalogControllersIntegrationTests {
     String createResponse =
         mockMvc
             .perform(
-                post("/gift-status")
+                post("/gift-statuses")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                         """
@@ -87,13 +87,13 @@ class CatalogControllersIntegrationTests {
     Long id = readId(createResponse);
 
     mockMvc
-        .perform(get("/gift-status"))
+        .perform(get("/gift-statuses"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[*].name", hasItem("WRAPPED")));
 
     mockMvc
         .perform(
-            patch("/gift-status/{id}", id)
+            patch("/gift-statuses/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
@@ -102,11 +102,11 @@ class CatalogControllersIntegrationTests {
         .andExpect(status().isOk());
 
     mockMvc
-        .perform(get("/gift-status"))
+        .perform(get("/gift-statuses"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[*].name", hasItem("SHIPPED")));
 
-    mockMvc.perform(delete("/gift-status/{id}", id)).andExpect(status().isOk());
+    mockMvc.perform(delete("/gift-statuses/{id}", id)).andExpect(status().isOk());
   }
 
   private Long readId(String json) {

@@ -12,13 +12,13 @@ public interface ShoppingItemService {
 
   List<ShoppingItemDTO> list(ShoppingItemFiltersDTO filtersDTO);
 
-  List<ShoppingItemDTO> listRecently();
+  List<ShoppingItemDTO> listRecent();
 
   Long countAll();
 
   BigDecimal getTotalPrice();
 
-  void update(UpdateShoppingItemDTO dto, Long itemId);
+  void update(UpdateShoppingItemDTO dto, Long id);
 
-  void delete(Long itemId);
+  void delete(Long id);
 }

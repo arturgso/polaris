@@ -17,7 +17,7 @@ public class ShoppingItemStatusesController {
   private final ShoppingItemStatusesService service;
 
   @GetMapping
-  public ResponseEntity<List<ShoppingItemStatusDTO>> getAll() {
-    return ResponseEntity.ok(service.getAll());
+  public ResponseEntity<List<ShoppingItemStatusDTO>> list() {
+    return ResponseEntity.ok(service.list());
   }
 }

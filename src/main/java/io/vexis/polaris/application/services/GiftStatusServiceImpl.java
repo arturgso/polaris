@@ -34,7 +34,7 @@ public class GiftStatusServiceImpl implements GiftStatusService {
   }
 
   @Override
-  public List<GiftStatusDTO> getAll() {
+  public List<GiftStatusDTO> list() {
     log.debug("Listing gift statuses");
     List<GiftStatus> giftStatusList = repository.findAll();
     List<GiftStatusDTO> response = new ArrayList<>();

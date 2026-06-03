@@ -83,9 +83,9 @@ public class GiftsServiceImpl implements GiftsService {
 
   @Transactional
   @Override
-  public void updateGift(UpdateGiftDTO dto, Long giftId) {
-    log.info("Updating gift id={}", giftId);
-    var gift = repository.findById(giftId).orElseThrow(GiftNotFoundException::new);
+  public void update(UpdateGiftDTO dto, Long id) {
+    log.info("Updating gift id={}", id);
+    var gift = repository.findById(id).orElseThrow(GiftNotFoundException::new);
     gift = mapper.update(dto, gift);
 
     if (dto.giftFor() != null) {
@@ -101,20 +101,21 @@ public class GiftsServiceImpl implements GiftsService {
     }
 
     repository.save(gift);
-    log.info("Gift updated id={}", giftId);
+    log.info("Gift updated id={}", id);
   }
 
   @Transactional
   @Override
-  public void deleteGift(Long giftId) {
-    log.info("Deleting gift id={}", giftId);
-    if (!repository.existsById(giftId)) {
+  public void delete(Long id) {
+    log.info("Deleting gift id={}", id);
+    if (!repository.existsById(id)) {
       throw new GiftNotFoundException();
     }
-    repository.deleteById(giftId);
-    log.info("Gift deleted id={}", giftId);
+    repository.deleteById(id);
+    log.info("Gift deleted id={}", id);
   }
 
+  // TODO: Consolidate duplicated list-to-DTO response mapping with ShoppingItemServiceImpl.
   private List<GiftDTO> createResponseList(List<Gift> giftList) {
     List<GiftDTO> responseList = new ArrayList<>();
 

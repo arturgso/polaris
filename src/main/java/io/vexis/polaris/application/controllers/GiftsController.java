@@ -33,9 +33,9 @@ public class GiftsController {
         service.list(new GiftFiltersDTO(null, statusId, eventId, title, link)));
   }
 
-  @GetMapping("{personId}")
-  public ResponseEntity<List<GiftDTO>> getAll(
-      @PathVariable Long personId,
+  @GetMapping("by-person")
+  public ResponseEntity<List<GiftDTO>> listByPerson(
+      @RequestParam Long personId,
       @RequestParam(required = false) Long statusId,
       @RequestParam(required = false) Long eventId,
       @RequestParam(required = false) String title,
@@ -44,15 +44,15 @@ public class GiftsController {
         service.listByPerson(new GiftFiltersDTO(personId, statusId, eventId, title, link)));
   }
 
-  @PatchMapping("{giftId}")
-  public ResponseEntity<Void> update(@RequestBody UpdateGiftDTO dto, @PathVariable Long giftId) {
-    service.updateGift(dto, giftId);
+  @PatchMapping("{id}")
+  public ResponseEntity<Void> update(@RequestBody UpdateGiftDTO dto, @PathVariable Long id) {
+    service.update(dto, id);
     return ResponseEntity.ok(null);
   }
 
-  @DeleteMapping("{giftId}")
-  public ResponseEntity<Void> delete(@PathVariable Long giftId) {
-    service.deleteGift(giftId);
+  @DeleteMapping("{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    service.delete(id);
     return ResponseEntity.ok(null);
   }
 }

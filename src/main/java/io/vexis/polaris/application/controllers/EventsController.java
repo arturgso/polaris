@@ -31,8 +31,8 @@ public class EventsController {
   }
 
   @GetMapping
-  public ResponseEntity<List<EventDTO>> getAll() {
-    return ResponseEntity.ok(service.getAll());
+  public ResponseEntity<List<EventDTO>> list() {
+    return ResponseEntity.ok(service.list());
   }
 
   @PatchMapping("{id}")

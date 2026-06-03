@@ -18,8 +18,8 @@ public class DashboardController {
   private final ShoppingItemService shoppingItemService;
 
   @GetMapping("/recent-shopping-items")
-  public ResponseEntity<List<ShoppingItemDTO>> listRecently() {
-    return ResponseEntity.ok(shoppingItemService.listRecently());
+  public ResponseEntity<List<ShoppingItemDTO>> listRecent() {
+    return ResponseEntity.ok(shoppingItemService.listRecent());
   }
 
   @GetMapping("/metrics")

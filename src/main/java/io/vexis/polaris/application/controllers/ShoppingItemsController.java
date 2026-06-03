@@ -40,16 +40,16 @@ public class ShoppingItemsController {
     return ResponseEntity.ok(service.list(new ShoppingItemFiltersDTO(statusId, categoryId, title)));
   }
 
-  @PatchMapping("{itemId}")
+  @PatchMapping("{id}")
   public ResponseEntity<Void> update(
-      @RequestBody UpdateShoppingItemDTO dto, @PathVariable Long itemId) {
-    service.update(dto, itemId);
+      @RequestBody UpdateShoppingItemDTO dto, @PathVariable Long id) {
+    service.update(dto, id);
     return ResponseEntity.ok(null);
   }
 
-  @DeleteMapping("{itemId}")
-  public ResponseEntity<Void> delete(@PathVariable Long itemId) {
-    service.delete(itemId);
+  @DeleteMapping("{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    service.delete(id);
     return ResponseEntity.ok(null);
   }
 }

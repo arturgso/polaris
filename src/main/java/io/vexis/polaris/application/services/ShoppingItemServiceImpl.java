@@ -13,7 +13,7 @@ import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingIte
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.UpdateShoppingItemDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.specs.ShoppingItemsSpec;
-import io.vexis.polaris.shared.TextUitls;
+import io.vexis.polaris.shared.TextUtils;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -60,9 +60,9 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   }
 
   @Override
-  public List<ShoppingItemDTO> listRecently() {
+  public List<ShoppingItemDTO> listRecent() {
     log.debug("Listing recent shopping items");
-    List<ShoppingItem> itemList = repository.findRecentlyInserts();
+    List<ShoppingItem> itemList = repository.findRecentlyInserted();
     log.debug("Found {} recent shopping items", itemList.size());
     return createResponseList(itemList);
   }
@@ -83,13 +83,13 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
 
   @Transactional
   @Override
-  public void update(UpdateShoppingItemDTO dto, Long itemId) {
-    log.info("Updating shopping item id={}", itemId);
-    var item = repository.findById(itemId).orElseThrow(ShoppingItemNotFoundException::new);
+  public void update(UpdateShoppingItemDTO dto, Long id) {
+    log.info("Updating shopping item id={}", id);
+    var item = repository.findById(id).orElseThrow(ShoppingItemNotFoundException::new);
     item = mapper.partialUpdate(dto, item);
 
     if (dto.title() != null) {
-      item.setTitle(TextUitls.normalizeText(dto.title()));
+      item.setTitle(TextUtils.normalizeText(dto.title()));
     }
 
     if (dto.categoryId() != null) {
@@ -101,18 +101,19 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
     }
 
     repository.save(item);
-    log.info("Shopping item updated id={}", itemId);
+    log.info("Shopping item updated id={}", id);
   }
 
   @Transactional
   @Override
-  public void delete(Long itemId) {
-    log.info("Deleting shopping item id={}", itemId);
-    var item = repository.findById(itemId).orElseThrow(ShoppingItemNotFoundException::new);
+  public void delete(Long id) {
+    log.info("Deleting shopping item id={}", id);
+    var item = repository.findById(id).orElseThrow(ShoppingItemNotFoundException::new);
     repository.delete(item);
-    log.info("Shopping item deleted id={}", itemId);
+    log.info("Shopping item deleted id={}", id);
   }
 
+  // TODO: Consolidate duplicated list-to-DTO response mapping with GiftsServiceImpl.
   private List<ShoppingItemDTO> createResponseList(List<ShoppingItem> shoppingItems) {
 
     List<ShoppingItemDTO> responseList = new ArrayList<>();

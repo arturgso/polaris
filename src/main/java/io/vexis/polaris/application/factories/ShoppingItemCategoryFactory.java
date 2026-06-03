@@ -1,7 +1,7 @@
 package io.vexis.polaris.application.factories;
 
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
-import io.vexis.polaris.shared.TextUitls;
+import io.vexis.polaris.shared.TextUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,7 +11,8 @@ public class ShoppingItemCategoryFactory {
     return ShoppingItemCategory.builder().name(normalizeName(name)).color(color).build();
   }
 
+  // TODO: Consolidate duplicated catalog name normalization with other factories.
   public String normalizeName(String name) {
-    return TextUitls.normalizeText(name).toUpperCase();
+    return TextUtils.normalizeText(name).toUpperCase();
   }
 }
