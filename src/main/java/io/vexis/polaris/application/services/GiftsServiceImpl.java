@@ -8,10 +8,12 @@ import io.vexis.polaris.domain.interfaces.services.EventsService;
 import io.vexis.polaris.domain.interfaces.services.GiftStatusService;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.interfaces.services.PersonsService;
+import io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.NewGiftDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.UpdateGiftDTO;
 import io.vexis.polaris.domain.models.entities.Gift;
+import io.vexis.polaris.domain.specs.GiftsSpec;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,17 +58,26 @@ public class GiftsServiceImpl implements GiftsService {
   }
 
   @Override
-  public List<GiftDTO> getAllFromPerson(Long personId) {
-    log.debug("Listing gifts for personId={}", personId);
-    personsService.getEntity(personId);
-    var giftList = repository.findAllByGiftForId(personId);
+  public List<GiftDTO> list(GiftFiltersDTO filters) {
+    List<Gift> giftList = repository.findAll(GiftsSpec.byFilters(filters));
+
+    return createResponseList(giftList);
+  }
+
+  @Override
+  public List<GiftDTO> listByPerson(GiftFiltersDTO filtersDTO) {
+    if (filtersDTO.personId() == null) {
+      throw new IllegalArgumentException("personId must not be empty");
+    }
+
+    var giftList = repository.findAll(GiftsSpec.byFilters(filtersDTO));
     List<GiftDTO> response = new ArrayList<>();
 
     for (Gift gift : giftList) {
       response.add(mapper.toDTO(gift));
     }
 
-    log.debug("Found {} gifts for personId={}", response.size(), personId);
+    log.debug("Found {} gifts for personId={}", response.size(), filtersDTO.personId());
     return response;
   }
 
@@ -102,5 +113,15 @@ public class GiftsServiceImpl implements GiftsService {
     }
     repository.deleteById(giftId);
     log.info("Gift deleted id={}", giftId);
+  }
+
+  private List<GiftDTO> createResponseList(List<Gift> giftList) {
+    List<GiftDTO> responseList = new ArrayList<>();
+
+    for (Gift gift : giftList) {
+      responseList.add(mapper.toDTO(gift));
+    }
+
+    return responseList;
   }
 }
