@@ -16,6 +16,8 @@ import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.specs.GiftsSpec;
 import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
+
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -107,4 +109,14 @@ public class GiftsServiceImpl implements GiftsService {
     repository.deleteById(id);
     log.info("Gift deleted id={}", id);
   }
+
+  @Override
+  public Long countAll() {
+    return repository.count();
+  }
+
+  @Override
+  public BigDecimal getTotalPrice() {
+    return repository.getTotalPrice();
+    }
 }

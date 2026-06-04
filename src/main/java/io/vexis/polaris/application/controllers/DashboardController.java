@@ -1,5 +1,6 @@
 package io.vexis.polaris.application.controllers;
 
+import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemService;
 import io.vexis.polaris.domain.models.dtos.dashboard.DashboardMetricsDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DashboardController {
 
   private final ShoppingItemService shoppingItemService;
+  private final GiftsService giftsService;
 
   @GetMapping("/recent-shopping-items")
   public ResponseEntity<List<ShoppingItemDTO>> listRecent() {
@@ -26,6 +28,6 @@ public class DashboardController {
   public ResponseEntity<DashboardMetricsDTO> getMetrics() {
     return ResponseEntity.ok(
         new DashboardMetricsDTO(
-            shoppingItemService.countAll(), shoppingItemService.getTotalPrice()));
+            shoppingItemService.countAll(), giftsService.countAll(), shoppingItemService.getTotalPrice(), giftsService.getTotalPrice()));
   }
 }
