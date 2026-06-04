@@ -4,8 +4,10 @@ import io.vexis.polaris.domain.exceptions.OperationNotImplementedException;
 import io.vexis.polaris.domain.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -56,6 +58,18 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleOperationNotImplemented(
       OperationNotImplementedException exception, HttpServletRequest request) {
     return build(HttpStatus.NOT_IMPLEMENTED, "Esta operação ainda não está disponível.", request);
+  }
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(
+      DataIntegrityViolationException exception, HttpServletRequest request) {
+    return build(HttpStatus.CONFLICT, "Não foi possível salvar por conflito de dados.", request);
+  }
+
+  @ExceptionHandler(AuthenticationException.class)
+  public ResponseEntity<ErrorResponse> handleAuthenticationException(
+      AuthenticationException exception, HttpServletRequest request) {
+    return build(HttpStatus.UNAUTHORIZED, "Credenciais inválidas.", request);
   }
 
   @ExceptionHandler(Exception.class)

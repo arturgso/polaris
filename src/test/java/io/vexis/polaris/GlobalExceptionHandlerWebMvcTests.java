@@ -9,17 +9,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.vexis.polaris.application.controllers.GiftsController;
 import io.vexis.polaris.application.controllers.PersonsController;
+import io.vexis.polaris.application.security.JwtService;
 import io.vexis.polaris.domain.exceptions.PersonNotFoundException;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.interfaces.services.PersonsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = {PersonsController.class, GiftsController.class})
+@AutoConfigureMockMvc(addFilters = false)
+@WithMockUser(roles = "ADMIN")
 class GlobalExceptionHandlerWebMvcTests {
 
   @Autowired private MockMvc mockMvc;
@@ -27,6 +32,8 @@ class GlobalExceptionHandlerWebMvcTests {
   @MockitoBean private PersonsService personsService;
 
   @MockitoBean private GiftsService giftsService;
+
+  @MockitoBean private JwtService jwtService;
 
   @Test
   void shouldReturnFriendlyErrorWhenResourceDoesNotExist() throws Exception {
