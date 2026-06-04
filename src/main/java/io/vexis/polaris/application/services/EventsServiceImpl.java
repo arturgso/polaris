@@ -9,6 +9,7 @@ import io.vexis.polaris.domain.models.dtos.events.EventDTO;
 import io.vexis.polaris.domain.models.dtos.events.NewEventDTO;
 import io.vexis.polaris.domain.models.dtos.events.UpdateEventDTO;
 import io.vexis.polaris.domain.models.entities.Event;
+import io.vexis.polaris.shared.ListMapper;
 import io.vexis.polaris.shared.TextUtils;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
@@ -38,14 +39,7 @@ public class EventsServiceImpl implements EventsService {
   public List<EventDTO> list() {
     log.debug("Listing events");
     List<Event> eventList = repository.findAll();
-    List<EventDTO> response = new ArrayList<>();
-
-    for (Event event : eventList) {
-      response.add(mapper.toDTO(event));
-    }
-
-    log.debug("Found {} events", response.size());
-    return response;
+    return ListMapper.createResponseList(eventList, mapper::toDTO);
   }
 
   @Override

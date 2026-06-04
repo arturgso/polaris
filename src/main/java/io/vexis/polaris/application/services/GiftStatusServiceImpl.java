@@ -9,6 +9,7 @@ import io.vexis.polaris.domain.models.dtos.giftstatus.GiftStatusDTO;
 import io.vexis.polaris.domain.models.dtos.giftstatus.NewGiftStatusDTO;
 import io.vexis.polaris.domain.models.dtos.giftstatus.UpdateGiftStatusDTO;
 import io.vexis.polaris.domain.models.entities.GiftStatus;
+import io.vexis.polaris.shared.ListMapper;
 import io.vexis.polaris.shared.TextUtils;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
@@ -38,14 +39,7 @@ public class GiftStatusServiceImpl implements GiftStatusService {
   public List<GiftStatusDTO> list() {
     log.debug("Listing gift statuses");
     List<GiftStatus> giftStatusList = repository.findAll();
-    List<GiftStatusDTO> response = new ArrayList<>();
-
-    for (GiftStatus giftStatus : giftStatusList) {
-      response.add(mapper.toDTO(giftStatus));
-    }
-
-    log.debug("Found {} gift statuses", response.size());
-    return response;
+    return ListMapper.createResponseList(giftStatusList, mapper::toDTO);
   }
 
   @Override

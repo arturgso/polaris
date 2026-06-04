@@ -9,6 +9,7 @@ import io.vexis.polaris.domain.models.dtos.persons.NewPersonDTO;
 import io.vexis.polaris.domain.models.dtos.persons.PersonDTO;
 import io.vexis.polaris.domain.models.dtos.persons.UpdatePersonDTO;
 import io.vexis.polaris.domain.models.entities.Person;
+import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +40,7 @@ public class PersonsServiceImpl implements PersonsService {
   public List<PersonDTO> list() {
     log.debug("Listing persons");
     List<Person> personsList = repository.findAll();
-    List<PersonDTO> response = new ArrayList<>();
-
-    for (Person person : personsList) {
-      response.add(mapper.toDTO(person));
-    }
-
-    log.debug("Found {} persons", response.size());
-    return response;
+    return ListMapper.createResponseList(personsList, mapper::toDTO);
   }
 
   public PersonDTO getById(Long id) {

@@ -5,6 +5,8 @@ import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemStatusesRepos
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemStatusesService;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.statuses.ShoppingItemStatusDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItemStatus;
+import io.vexis.polaris.shared.ListMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +25,7 @@ public class ShoppingItemStatusesServiceImpl implements ShoppingItemStatusesServ
   public List<ShoppingItemStatusDTO> list() {
     log.debug("Listing shopping item statuses");
     List<ShoppingItemStatus> shoppingItemStatusList = repository.findAll();
-    List<ShoppingItemStatusDTO> response = new ArrayList<>();
-
-    for (ShoppingItemStatus shoppingItemStatus : shoppingItemStatusList) {
-      response.add(mapper.toDTO(shoppingItemStatus));
-    }
-
-    log.debug("Found {} shopping item statuses", response.size());
-    return response;
+    return ListMapper.createResponseList(shoppingItemStatusList, mapper::toDTO);
   }
 
   @Override
