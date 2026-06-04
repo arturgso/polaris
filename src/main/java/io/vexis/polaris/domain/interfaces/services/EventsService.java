@@ -13,7 +13,7 @@ public interface EventsService {
 
   Event getEntity(Long id);
 
-  Event getEntityByName(String name);
+  Event getEntityByTag(String tag);
 
   void update(UpdateEventDTO dto, Long id);
 

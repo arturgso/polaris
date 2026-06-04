@@ -2,4 +2,4 @@ package io.vexis.polaris.domain.models.dtos.events;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record NewEventDTO(@NotBlank String name, String color) {}
+public record NewEventDTO(@NotBlank String tag, @NotBlank String name, String color) {}

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GiftStatusRepository extends JpaRepository<GiftStatus, Long> {
 
-  Optional<GiftStatus> findByName(String name);
+  Optional<GiftStatus> findByTag(String tag);
 }

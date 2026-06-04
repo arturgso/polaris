@@ -141,30 +141,30 @@ public class DatabasePopulateRunner implements ApplicationRunner {
         .build();
   }
 
-  private Event getEvent(String name) {
-    return eventsRepository.findByName(name).orElseThrow(() -> missingCatalog("event", name));
+  private Event getEvent(String tag) {
+    return eventsRepository.findByTag(tag).orElseThrow(() -> missingCatalog("event", tag));
   }
 
-  private GiftStatus getGiftStatus(String name) {
+  private GiftStatus getGiftStatus(String tag) {
     return giftStatusRepository
-        .findByName(name)
-        .orElseThrow(() -> missingCatalog("gift status", name));
+        .findByTag(tag)
+        .orElseThrow(() -> missingCatalog("gift status", tag));
   }
 
-  private ShoppingItemCategory getShoppingItemCategory(String name) {
+  private ShoppingItemCategory getShoppingItemCategory(String tag) {
     return shoppingItemCategoriesRepository
-        .findByName(name)
-        .orElseThrow(() -> missingCatalog("shopping item category", name));
+        .findByTag(tag)
+        .orElseThrow(() -> missingCatalog("shopping item category", tag));
   }
 
-  private ShoppingItemStatus getShoppingItemStatus(String name) {
+  private ShoppingItemStatus getShoppingItemStatus(String tag) {
     return shoppingItemStatusesRepository
-        .findByName(name)
-        .orElseThrow(() -> missingCatalog("shopping item status", name));
+        .findByTag(tag)
+        .orElseThrow(() -> missingCatalog("shopping item status", tag));
   }
 
-  private IllegalStateException missingCatalog(String catalog, String name) {
+  private IllegalStateException missingCatalog(String catalog, String tag) {
     return new IllegalStateException(
-        "Required " + catalog + " catalog '" + name + "' was not found. Check Flyway migrations.");
+        "Required " + catalog + " catalog '" + tag + "' was not found. Check Flyway migrations.");
   }
 }

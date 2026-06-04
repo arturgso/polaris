@@ -27,7 +27,7 @@ public class ShoppingItemCategoriesServiceImpl implements ShoppingItemCategories
   @Override
   public CategoryDTO create(NewCategoryDTO dto) {
     log.info("Creating shopping item category");
-    var shoppingItemCategory = repository.save(factory.create(dto.name(), dto.color()));
+    var shoppingItemCategory = repository.save(factory.create(dto.tag(), dto.name(), dto.color()));
     log.info("Shopping item category created with id={}", shoppingItemCategory.getId());
     return mapper.toDTO(shoppingItemCategory);
   }

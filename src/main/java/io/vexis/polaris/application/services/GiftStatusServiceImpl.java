@@ -28,7 +28,7 @@ public class GiftStatusServiceImpl implements GiftStatusService {
   @Override
   public GiftStatusDTO create(NewGiftStatusDTO dto) {
     log.info("Creating gift status");
-    var giftStatus = repository.save(factory.create(dto.name(), dto.color()));
+    var giftStatus = repository.save(factory.create(dto.tag(), dto.name(), dto.color()));
     log.info("Gift status created with id={}", giftStatus.getId());
     return mapper.toDTO(giftStatus);
   }
@@ -54,10 +54,10 @@ public class GiftStatusServiceImpl implements GiftStatusService {
   }
 
   @Override
-  public GiftStatus getEntityByName(String name) {
-    log.debug("Loading gift status by name");
+  public GiftStatus getEntityByTag(String tag) {
+    log.debug("Loading gift status by tag");
     return repository
-        .findByName(factory.normalizeName(name))
+        .findByTag(factory.normalizeTag(tag))
         .orElseThrow(GiftStatusNotFoundException::new);
   }
 
@@ -68,8 +68,8 @@ public class GiftStatusServiceImpl implements GiftStatusService {
     var giftStatus = repository.findById(id).orElseThrow(GiftStatusNotFoundException::new);
     giftStatus = mapper.update(dto, giftStatus);
 
-    if (dto.name() != null) {
-      giftStatus.setName(factory.normalizeName(dto.name()));
+    if (dto.tag() != null) {
+      giftStatus.setTag(factory.normalizeTag(dto.tag()));
     }
 
     if (dto.color() != null) {

@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ShoppingItemCategoriesRepository
     extends JpaRepository<ShoppingItemCategory, Long> {
 
-  Optional<ShoppingItemCategory> findByName(String name);
+  Optional<ShoppingItemCategory> findByTag(String tag);
 }

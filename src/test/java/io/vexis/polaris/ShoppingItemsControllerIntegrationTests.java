@@ -32,9 +32,9 @@ class ShoppingItemsControllerIntegrationTests {
     mockMvc
         .perform(get("/shopping-item-statuses"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].name", hasItem("IDEA")))
-        .andExpect(jsonPath("$[*].name", hasItem("TO_BUY")))
-        .andExpect(jsonPath("$[*].name", hasItem("BOUGHT")));
+        .andExpect(jsonPath("$[*].tag", hasItem("IDEA")))
+        .andExpect(jsonPath("$[*].tag", hasItem("TO_BUY")))
+        .andExpect(jsonPath("$[*].tag", hasItem("BOUGHT")));
 
     String categoryResponse = createCategory("e2e dep", "#111827");
     Long categoryId = readId(categoryResponse);
@@ -43,7 +43,7 @@ class ShoppingItemsControllerIntegrationTests {
         .perform(get("/shopping-item-categories"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[*].id", hasItem(categoryId.intValue())))
-        .andExpect(jsonPath("$[*].name", hasItem("E2E DEP")));
+        .andExpect(jsonPath("$[*].tag", hasItem("E2E DEP")));
   }
 
   @Test
@@ -75,10 +75,11 @@ class ShoppingItemsControllerIntegrationTests {
             .andExpect(jsonPath("$.link").value("https://example.com/cable"))
             .andExpect(jsonPath("$.price").value(39.90))
             .andExpect(jsonPath("$.category.id").value(categoryId))
-            .andExpect(jsonPath("$.category.name").value("E2E ITEM CAT"))
+            .andExpect(jsonPath("$.category.tag").value("E2E ITEM CAT"))
+            .andExpect(jsonPath("$.category.name").value("e2e item cat"))
             .andExpect(jsonPath("$.category.color").value("#06B6D4"))
             .andExpect(jsonPath("$.status.id").value(plannedStatusId))
-            .andExpect(jsonPath("$.status.name").value("PLANNED"))
+            .andExpect(jsonPath("$.status.tag").value("PLANNED"))
             .andExpect(jsonPath("$.createdAt").exists())
             .andExpect(jsonPath("$.updatedAt").exists())
             .andReturn()
@@ -130,8 +131,8 @@ class ShoppingItemsControllerIntegrationTests {
         .andExpect(jsonPath("$[?(@.id == %d)].title".formatted(itemId), hasItem("wireless mouse")))
         .andExpect(jsonPath("$[?(@.id == %d)].price".formatted(itemId), hasItem(89.50)))
         .andExpect(
-            jsonPath("$[?(@.id == %d)].category.name".formatted(itemId), hasItem("E2E UPD CAT")))
-        .andExpect(jsonPath("$[?(@.id == %d)].status.name".formatted(itemId), hasItem("BOUGHT")));
+            jsonPath("$[?(@.id == %d)].category.tag".formatted(itemId), hasItem("E2E UPD CAT")))
+        .andExpect(jsonPath("$[?(@.id == %d)].status.tag".formatted(itemId), hasItem("BOUGHT")));
 
     mockMvc.perform(delete("/shopping-items/{id}", itemId)).andExpect(status().isOk());
 
@@ -208,7 +209,7 @@ class ShoppingItemsControllerIntegrationTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                    {"name":"invalid color","color":"blue"}
+                    {"tag":"invalid color","name":"invalid color","color":"blue"}
                     """))
         .andExpect(status().isBadRequest());
   }
@@ -235,12 +236,13 @@ class ShoppingItemsControllerIntegrationTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                    {"name":"%s","color":"%s"}
+                    {"tag":"%s","name":"%s","color":"%s"}
                     """
-                        .formatted(name, color)))
+                        .formatted(name, name, color)))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").isNumber())
-        .andExpect(jsonPath("$.name").value(name.toUpperCase()))
+        .andExpect(jsonPath("$.tag").value(name.toUpperCase()))
+        .andExpect(jsonPath("$.name").value(name))
         .andExpect(jsonPath("$.color").value(color))
         .andReturn()
         .getResponse()
@@ -270,8 +272,8 @@ class ShoppingItemsControllerIntegrationTests {
         .getContentAsString();
   }
 
-  private Long getStatusId(String name) {
-    return statusesRepository.findByName(name).orElseThrow().getId();
+  private Long getStatusId(String tag) {
+    return statusesRepository.findByTag(tag).orElseThrow().getId();
   }
 
   private Long readId(String json) {

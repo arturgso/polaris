@@ -12,8 +12,8 @@ import org.mapstruct.*;
 public interface GiftsMapper {
 
   @Mapping(target = "giftFor", source = "giftFor.name")
-  @Mapping(target = "event", source = "event.name")
-  @Mapping(target = "status", source = "status.name")
+  @Mapping(target = "event", source = "event.tag")
+  @Mapping(target = "status", source = "status.tag")
   GiftDTO toDTO(Gift gift);
 
   @Mapping(target = "giftFor", ignore = true)

@@ -58,8 +58,8 @@ class GiftsServiceIntegrationTests {
 
     var updated = giftsRepository.findById(created.id()).orElseThrow();
 
-    assertEquals("CHRISTMAS", updated.getEvent().getName());
-    assertEquals("DELIVERED", updated.getStatus().getName());
+    assertEquals("CHRISTMAS", updated.getEvent().getTag());
+    assertEquals("DELIVERED", updated.getStatus().getTag());
     assertNotNull(updated.getEvent().getId());
     assertNotNull(updated.getStatus().getId());
   }

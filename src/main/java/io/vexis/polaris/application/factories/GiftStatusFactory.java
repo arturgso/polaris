@@ -9,8 +9,8 @@ public class GiftStatusFactory {
 
   private static final String DEFAULT_COLOR = "#6B7280";
 
-  public GiftStatus create(String name, String color) {
-    return GiftStatus.builder().name(normalizeName(name)).color(normalizeColor(color)).build();
+  public GiftStatus create(String tag, String name, String color) {
+    return GiftStatus.builder().tag(normalizeTag(tag)).name(name).color(normalizeColor(color)).build();
   }
 
   // TODO: Consolidate duplicated catalog color normalization with EventsFactory.
@@ -18,8 +18,8 @@ public class GiftStatusFactory {
     return color == null ? DEFAULT_COLOR : color;
   }
 
-  // TODO: Consolidate duplicated catalog name normalization with other factories.
-  public String normalizeName(String name) {
-    return TextUtils.normalizeText(name).toUpperCase();
+  // TODO: Consolidate duplicated catalog tag normalization with other factories.
+  public String normalizeTag(String tag) {
+    return TextUtils.normalizeText(tag).toUpperCase();
   }
 }

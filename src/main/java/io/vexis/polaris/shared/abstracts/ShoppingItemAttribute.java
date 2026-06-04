@@ -18,6 +18,7 @@ public abstract class ShoppingItemAttribute {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  private String tag;
   private String name;
   private String color;
 

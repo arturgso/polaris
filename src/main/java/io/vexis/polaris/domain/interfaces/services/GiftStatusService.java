@@ -13,7 +13,7 @@ public interface GiftStatusService {
 
   GiftStatus getEntity(Long id);
 
-  GiftStatus getEntityByName(String name);
+  GiftStatus getEntityByTag(String tag);
 
   void update(UpdateGiftStatusDTO dto, Long id);
 

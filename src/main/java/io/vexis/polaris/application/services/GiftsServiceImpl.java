@@ -43,12 +43,12 @@ public class GiftsServiceImpl implements GiftsService {
     var person = personsService.getEntity(dto.personId());
     var event =
         dto.event() == null
-            ? eventsService.getEntityByName(DEFAULT_EVENT)
-            : eventsService.getEntityByName(dto.event());
+            ? eventsService.getEntityByTag(DEFAULT_EVENT)
+            : eventsService.getEntityByTag(dto.event());
     var status =
         dto.status() == null
-            ? giftStatusService.getEntityByName(DEFAULT_STATUS)
-            : giftStatusService.getEntityByName(dto.status());
+            ? giftStatusService.getEntityByTag(DEFAULT_STATUS)
+            : giftStatusService.getEntityByTag(dto.status());
 
     var gift = factory.create(dto.title(), dto.link(), person, event, status);
 
@@ -93,11 +93,11 @@ public class GiftsServiceImpl implements GiftsService {
     }
 
     if (dto.event() != null) {
-      gift.setEvent(eventsService.getEntityByName(dto.event()));
+      gift.setEvent(eventsService.getEntityByTag(dto.event()));
     }
 
     if (dto.status() != null) {
-      gift.setStatus(giftStatusService.getEntityByName(dto.status()));
+      gift.setStatus(giftStatusService.getEntityByTag(dto.status()));
     }
 
     repository.save(gift);

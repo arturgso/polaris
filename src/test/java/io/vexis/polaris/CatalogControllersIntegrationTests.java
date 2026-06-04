@@ -32,10 +32,11 @@ class CatalogControllersIntegrationTests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                         """
-                                {"name":"graduation","color":"#111827"}
+                                {"tag":"graduation","name":"graduacao","color":"#111827"}
                                 """))
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.name").value("GRADUATION"))
+            .andExpect(jsonPath("$.tag").value("GRADUATION"))
+            .andExpect(jsonPath("$.name").value("graduacao"))
             .andExpect(jsonPath("$.color").value("#111827"))
             .andReturn()
             .getResponse()
@@ -46,7 +47,7 @@ class CatalogControllersIntegrationTests {
     mockMvc
         .perform(get("/events"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].name", hasItem("GRADUATION")));
+        .andExpect(jsonPath("$[*].tag", hasItem("GRADUATION")));
 
     mockMvc
         .perform(
@@ -54,14 +55,15 @@ class CatalogControllersIntegrationTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                                {"name":"retirement"}
+                                {"tag":"retirement","name":"aposentadoria"}
                                 """))
         .andExpect(status().isOk());
 
     mockMvc
         .perform(get("/events"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].name", hasItem("RETIREMENT")));
+        .andExpect(jsonPath("$[*].tag", hasItem("RETIREMENT")))
+        .andExpect(jsonPath("$[*].name", hasItem("aposentadoria")));
 
     mockMvc.perform(delete("/events/{id}", id)).andExpect(status().isOk());
   }
@@ -75,10 +77,11 @@ class CatalogControllersIntegrationTests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                         """
-                                {"name":"wrapped","color":"#F97316"}
+                                {"tag":"wrapped","name":"embrulhado","color":"#F97316"}
                                 """))
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.name").value("WRAPPED"))
+            .andExpect(jsonPath("$.tag").value("WRAPPED"))
+            .andExpect(jsonPath("$.name").value("embrulhado"))
             .andExpect(jsonPath("$.color").value("#F97316"))
             .andReturn()
             .getResponse()
@@ -89,7 +92,7 @@ class CatalogControllersIntegrationTests {
     mockMvc
         .perform(get("/gift-statuses"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].name", hasItem("WRAPPED")));
+        .andExpect(jsonPath("$[*].tag", hasItem("WRAPPED")));
 
     mockMvc
         .perform(
@@ -97,14 +100,15 @@ class CatalogControllersIntegrationTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                                {"name":"shipped"}
+                                {"tag":"shipped","name":"enviado"}
                                 """))
         .andExpect(status().isOk());
 
     mockMvc
         .perform(get("/gift-statuses"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].name", hasItem("SHIPPED")));
+        .andExpect(jsonPath("$[*].tag", hasItem("SHIPPED")))
+        .andExpect(jsonPath("$[*].name", hasItem("enviado")));
 
     mockMvc.perform(delete("/gift-statuses/{id}", id)).andExpect(status().isOk());
   }

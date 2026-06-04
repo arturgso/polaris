@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ShoppingItemStatusesRepository extends JpaRepository<ShoppingItemStatus, Long> {
 
-  Optional<ShoppingItemStatus> findByName(String name);
+  Optional<ShoppingItemStatus> findByTag(String tag);
 }

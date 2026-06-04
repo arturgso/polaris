@@ -28,7 +28,7 @@ public class EventsServiceImpl implements EventsService {
   @Override
   public EventDTO create(NewEventDTO dto) {
     log.info("Creating event");
-    var event = repository.save(factory.create(dto.name(), dto.color()));
+    var event = repository.save(factory.create(dto.tag(), dto.name(), dto.color()));
     log.info("Event created with id={}", event.getId());
     return mapper.toDTO(event);
   }
@@ -54,10 +54,10 @@ public class EventsServiceImpl implements EventsService {
   }
 
   @Override
-  public Event getEntityByName(String name) {
-    log.debug("Loading event by name");
+  public Event getEntityByTag(String tag) {
+    log.debug("Loading event by tag");
     return repository
-        .findByName(factory.normalizeName(name))
+        .findByTag(factory.normalizeTag(tag))
         .orElseThrow(EventNotFoundException::new);
   }
 
@@ -68,8 +68,8 @@ public class EventsServiceImpl implements EventsService {
     var event = repository.findById(id).orElseThrow(EventNotFoundException::new);
     event = mapper.update(dto, event);
 
-    if (dto.name() != null) {
-      event.setName(factory.normalizeName(dto.name()));
+    if (dto.tag() != null) {
+      event.setTag(factory.normalizeTag(dto.tag()));
     }
 
     if (dto.color() != null) {
