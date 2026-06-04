@@ -42,7 +42,8 @@ public class InitialAdminUserRunner implements ApplicationRunner {
     String normalizedUsername = TextUtils.normalizeText(username);
 
     if (userRepository.existsByUsername(normalizedUsername)) {
-      log.info("Initial admin user skipped because username '{}' already exists", normalizedUsername);
+      log.info(
+          "Initial admin user skipped because username '{}' already exists", normalizedUsername);
       return;
     }
 

@@ -31,7 +31,8 @@ class InitialAdminUserRunnerTests {
 
     assertEquals("ADMIN", user.getRole());
     assertTrue(passwordEncoder.matches("secret123", user.getPassword()));
-    assertTrue(user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN")));
+    assertTrue(
+        user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN")));
   }
 
   @Test

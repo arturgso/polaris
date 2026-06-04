@@ -75,7 +75,8 @@ public class JwtService {
 
   private boolean isExpired(String token) {
     var exp = readPayload(token).get("exp");
-    long expiresAt = exp instanceof Number number ? number.longValue() : Long.parseLong(exp.toString());
+    long expiresAt =
+        exp instanceof Number number ? number.longValue() : Long.parseLong(exp.toString());
     return Instant.now().getEpochSecond() >= expiresAt;
   }
 
