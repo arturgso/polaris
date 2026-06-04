@@ -9,6 +9,7 @@ import io.vexis.polaris.domain.models.dtos.giftstatus.GiftStatusDTO;
 import io.vexis.polaris.domain.models.dtos.giftstatus.NewGiftStatusDTO;
 import io.vexis.polaris.domain.models.dtos.giftstatus.UpdateGiftStatusDTO;
 import io.vexis.polaris.domain.models.entities.GiftStatus;
+import io.vexis.polaris.shared.TextUtils;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class GiftStatusServiceImpl implements GiftStatusService {
   @Override
   public GiftStatusDTO create(NewGiftStatusDTO dto) {
     log.info("Creating gift status");
-    var giftStatus = repository.save(factory.create(dto.tag(), dto.name(), dto.color()));
+    var giftStatus = repository.save(factory.create(dto.name(), dto.color()));
     log.info("Gift status created with id={}", giftStatus.getId());
     return mapper.toDTO(giftStatus);
   }
@@ -57,7 +58,7 @@ public class GiftStatusServiceImpl implements GiftStatusService {
   public GiftStatus getEntityByTag(String tag) {
     log.debug("Loading gift status by tag");
     return repository
-        .findByTag(factory.normalizeTag(tag))
+        .findByTag(TextUtils.normalizeTag(tag))
         .orElseThrow(GiftStatusNotFoundException::new);
   }
 
@@ -69,11 +70,11 @@ public class GiftStatusServiceImpl implements GiftStatusService {
     giftStatus = mapper.update(dto, giftStatus);
 
     if (dto.tag() != null) {
-      giftStatus.setTag(factory.normalizeTag(dto.tag()));
+      giftStatus.setTag(TextUtils.normalizeTag(dto.tag()));
     }
 
     if (dto.color() != null) {
-      giftStatus.setColor(factory.normalizeColor(dto.color()));
+      giftStatus.setColor(TextUtils.normalizeColor(dto.color()));
     }
 
     repository.save(giftStatus);

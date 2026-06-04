@@ -14,6 +14,7 @@ import io.vexis.polaris.domain.models.dtos.gifts.NewGiftDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.UpdateGiftDTO;
 import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.specs.GiftsSpec;
+import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class GiftsServiceImpl implements GiftsService {
   public List<GiftDTO> list(GiftFiltersDTO filters) {
     List<Gift> giftList = repository.findAll(GiftsSpec.byFilters(filters));
 
-    return createResponseList(giftList);
+    return ListMapper.createResponseList(giftList, mapper::toDTO);
   }
 
   @Override
@@ -71,14 +72,8 @@ public class GiftsServiceImpl implements GiftsService {
     }
 
     var giftList = repository.findAll(GiftsSpec.byFilters(filtersDTO));
-    List<GiftDTO> response = new ArrayList<>();
+    return ListMapper.createResponseList(giftList, mapper::toDTO);
 
-    for (Gift gift : giftList) {
-      response.add(mapper.toDTO(gift));
-    }
-
-    log.debug("Found {} gifts for personId={}", response.size(), filtersDTO.personId());
-    return response;
   }
 
   @Transactional
@@ -113,16 +108,5 @@ public class GiftsServiceImpl implements GiftsService {
     }
     repository.deleteById(id);
     log.info("Gift deleted id={}", id);
-  }
-
-  // TODO: Consolidate duplicated list-to-DTO response mapping with ShoppingItemServiceImpl.
-  private List<GiftDTO> createResponseList(List<Gift> giftList) {
-    List<GiftDTO> responseList = new ArrayList<>();
-
-    for (Gift gift : giftList) {
-      responseList.add(mapper.toDTO(gift));
-    }
-
-    return responseList;
   }
 }

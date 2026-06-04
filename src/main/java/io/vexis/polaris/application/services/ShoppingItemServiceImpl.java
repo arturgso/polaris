@@ -13,6 +13,7 @@ import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingIte
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.UpdateShoppingItemDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.specs.ShoppingItemsSpec;
+import io.vexis.polaris.shared.ListMapper;
 import io.vexis.polaris.shared.TextUtils;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
@@ -56,7 +57,7 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
         filtersDTO.title() != null);
     List<ShoppingItem> itemList = repository.findAll(ShoppingItemsSpec.byFilters(filtersDTO));
     log.debug("Found {} shopping items", itemList.size());
-    return createResponseList(itemList);
+    return ListMapper.createResponseList(itemList, mapper::toDTO);
   }
 
   @Override
@@ -64,7 +65,7 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
     log.debug("Listing recent shopping items");
     List<ShoppingItem> itemList = repository.findRecentlyInserted();
     log.debug("Found {} recent shopping items", itemList.size());
-    return createResponseList(itemList);
+    return ListMapper.createResponseList(itemList, mapper::toDTO);
   }
 
   @Override
@@ -111,17 +112,5 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
     var item = repository.findById(id).orElseThrow(ShoppingItemNotFoundException::new);
     repository.delete(item);
     log.info("Shopping item deleted id={}", id);
-  }
-
-  // TODO: Consolidate duplicated list-to-DTO response mapping with GiftsServiceImpl.
-  private List<ShoppingItemDTO> createResponseList(List<ShoppingItem> shoppingItems) {
-
-    List<ShoppingItemDTO> responseList = new ArrayList<>();
-
-    for (ShoppingItem item : shoppingItems) {
-      responseList.add(mapper.toDTO(item));
-    }
-
-    return responseList;
   }
 }

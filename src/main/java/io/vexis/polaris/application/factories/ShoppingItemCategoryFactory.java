@@ -7,12 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShoppingItemCategoryFactory {
 
-  public ShoppingItemCategory create(String tag, String name, String color) {
-    return ShoppingItemCategory.builder().tag(normalizeTag(tag)).name(name).color(color).build();
-  }
-
-  // TODO: Consolidate duplicated catalog tag normalization with other factories.
-  public String normalizeTag(String tag) {
-    return TextUtils.normalizeText(tag).toUpperCase();
+  public ShoppingItemCategory create(String name, String color) {
+    return ShoppingItemCategory.builder().tag(TextUtils.normalizeTag(name)).name(name).color(color).build();
   }
 }

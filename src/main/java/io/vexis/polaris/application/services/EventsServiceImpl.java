@@ -9,6 +9,7 @@ import io.vexis.polaris.domain.models.dtos.events.EventDTO;
 import io.vexis.polaris.domain.models.dtos.events.NewEventDTO;
 import io.vexis.polaris.domain.models.dtos.events.UpdateEventDTO;
 import io.vexis.polaris.domain.models.entities.Event;
+import io.vexis.polaris.shared.TextUtils;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class EventsServiceImpl implements EventsService {
   @Override
   public EventDTO create(NewEventDTO dto) {
     log.info("Creating event");
-    var event = repository.save(factory.create(dto.tag(), dto.name(), dto.color()));
+    var event = repository.save(factory.create(dto.name(), dto.color()));
     log.info("Event created with id={}", event.getId());
     return mapper.toDTO(event);
   }
@@ -57,7 +58,7 @@ public class EventsServiceImpl implements EventsService {
   public Event getEntityByTag(String tag) {
     log.debug("Loading event by tag");
     return repository
-        .findByTag(factory.normalizeTag(tag))
+        .findByTag(TextUtils.normalizeTag(tag))
         .orElseThrow(EventNotFoundException::new);
   }
 
@@ -69,11 +70,11 @@ public class EventsServiceImpl implements EventsService {
     event = mapper.update(dto, event);
 
     if (dto.tag() != null) {
-      event.setTag(factory.normalizeTag(dto.tag()));
+      event.setTag(TextUtils.normalizeTag(dto.tag()));
     }
 
     if (dto.color() != null) {
-      event.setColor(factory.normalizeColor(dto.color()));
+      event.setColor(TextUtils.normalizeColor(dto.color()));
     }
 
     repository.save(event);
