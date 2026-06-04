@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemStatusesRepository;
+import io.vexis.polaris.shared.TextUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,7 +44,7 @@ class ShoppingItemsControllerIntegrationTests {
         .perform(get("/shopping-item-categories"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[*].id", hasItem(categoryId.intValue())))
-        .andExpect(jsonPath("$[*].tag", hasItem("E2E DEP")));
+        .andExpect(jsonPath("$[*].tag", hasItem(TextUtils.normalizeTag("e2e dep"))));
   }
 
   @Test
@@ -65,7 +66,7 @@ class ShoppingItemsControllerIntegrationTests {
                           "link":"https://example.com/cable",
                           "categoryId":%d,
                           "price":39.90,
-                          "status":%d
+                          "statusId":%d
                         }
                         """
                             .formatted(categoryId, plannedStatusId)))
@@ -75,7 +76,7 @@ class ShoppingItemsControllerIntegrationTests {
             .andExpect(jsonPath("$.link").value("https://example.com/cable"))
             .andExpect(jsonPath("$.price").value(39.90))
             .andExpect(jsonPath("$.category.id").value(categoryId))
-            .andExpect(jsonPath("$.category.tag").value("E2E ITEM CAT"))
+            .andExpect(jsonPath("$.category.tag").value(TextUtils.normalizeTag("e2e item cat")))
             .andExpect(jsonPath("$.category.name").value("e2e item cat"))
             .andExpect(jsonPath("$.category.color").value("#06B6D4"))
             .andExpect(jsonPath("$.status.id").value(plannedStatusId))
@@ -99,12 +100,12 @@ class ShoppingItemsControllerIntegrationTests {
         .andExpect(jsonPath("$[*].id", hasItem(itemId.intValue())));
 
     mockMvc
-        .perform(get("/shopping-items").param("categoryId", categoryId.toString()))
+        .perform(get("/shopping-items").param("tag", TextUtils.normalizeTag("e2e item cat")))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[*].id", hasItem(itemId.intValue())));
 
     mockMvc
-        .perform(get("/shopping-items").param("status", plannedStatusId.toString()))
+        .perform(get("/shopping-items").param("status", "PLANNED"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[*].id", hasItem(itemId.intValue())));
 
@@ -118,7 +119,7 @@ class ShoppingItemsControllerIntegrationTests {
                       "title":"Wireless Mouse",
                       "categoryId":%d,
                       "price":89.50,
-                      "status":%d
+                      "statusId":%d
                     }
                     """
                         .formatted(updatedCategoryId, boughtStatusId)))
@@ -131,7 +132,9 @@ class ShoppingItemsControllerIntegrationTests {
         .andExpect(jsonPath("$[?(@.id == %d)].title".formatted(itemId), hasItem("wireless mouse")))
         .andExpect(jsonPath("$[?(@.id == %d)].price".formatted(itemId), hasItem(89.50)))
         .andExpect(
-            jsonPath("$[?(@.id == %d)].category.tag".formatted(itemId), hasItem("E2E UPD CAT")))
+            jsonPath(
+                "$[?(@.id == %d)].category.tag".formatted(itemId),
+                hasItem(TextUtils.normalizeTag("e2e upd cat"))))
         .andExpect(jsonPath("$[?(@.id == %d)].status.tag".formatted(itemId), hasItem("BOUGHT")));
 
     mockMvc.perform(delete("/shopping-items/{id}", itemId)).andExpect(status().isOk());
@@ -241,7 +244,7 @@ class ShoppingItemsControllerIntegrationTests {
                         .formatted(name, name, color)))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").isNumber())
-        .andExpect(jsonPath("$.tag").value(name.toUpperCase()))
+        .andExpect(jsonPath("$.tag").value(TextUtils.normalizeTag(name)))
         .andExpect(jsonPath("$.name").value(name))
         .andExpect(jsonPath("$.color").value(color))
         .andReturn()
@@ -262,7 +265,7 @@ class ShoppingItemsControllerIntegrationTests {
                       "link":"%s",
                       "categoryId":%d,
                       "price":%d,
-                      "status":%d
+                      "statusId":%d
                     }
                     """
                         .formatted(title, link, categoryId, price, statusId)))

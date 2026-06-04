@@ -10,7 +10,6 @@ import io.vexis.polaris.domain.models.dtos.shoppinglist.categories.NewCategoryDT
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
 import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

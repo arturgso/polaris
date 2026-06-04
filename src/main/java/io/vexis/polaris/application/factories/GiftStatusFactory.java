@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class GiftStatusFactory {
 
-
-
   public GiftStatus create(String name, String color) {
-    return GiftStatus.builder().tag(TextUtils.normalizeTag(name)).name(name).color(TextUtils.normalizeColor(color)).build();
+    return GiftStatus.builder()
+        .tag(TextUtils.normalizeTag(name))
+        .name(name)
+        .color(TextUtils.normalizeColor(color))
+        .build();
   }
 }

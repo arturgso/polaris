@@ -16,7 +16,6 @@ import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.specs.GiftsSpec;
 import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +72,6 @@ public class GiftsServiceImpl implements GiftsService {
 
     var giftList = repository.findAll(GiftsSpec.byFilters(filtersDTO));
     return ListMapper.createResponseList(giftList, mapper::toDTO);
-
   }
 
   @Transactional

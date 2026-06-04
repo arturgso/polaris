@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import io.vexis.polaris.shared.TextUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,7 +36,7 @@ class CatalogControllersIntegrationTests {
                                 {"tag":"graduation","name":"graduacao","color":"#111827"}
                                 """))
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.tag").value("GRADUATION"))
+            .andExpect(jsonPath("$.tag").value(TextUtils.normalizeTag("graduacao")))
             .andExpect(jsonPath("$.name").value("graduacao"))
             .andExpect(jsonPath("$.color").value("#111827"))
             .andReturn()
@@ -47,7 +48,7 @@ class CatalogControllersIntegrationTests {
     mockMvc
         .perform(get("/events"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].tag", hasItem("GRADUATION")));
+        .andExpect(jsonPath("$[*].tag", hasItem(TextUtils.normalizeTag("graduacao"))));
 
     mockMvc
         .perform(
@@ -62,7 +63,7 @@ class CatalogControllersIntegrationTests {
     mockMvc
         .perform(get("/events"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].tag", hasItem("RETIREMENT")))
+        .andExpect(jsonPath("$[*].tag", hasItem(TextUtils.normalizeTag("retirement"))))
         .andExpect(jsonPath("$[*].name", hasItem("aposentadoria")));
 
     mockMvc.perform(delete("/events/{id}", id)).andExpect(status().isOk());
@@ -80,7 +81,7 @@ class CatalogControllersIntegrationTests {
                                 {"tag":"wrapped","name":"embrulhado","color":"#F97316"}
                                 """))
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.tag").value("WRAPPED"))
+            .andExpect(jsonPath("$.tag").value(TextUtils.normalizeTag("embrulhado")))
             .andExpect(jsonPath("$.name").value("embrulhado"))
             .andExpect(jsonPath("$.color").value("#F97316"))
             .andReturn()
@@ -92,7 +93,7 @@ class CatalogControllersIntegrationTests {
     mockMvc
         .perform(get("/gift-statuses"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].tag", hasItem("WRAPPED")));
+        .andExpect(jsonPath("$[*].tag", hasItem(TextUtils.normalizeTag("embrulhado"))));
 
     mockMvc
         .perform(
@@ -107,7 +108,7 @@ class CatalogControllersIntegrationTests {
     mockMvc
         .perform(get("/gift-statuses"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].tag", hasItem("SHIPPED")))
+        .andExpect(jsonPath("$[*].tag", hasItem(TextUtils.normalizeTag("shipped"))))
         .andExpect(jsonPath("$[*].name", hasItem("enviado")));
 
     mockMvc.perform(delete("/gift-statuses/{id}", id)).andExpect(status().isOk());

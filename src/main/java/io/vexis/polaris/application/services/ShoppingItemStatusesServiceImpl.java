@@ -6,8 +6,6 @@ import io.vexis.polaris.domain.interfaces.services.ShoppingItemStatusesService;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.statuses.ShoppingItemStatusDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItemStatus;
 import io.vexis.polaris.shared.ListMapper;
-
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

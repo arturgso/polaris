@@ -12,7 +12,6 @@ import io.vexis.polaris.domain.models.entities.GiftStatus;
 import io.vexis.polaris.shared.ListMapper;
 import io.vexis.polaris.shared.TextUtils;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,8 +1,7 @@
 package io.vexis.polaris.shared;
 
-import org.springframework.stereotype.Component;
-
 import java.text.Normalizer;
+import org.springframework.stereotype.Component;
 
 @Component
 public class TextUtils {
@@ -18,9 +17,9 @@ public class TextUtils {
 
   public static String normalizeTag(String tag) {
     return Normalizer.normalize(tag, Normalizer.Form.NFD)
-            .replaceAll("\\p{M}", "")
-            .replaceAll("[^a-zA-Z0-9]", "")
-            .toUpperCase();
+        .replaceAll("\\p{M}", "")
+        .replaceAll("[^a-zA-Z0-9]", "")
+        .toUpperCase();
   }
 
   public static String normalizeColor(String color) {

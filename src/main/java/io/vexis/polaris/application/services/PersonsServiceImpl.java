@@ -11,7 +11,6 @@ import io.vexis.polaris.domain.models.dtos.persons.UpdatePersonDTO;
 import io.vexis.polaris.domain.models.entities.Person;
 import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
