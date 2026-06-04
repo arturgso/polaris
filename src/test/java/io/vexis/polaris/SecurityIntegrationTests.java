@@ -1,7 +1,9 @@
 package io.vexis.polaris;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,6 +33,28 @@ class SecurityIntegrationTests {
   @Test
   void shouldReturnUnauthorizedForPrivateRouteWithoutToken() throws Exception {
     mockMvc.perform(get("/persons")).andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  void shouldAllowCorsPreflightFromLocalFrontend() throws Exception {
+    mockMvc
+        .perform(
+            options("/persons")
+                .header("Origin", "http://localhost:5173")
+                .header("Access-Control-Request-Method", "POST")
+                .header("Access-Control-Request-Headers", "authorization,content-type"))
+        .andExpect(status().isOk())
+        .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5173"))
+        .andExpect(header().string("Access-Control-Allow-Credentials", "true"));
+  }
+
+  @Test
+  void shouldIncludeCorsHeadersOnUnauthorizedResponseFromLocalFrontend() throws Exception {
+    mockMvc
+        .perform(get("/persons").header("Origin", "http://localhost:5173"))
+        .andExpect(status().isUnauthorized())
+        .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5173"))
+        .andExpect(header().string("Access-Control-Allow-Credentials", "true"));
   }
 
   @Test
