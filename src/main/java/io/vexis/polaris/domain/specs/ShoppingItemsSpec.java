@@ -6,14 +6,14 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class ShoppingItemsSpec {
 
-  private static Specification<ShoppingItem> byStatusId(Long statusId) {
+  private static Specification<ShoppingItem> byStatus(String status) {
     return ((root, query, cb) ->
-        statusId == null ? null : cb.equal(root.get("status").get("id"), statusId));
+        status == null ? null : cb.equal(root.get("status").get("tag"), status));
   }
 
-  private static Specification<ShoppingItem> byCategoryId(Long categoryId) {
+  private static Specification<ShoppingItem> byTag(String tag) {
     return ((root, query, cb) ->
-        categoryId == null ? null : cb.equal(root.get("category").get("id"), categoryId));
+        tag == null ? null : cb.equal(root.get("category").get("tag"), tag));
   }
 
   private static Specification<ShoppingItem> byTitle(String title) {
@@ -24,7 +24,7 @@ public class ShoppingItemsSpec {
   }
 
   public static Specification<ShoppingItem> byFilters(ShoppingItemFiltersDTO filters) {
-    return Specification.where(byTitle(filters.title()).and(byStatusId(filters.statusId())))
-        .and(byCategoryId(filters.categoryId()));
+    return Specification.where(byTitle(filters.title()).and(byStatus(filters.status())))
+        .and(byTag(filters.tag()));
   }
 }

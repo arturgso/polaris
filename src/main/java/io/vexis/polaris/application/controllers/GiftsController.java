@@ -25,23 +25,23 @@ public class GiftsController {
 
   @GetMapping
   public ResponseEntity<List<GiftDTO>> list(
-      @RequestParam(required = false) Long statusId,
-      @RequestParam(required = false) Long eventId,
+      @RequestParam(required = false) String status,
+      @RequestParam(required = false) String event,
       @RequestParam(required = false) String title,
       @RequestParam(required = false) String link) {
     return ResponseEntity.ok(
-        service.list(new GiftFiltersDTO(null, statusId, eventId, title, link)));
+        service.list(new GiftFiltersDTO(null, status, event, title, link)));
   }
 
   @GetMapping("by-person")
   public ResponseEntity<List<GiftDTO>> listByPerson(
       @RequestParam Long personId,
-      @RequestParam(required = false) Long statusId,
-      @RequestParam(required = false) Long eventId,
+      @RequestParam(required = false) String status,
+      @RequestParam(required = false) String event,
       @RequestParam(required = false) String title,
       @RequestParam(required = false) String link) {
     return ResponseEntity.ok(
-        service.listByPerson(new GiftFiltersDTO(personId, statusId, eventId, title, link)));
+        service.listByPerson(new GiftFiltersDTO(personId, status, event, title, link)));
   }
 
   @PatchMapping("{id}")

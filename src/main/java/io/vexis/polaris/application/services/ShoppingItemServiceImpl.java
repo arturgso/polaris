@@ -36,7 +36,7 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   @Override
   public ShoppingItemDTO create(NewShoppingItemDTO dto) {
     log.info(
-        "Creating shopping item with categoryId={} and statusId={}",
+        "Creating shopping item with categoryId={} and status={}",
         dto.categoryId(),
         dto.statusId());
     var item =
@@ -50,9 +50,9 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   @Override
   public List<ShoppingItemDTO> list(ShoppingItemFiltersDTO filtersDTO) {
     log.debug(
-        "Listing shopping items with filters statusId={}, categoryId={}, titlePresent={}",
-        filtersDTO.statusId(),
-        filtersDTO.categoryId(),
+        "Listing shopping items with filters status={}, categoryId={}, titlePresent={}",
+        filtersDTO.status(),
+        filtersDTO.tag(),
         filtersDTO.title() != null);
     List<ShoppingItem> itemList = repository.findAll(ShoppingItemsSpec.byFilters(filtersDTO));
     log.debug("Found {} shopping items", itemList.size());

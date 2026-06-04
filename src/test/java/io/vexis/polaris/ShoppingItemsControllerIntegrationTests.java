@@ -65,7 +65,7 @@ class ShoppingItemsControllerIntegrationTests {
                           "link":"https://example.com/cable",
                           "categoryId":%d,
                           "price":39.90,
-                          "statusId":%d
+                          "status":%d
                         }
                         """
                             .formatted(categoryId, plannedStatusId)))
@@ -104,7 +104,7 @@ class ShoppingItemsControllerIntegrationTests {
         .andExpect(jsonPath("$[*].id", hasItem(itemId.intValue())));
 
     mockMvc
-        .perform(get("/shopping-items").param("statusId", plannedStatusId.toString()))
+        .perform(get("/shopping-items").param("status", plannedStatusId.toString()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[*].id", hasItem(itemId.intValue())));
 
@@ -118,7 +118,7 @@ class ShoppingItemsControllerIntegrationTests {
                       "title":"Wireless Mouse",
                       "categoryId":%d,
                       "price":89.50,
-                      "statusId":%d
+                      "status":%d
                     }
                     """
                         .formatted(updatedCategoryId, boughtStatusId)))
@@ -262,7 +262,7 @@ class ShoppingItemsControllerIntegrationTests {
                       "link":"%s",
                       "categoryId":%d,
                       "price":%d,
-                      "statusId":%d
+                      "status":%d
                     }
                     """
                         .formatted(title, link, categoryId, price, statusId)))

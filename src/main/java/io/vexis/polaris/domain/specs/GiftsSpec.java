@@ -20,14 +20,14 @@ public class GiftsSpec {
             : cb.like(cb.lower(root.get("link")), "%" + link.toLowerCase() + "%");
   }
 
-  private static Specification<Gift> byStatusId(Long statusId) {
+  private static Specification<Gift> byStatus(String status) {
     return ((root, query, cb) ->
-        statusId == null ? null : cb.equal(root.get("status").get("id"), statusId));
+        status == null ? null : cb.equal(root.get("status").get("tag"), status));
   }
 
-  private static Specification<Gift> byEventId(Long eventId) {
+  private static Specification<Gift> byEvent(String event) {
     return ((root, query, cb) ->
-        eventId == null ? null : cb.equal(root.get("event").get("id"), eventId));
+        event == null ? null : cb.equal(root.get("event").get("tag"), event));
   }
 
   private static Specification<Gift> byGiftForId(Long personId) {
@@ -38,8 +38,8 @@ public class GiftsSpec {
   public static Specification<Gift> byFilters(GiftFiltersDTO filters) {
     return Specification.where(byTitle(filters.title()))
         .and(byLink(filters.link()))
-        .and(byStatusId(filters.statusId()))
-        .and(byEventId(filters.eventId()))
+        .and(byStatus(filters.status()))
+        .and(byEvent(filters.event()))
         .and(byGiftForId(filters.personId()));
   }
 }

@@ -34,10 +34,10 @@ public class ShoppingItemsController {
 
   @GetMapping
   public ResponseEntity<List<ShoppingItemDTO>> list(
-      @RequestParam(required = false) Long statusId,
-      @RequestParam(required = false) Long categoryId,
+      @RequestParam(required = false) String status,
+      @RequestParam(required = false) String tag,
       @RequestParam(required = false) String title) {
-    return ResponseEntity.ok(service.list(new ShoppingItemFiltersDTO(statusId, categoryId, title)));
+    return ResponseEntity.ok(service.list(new ShoppingItemFiltersDTO(status, tag, title)));
   }
 
   @PatchMapping("{id}")
