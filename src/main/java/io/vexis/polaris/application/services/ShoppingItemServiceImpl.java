@@ -81,11 +81,16 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
     return totalPrice;
   }
 
+  @Override
+  public ShoppingItem getEntity(Long id) {
+    return repository.findById(id).orElseThrow(ShoppingItemNotFoundException::new);
+  }
+
   @Transactional
   @Override
   public void update(UpdateShoppingItemDTO dto, Long id) {
     log.info("Updating shopping item id={}", id);
-    var item = repository.findById(id).orElseThrow(ShoppingItemNotFoundException::new);
+    var item = getEntity(id);
     item = mapper.partialUpdate(dto, item);
 
     if (dto.title() != null) {
@@ -108,7 +113,7 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   @Override
   public void delete(Long id) {
     log.info("Deleting shopping item id={}", id);
-    var item = repository.findById(id).orElseThrow(ShoppingItemNotFoundException::new);
+    var item = getEntity(id);
     repository.delete(item);
     log.info("Shopping item deleted id={}", id);
   }

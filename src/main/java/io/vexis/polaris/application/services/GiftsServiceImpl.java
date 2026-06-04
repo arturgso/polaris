@@ -16,7 +16,6 @@ import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.specs.GiftsSpec;
 import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
-
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -76,11 +75,16 @@ public class GiftsServiceImpl implements GiftsService {
     return ListMapper.createResponseList(giftList, mapper::toDTO);
   }
 
+  @Override
+  public Gift getEntity(Long id) {
+    return repository.findById(id).orElseThrow(GiftNotFoundException::new);
+  }
+
   @Transactional
   @Override
   public void update(UpdateGiftDTO dto, Long id) {
     log.info("Updating gift id={}", id);
-    var gift = repository.findById(id).orElseThrow(GiftNotFoundException::new);
+    var gift = getEntity(id);
     gift = mapper.update(dto, gift);
 
     if (dto.giftFor() != null) {
@@ -118,5 +122,5 @@ public class GiftsServiceImpl implements GiftsService {
   @Override
   public BigDecimal getTotalPrice() {
     return repository.getTotalPrice();
-    }
+  }
 }

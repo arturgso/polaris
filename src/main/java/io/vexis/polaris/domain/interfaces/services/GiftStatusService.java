@@ -4,18 +4,9 @@ import io.vexis.polaris.domain.models.dtos.giftstatus.GiftStatusDTO;
 import io.vexis.polaris.domain.models.dtos.giftstatus.NewGiftStatusDTO;
 import io.vexis.polaris.domain.models.dtos.giftstatus.UpdateGiftStatusDTO;
 import io.vexis.polaris.domain.models.entities.GiftStatus;
-import java.util.List;
 
-public interface GiftStatusService {
-  GiftStatusDTO create(NewGiftStatusDTO dto);
-
-  List<GiftStatusDTO> list();
-
-  GiftStatus getEntity(Long id);
-
+public interface GiftStatusService
+    extends ListCrudService<
+        NewGiftStatusDTO, UpdateGiftStatusDTO, GiftStatusDTO, GiftStatus, Long> {
   GiftStatus getEntityByTag(String tag);
-
-  void update(UpdateGiftStatusDTO dto, Long id);
-
-  void delete(Long id);
 }
