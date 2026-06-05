@@ -1,9 +1,7 @@
 package io.vexis.polaris.application.controllers;
 
-import io.vexis.polaris.domain.interfaces.services.GiftListService;
-import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
-import io.vexis.polaris.domain.models.dtos.giftlist.NewGiftListDTO;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.vexis.polaris.domain.interfaces.services.GiftListService;
+import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
+import io.vexis.polaris.domain.models.dtos.giftlist.NewGiftListDTO;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/gift-lists")
@@ -27,18 +30,25 @@ public class GiftListController {
     return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
   }
 
+  @GetMapping
+  public ResponseEntity<List<GiftListDTO>> getAll() {
+    return ResponseEntity.ok().body(service.list());
+  }
+
   @GetMapping("{id}")
   public ResponseEntity<GiftListDTO> getById(@PathVariable Long id) {
-    return null;
+    return ResponseEntity.ok(service.getById(id));
   }
 
   @PatchMapping("{id}")
   public ResponseEntity<Void> update(@RequestBody NewGiftListDTO dto, @PathVariable Long id) {
-    return null;
+    service.update(dto, id);
+    return ResponseEntity.ok().body(null);
   }
 
   @DeleteMapping("{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
-    return null;
+    service.delete(id);
+    return ResponseEntity.ok().body(null);
   }
 }
