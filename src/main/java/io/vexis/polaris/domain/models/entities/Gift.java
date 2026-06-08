@@ -49,6 +49,10 @@ public class Gift {
   @JoinColumn(name = "status_id")
   private GiftStatus status;
 
+  @ManyToOne(fetch = FetchType.LAZY)  
+  @JoinColumn(name = "list_id")
+  private GiftList giftList;
+
   @CreationTimestamp private Instant createdAt;
 
   @UpdateTimestamp private Instant updatedAt;

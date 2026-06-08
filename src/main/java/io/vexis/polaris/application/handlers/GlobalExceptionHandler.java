@@ -2,6 +2,7 @@ package io.vexis.polaris.application.handlers;
 
 import io.vexis.polaris.domain.exceptions.OperationNotImplementedException;
 import io.vexis.polaris.domain.exceptions.ResourceNotFoundException;
+import io.vexis.polaris.domain.exceptions.ShoppingListNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,6 +18,12 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+  @ExceptionHandler(ShoppingListNotFoundException.class)
+  public ResponseEntity<ErrorResponse> handleShoppingListNotFound(
+      ShoppingListNotFoundException exception, HttpServletRequest request) {
+    return build(HttpStatus.NOT_FOUND, "Lista de compras não encontrada.", request);
+  }
 
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<ErrorResponse> handleResourceNotFound(

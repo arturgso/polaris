@@ -1,0 +1,83 @@
+package io.vexis.polaris.application.services;
+
+import java.util.List;
+
+import io.vexis.polaris.shared.dtos.NewListDTO;
+import org.springframework.stereotype.Service;
+
+import io.vexis.polaris.domain.exceptions.GiftListNotFoundException;
+import io.vexis.polaris.domain.interfaces.mappers.GiftListMapper;
+import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
+import io.vexis.polaris.domain.interfaces.services.GiftListService;
+import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
+import io.vexis.polaris.domain.models.entities.GiftList;
+import io.vexis.polaris.shared.ListMapper;
+import io.vexis.polaris.shared.TextUtils;
+import io.vexis.polaris.shared.utils.EntityUtils;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class GiftListServiceImpl implements GiftListService {
+
+  private final GiftListMapper mapper;
+  private final GiftListRepository repository;
+
+  @Override
+  public GiftListDTO create(NewListDTO dto) {
+    log.info("Creating gift list");
+    var giftList = new GiftList();
+    giftList.setTitle(TextUtils.normalizeText(dto.title()));
+    giftList = repository.save(giftList);
+
+    log.info("Gift list created with id={}", giftList.getId());
+    return mapper.toDTO(giftList);
+  }
+
+  @Override
+  public GiftList getEntity(Long id) {
+    log.debug("Loading gift list id={}", id);
+    return repository.findById(id).orElseThrow(GiftListNotFoundException::new);
+  }
+
+  @Override
+  public GiftListDTO getById(Long id) {
+    log.debug("Loading gift list DTO id={}", id);
+    return mapper.toDTO(getEntity(id));
+  }
+
+  @Transactional
+  @Override
+  public void update(NewListDTO dto, Long id) {
+    log.info("Updating gift list id={}", id);
+    var giftList = EntityUtils.findOrThrow(repository, id);
+    if (dto.title() != null) {
+      giftList.setTitle(TextUtils.normalizeText(dto.title()));
+    }
+
+    repository.save(giftList);
+    log.info("Gift list updated id={}", id);
+  }
+
+  @Transactional
+  @Override
+  public void delete(Long id) {
+    log.info("Deleting gift list id={}", id);
+    if (!repository.existsById(id)) {
+      throw new GiftListNotFoundException();
+    }
+    repository.deleteById(id);
+    log.info("Gift list deleted id={}", id);
+  }
+
+  @Override
+  public List<GiftListDTO> list() {
+    log.debug("Listing gift lists");
+    var lists = repository.findAll();
+    return ListMapper.createResponseList(lists, mapper::toDTO);
+  }
+
+}

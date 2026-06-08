@@ -1,10 +1,16 @@
 package io.vexis.polaris.application.services;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import io.vexis.polaris.application.factories.GiftsFactory;
 import io.vexis.polaris.domain.exceptions.GiftNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.GiftsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.services.EventsService;
+import io.vexis.polaris.domain.interfaces.services.GiftListService;
 import io.vexis.polaris.domain.interfaces.services.GiftStatusService;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.interfaces.services.PersonsService;
@@ -16,12 +22,8 @@ import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.specs.GiftsSpec;
 import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
-
-import java.math.BigDecimal;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,7 @@ public class GiftsServiceImpl implements GiftsService {
   private final PersonsService personsService;
   private final EventsService eventsService;
   private final GiftStatusService giftStatusService;
+  private final GiftListService giftListService;
 
   private final GiftsRepository repository;
   private final GiftsFactory factory;
@@ -76,11 +79,16 @@ public class GiftsServiceImpl implements GiftsService {
     return ListMapper.createResponseList(giftList, mapper::toDTO);
   }
 
+  @Override
+  public Gift getEntity(Long id) {
+    return repository.findById(id).orElseThrow(GiftNotFoundException::new);
+  }
+
   @Transactional
   @Override
   public void update(UpdateGiftDTO dto, Long id) {
     log.info("Updating gift id={}", id);
-    var gift = repository.findById(id).orElseThrow(GiftNotFoundException::new);
+    var gift = getEntity(id);
     gift = mapper.update(dto, gift);
 
     if (dto.giftFor() != null) {
@@ -93,6 +101,10 @@ public class GiftsServiceImpl implements GiftsService {
 
     if (dto.status() != null) {
       gift.setStatus(giftStatusService.getEntityByTag(dto.status()));
+    }
+
+    if(dto.giftListId() != null) {
+     gift.setGiftList(giftListService.getEntity(dto.giftListId())); 
     }
 
     repository.save(gift);
@@ -118,5 +130,5 @@ public class GiftsServiceImpl implements GiftsService {
   @Override
   public BigDecimal getTotalPrice() {
     return repository.getTotalPrice();
-    }
+  }
 }
