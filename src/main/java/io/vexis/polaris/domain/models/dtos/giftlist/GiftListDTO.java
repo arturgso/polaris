@@ -1,16 +1,23 @@
 package io.vexis.polaris.domain.models.dtos.giftlist;
 
-import java.time.Instant;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
+import io.vexis.polaris.shared.dtos.ListDTO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.List;
 
-import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
-
-public record GiftListDTO(
-    Long id,
-    String title,
-    List<GiftDTO> gifts,
-    Instant createdAt,
-    Instant updatedAt
-) {
+@JsonPropertyOrder({
+        "id",
+        "title",
+        "createdAt",
+        "updatedAt",
+        "gifs"
+})
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class GiftListDTO extends ListDTO {
+    List<GiftDTO> gifts;
 
 }

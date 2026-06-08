@@ -2,6 +2,7 @@ package io.vexis.polaris.application.controllers;
 
 import java.util.List;
 
+import io.vexis.polaris.shared.dtos.NewListDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
 import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
-import io.vexis.polaris.domain.models.dtos.giftlist.NewGiftListDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -26,7 +26,7 @@ public class GiftListController {
   private final GiftListService service;
 
   @PostMapping
-  public ResponseEntity<GiftListDTO> create(@RequestBody NewGiftListDTO dto) {
+  public ResponseEntity<GiftListDTO> create(@RequestBody NewListDTO dto) {
     return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
   }
 
@@ -41,7 +41,7 @@ public class GiftListController {
   }
 
   @PatchMapping("{id}")
-  public ResponseEntity<Void> update(@RequestBody NewGiftListDTO dto, @PathVariable Long id) {
+  public ResponseEntity<Void> update(@RequestBody NewListDTO dto, @PathVariable Long id) {
     service.update(dto, id);
     return ResponseEntity.ok().body(null);
   }

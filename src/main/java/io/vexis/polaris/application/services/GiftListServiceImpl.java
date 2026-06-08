@@ -2,6 +2,7 @@ package io.vexis.polaris.application.services;
 
 import java.util.List;
 
+import io.vexis.polaris.shared.dtos.NewListDTO;
 import org.springframework.stereotype.Service;
 
 import io.vexis.polaris.domain.exceptions.GiftListNotFoundException;
@@ -9,7 +10,6 @@ import io.vexis.polaris.domain.interfaces.mappers.GiftListMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
 import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
-import io.vexis.polaris.domain.models.dtos.giftlist.NewGiftListDTO;
 import io.vexis.polaris.domain.models.entities.GiftList;
 import io.vexis.polaris.shared.ListMapper;
 import io.vexis.polaris.shared.TextUtils;
@@ -25,9 +25,9 @@ public class GiftListServiceImpl implements GiftListService {
   private final GiftListRepository repository;
 
   @Override
-  public GiftListDTO create(NewGiftListDTO dto) {
-    var giftList = mapper.toEntity(dto);
-    giftList.setTitle(TextUtils.normalizeText(giftList.getTitle()));
+  public GiftListDTO create(NewListDTO dto) {
+    var giftList = new GiftList();
+    giftList.setTitle(TextUtils.normalizeText(dto.title()));
     giftList = repository.save(giftList);
 
     return mapper.toDTO(giftList);
@@ -45,7 +45,7 @@ public class GiftListServiceImpl implements GiftListService {
 
   @Transactional
   @Override
-  public void update(NewGiftListDTO dto, Long id) {
+  public void update(NewListDTO dto, Long id) {
     var giftList = EntityUtils.findOrThrow(repository, id);
     if (dto.title() != null) {
       giftList.setTitle(TextUtils.normalizeText(dto.title()));
