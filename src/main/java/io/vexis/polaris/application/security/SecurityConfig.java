@@ -49,7 +49,7 @@ public class SecurityConfig {
                     .requestMatchers(
                         "/auth/login", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**")
                     .permitAll()
-                    .requestMatchers("/gift-lists/**")
+                    .requestMatchers("/gift-lists/**", "/shopping-lists/**")
                     .hasRole("ADMIN")
                     .anyRequest()
                     .hasRole("ADMIN"))
