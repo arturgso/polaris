@@ -7,6 +7,7 @@ import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemCategoriesService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemStatusesService;
+import io.vexis.polaris.domain.interfaces.services.ShoppingListService;
 import io.vexis.polaris.domain.models.dtos.filters.ShoppingItemFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.NewShoppingItemDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
@@ -32,6 +33,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   private final ShoppingItemFactory factory;
   private final ShoppingItemStatusesService statusesService;
   private final ShoppingItemCategoriesService categoriesService;
+
+  private final ShoppingListService shoppingListService;
 
   @Override
   public ShoppingItemDTO create(NewShoppingItemDTO dto) {
@@ -103,6 +106,10 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
 
     if (dto.statusId() != null) {
       item.setStatus(statusesService.getEntity(dto.statusId()));
+    }
+
+    if (dto.shoppingListId() != null) {
+      item.setShoppingList(shoppingListService.getEntity(dto.shoppingListId()));
     }
 
     repository.save(item);
