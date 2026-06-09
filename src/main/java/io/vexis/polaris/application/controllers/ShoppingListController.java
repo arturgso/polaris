@@ -44,6 +44,12 @@ public class ShoppingListController {
     return ResponseEntity.ok().build();
   }
 
+  @PatchMapping("{id}/vault")
+  public ResponseEntity<Void> moveToVault(@PathVariable Long id) {
+    service.moveToVault(id);
+    return ResponseEntity.noContent().build();
+  }
+
   @DeleteMapping("{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     service.delete(id);

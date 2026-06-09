@@ -2,6 +2,7 @@ package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.domain.exceptions.ShoppingListNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.ShoppingListMapper;
+import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingListRepository;
 import io.vexis.polaris.domain.interfaces.services.ShoppingListService;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingListDTO;
@@ -23,6 +24,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
   private final ShoppingListMapper mapper;
   private final ShoppingListRepository repository;
+  private final ShoppingItemRepository shoppingItemRepository;
 
   @Override
   public ShoppingListDTO create(NewListDTO dto) {
@@ -45,6 +47,16 @@ public class ShoppingListServiceImpl implements ShoppingListService {
   public ShoppingListDTO getById(Long id) {
     log.debug("Loading shopping list DTO id={}", id);
     return mapper.toDTO(getEntity(id));
+  }
+
+  @Override
+  @Transactional
+  public void moveToVault(Long id) {
+    var list = getEntity(id);
+    list.setInVault(true);
+    repository.save(list);
+    list.getItems().forEach(item -> item.setInVault(true));
+    shoppingItemRepository.saveAll(list.getItems());
   }
 
   @Transactional

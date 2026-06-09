@@ -124,4 +124,19 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
     repository.delete(item);
     log.info("Shopping item deleted id={}", id);
   }
+
+  @Override
+  @Transactional
+  public void moveShoppingItemToVault(Long id) {
+    var item = getEntity(id);
+    item.setInVault(true);
+    repository.save(item);
+  }
+
+  @Override
+  @Transactional
+  public void moveShoppingItemsToVault(List<ShoppingItem> items) {
+    items.forEach(item -> item.setInVault(true));
+    repository.saveAll(items);
+  }
 }

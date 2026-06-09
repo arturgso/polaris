@@ -3,10 +3,9 @@ package io.vexis.polaris.application.services;
 import io.vexis.polaris.domain.exceptions.GiftListNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.GiftListMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
+import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
-import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
-import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.models.entities.GiftList;
 import io.vexis.polaris.shared.ListMapper;
 import io.vexis.polaris.shared.TextUtils;
@@ -25,7 +24,7 @@ public class GiftListServiceImpl implements GiftListService {
 
   private final GiftListMapper mapper;
   private final GiftListRepository repository;
-  private final GiftsService giftsService;
+  private final GiftsRepository giftsRepository;
 
   @Override
   public GiftListDTO create(NewListDTO dto) {
@@ -51,12 +50,19 @@ public class GiftListServiceImpl implements GiftListService {
   }
 
   @Override
+  public List<GiftListDTO> listAllInVault() {
+    var list = repository.findAllByInVaultTrue();
+    return ListMapper.createResponseList(list, mapper::toDTO);
+  }
+
+  @Override
+  @Transactional
   public void moveToVault(Long id) {
     var list = getEntity(id);
     list.setInVault(true);
-    list = repository.save(list);
-    List<Gift> giftList = list.getGifts();
-    giftsService.moveGiftsToVault(giftList);
+    repository.save(list);
+    list.getGifts().forEach(gift -> gift.setInVault(true));
+    giftsRepository.saveAll(list.getGifts());
   }
 
   @Transactional

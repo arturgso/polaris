@@ -1,11 +1,20 @@
 package io.vexis.polaris.application.controllers;
 
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
-import io.vexis.polaris.domain.interfaces.services.GiftsService;
+import io.vexis.polaris.domain.interfaces.services.VaultService;
+import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
+import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
+import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
+import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingListDTO;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,23 +23,49 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class VaultController {
 
-  private final GiftsService giftsService;
-  private final GiftListService giftListService;
+  private final VaultService vaultService;
 
   // TODO: Require and validate a short-lived vault token for every endpoint in this controller.
-  // TODO: Add the unlock endpoint responsible for issuing the vault token.
-  // TODO: Add endpoints for listing and retrieving vault content.
-  // TODO: Add equivalent operations for shopping items and shopping lists.
 
-  @PatchMapping("/gifts/{id}")
-  public ResponseEntity<Void> moveGiftToVault(@PathVariable Long id) {
-    giftsService.moveGiftToVault(id);
-    return ResponseEntity.noContent().build();
+  @GetMapping("/gifts")
+  public ResponseEntity<List<GiftDTO>> listGifts() {
+    // TODO: Delegate to VaultService.listGifts().
+    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
   }
 
-  @PatchMapping("/gift-lists/{id}")
-  public ResponseEntity<Void> moveGiftListToVault(@PathVariable Long id) {
-    giftListService.moveToVault(id);
-    return ResponseEntity.noContent().build();
+  @GetMapping("/gift-lists")
+  public ResponseEntity<List<GiftListDTO>> listGiftLists() {
+    return ResponseEntity.ok().body(vaultService.listGiftLists());
   }
+
+  @GetMapping("/shopping-items")
+  public ResponseEntity<List<ShoppingItemDTO>> listShoppingItems() {
+    // TODO: Delegate to VaultService.listShoppingItems().
+    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+  }
+
+  @GetMapping("/shopping-lists")
+  public ResponseEntity<List<ShoppingListDTO>> listShoppingLists() {
+    // TODO: Delegate to VaultService.listShoppingLists().
+    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+  }
+
+  @PostMapping("/unlock")
+  public ResponseEntity<VaultTokenResponse> unlock(@RequestBody UnlockVaultRequest request) {
+    // TODO: Delegate to VaultService.unlock(request.password()).
+    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+  }
+
+  @PostMapping("/validate")
+  public ResponseEntity<VaultTokenValidationResponse> validate(
+      @RequestHeader("X-Vault-Token") String token) {
+    // TODO: Delegate to VaultService.validate(token).
+    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+  }
+
+  public record UnlockVaultRequest(String password) {}
+
+  public record VaultTokenResponse(String token) {}
+
+  public record VaultTokenValidationResponse(boolean valid) {}
 }

@@ -138,12 +138,4 @@ public class GiftsServiceImpl implements GiftsService {
     repository.save(gift);
   }
 
-  @Override
-  @Transactional
-  public void moveGiftsToVault(List<Gift> gifts) {
-    for (Gift gift : gifts) {
-      gift.setInVault(true);
-      repository.save(gift);
-    }
-  }
 }

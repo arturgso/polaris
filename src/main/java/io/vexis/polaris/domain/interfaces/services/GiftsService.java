@@ -17,6 +17,4 @@ public interface GiftsService
   BigDecimal getTotalPrice();
 
   void moveGiftToVault(Long id);
-
-  void moveGiftsToVault(List<Gift> gifts);
 }

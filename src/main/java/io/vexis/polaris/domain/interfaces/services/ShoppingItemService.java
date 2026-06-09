@@ -21,4 +21,8 @@ public interface ShoppingItemService
   Long countAll();
 
   BigDecimal getTotalPrice();
+
+  void moveShoppingItemToVault(Long id);
+
+  void moveShoppingItemsToVault(List<ShoppingItem> items);
 }

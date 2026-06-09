@@ -49,6 +49,10 @@ public class SecurityConfig {
                     .requestMatchers(
                         "/auth/login", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**")
                     .permitAll()
+                    // TODO: Require an authority derived from the vault token scope instead of
+                    // relying only on the regular ADMIN authentication.
+                    .requestMatchers("/vault/**")
+                    .hasRole("ADMIN")
                     .requestMatchers("/gift-lists/**", "/shopping-lists/**")
                     .hasRole("ADMIN")
                     .anyRequest()

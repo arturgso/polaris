@@ -47,6 +47,12 @@ public class ShoppingItemsController {
     return ResponseEntity.ok(null);
   }
 
+  @PatchMapping("{id}/vault")
+  public ResponseEntity<Void> moveToVault(@PathVariable Long id) {
+    service.moveShoppingItemToVault(id);
+    return ResponseEntity.noContent().build();
+  }
+
   @DeleteMapping("{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     service.delete(id);

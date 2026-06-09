@@ -8,4 +8,6 @@ public interface ShoppingListService
     extends ListCrudService<NewListDTO, NewListDTO, ShoppingListDTO, ShoppingList, Long> {
 
   ShoppingListDTO getById(Long id);
+
+  void moveToVault(Long id);
 }
