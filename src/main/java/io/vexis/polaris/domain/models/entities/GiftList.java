@@ -1,13 +1,12 @@
 package io.vexis.polaris.domain.models.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.vexis.polaris.shared.abstracts.ListEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,8 +22,7 @@ import lombok.Setter;
 @Builder
 public class GiftList extends ListEntity {
 
-    @Builder.Default
-    @OneToMany(mappedBy = "giftList", fetch = FetchType.LAZY)
-    private List<Gift> gifts = new ArrayList<>();
-
+  @Builder.Default
+  @OneToMany(mappedBy = "giftList", fetch = FetchType.LAZY)
+  private List<Gift> gifts = new ArrayList<>();
 }

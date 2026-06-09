@@ -1,16 +1,14 @@
 package io.vexis.polaris.application.security;
 
-import java.time.Instant;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import java.time.Instant;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class JwtService {
@@ -52,11 +50,11 @@ public class JwtService {
     Instant issuedAt = Instant.now();
     Instant expiresAt = issuedAt.plusSeconds(expirationSeconds);
     return JWT.create()
-    .withSubject(initialUser)
-    .withClaim("scope", "vault:access")
-    .withIssuedAt(issuedAt)
-    .withExpiresAt(expiresAt)
-    .sign(algorithm);
+        .withSubject(initialUser)
+        .withClaim("scope", "vault:access")
+        .withIssuedAt(issuedAt)
+        .withExpiresAt(expiresAt)
+        .sign(algorithm);
   }
 
   public String extractUsername(String token) {

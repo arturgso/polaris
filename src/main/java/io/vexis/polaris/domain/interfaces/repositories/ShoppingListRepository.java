@@ -1,9 +1,6 @@
 package io.vexis.polaris.domain.interfaces.repositories;
 
+import io.vexis.polaris.domain.models.entities.ShoppingList;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import io.vexis.polaris.domain.models.entities.ShoppingList;
-
-public interface ShoppingListRepository extends JpaRepository<ShoppingList, Long> {
-
-}
+public interface ShoppingListRepository extends JpaRepository<ShoppingList, Long> {}

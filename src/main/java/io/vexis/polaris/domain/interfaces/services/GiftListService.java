@@ -8,4 +8,6 @@ public interface GiftListService
     extends ListCrudService<NewListDTO, NewListDTO, GiftListDTO, GiftList, Long> {
 
   GiftListDTO getById(Long id);
+
+  void moveToVault(Long id);
 }

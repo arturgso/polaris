@@ -1,19 +1,23 @@
 package io.vexis.polaris.application.bootstrap;
 
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
+import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftStatusRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.PersonsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemCategoriesRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemStatusesRepository;
+import io.vexis.polaris.domain.interfaces.repositories.ShoppingListRepository;
 import io.vexis.polaris.domain.models.entities.Event;
 import io.vexis.polaris.domain.models.entities.Gift;
+import io.vexis.polaris.domain.models.entities.GiftList;
 import io.vexis.polaris.domain.models.entities.GiftStatus;
 import io.vexis.polaris.domain.models.entities.Person;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
 import io.vexis.polaris.domain.models.entities.ShoppingItemStatus;
+import io.vexis.polaris.domain.models.entities.ShoppingList;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +36,9 @@ public class DatabasePopulateRunner implements ApplicationRunner {
 
   private final PersonsRepository personsRepository;
   private final GiftsRepository giftsRepository;
+  private final GiftListRepository giftListRepository;
   private final ShoppingItemRepository shoppingItemRepository;
+  private final ShoppingListRepository shoppingListRepository;
   private final EventsRepository eventsRepository;
   private final GiftStatusRepository giftStatusRepository;
   private final ShoppingItemCategoriesRepository shoppingItemCategoriesRepository;
@@ -45,7 +51,9 @@ public class DatabasePopulateRunner implements ApplicationRunner {
 
     if (personsRepository.count() > 0
         || giftsRepository.count() > 0
-        || shoppingItemRepository.count() > 0) {
+        || giftListRepository.count() > 0
+        || shoppingItemRepository.count() > 0
+        || shoppingListRepository.count() > 0) {
       log.info("Database populate skipped because user data tables already contain records");
       return;
     }
@@ -93,36 +101,105 @@ public class DatabasePopulateRunner implements ApplicationRunner {
     var bruno = persons.get(1);
     var carla = persons.get(2);
 
+    var publicGiftList = giftListRepository.save(giftList("Presentes", false));
+    var vaultGiftList = giftListRepository.save(giftList("Presentes secretos", true));
+
+    var publicShoppingList = shoppingListRepository.save(shoppingList("Compras", false));
+    var vaultShoppingList = shoppingListRepository.save(shoppingList("Compras secretas", true));
+
     giftsRepository.saveAll(
         List.of(
-            gift("Fone bluetooth", "https://example.com/fone", ana, birthday, purchased),
-            gift("Livro de receitas", null, bruno, christmas, giftIdea),
-            gift("Jogo de toalhas", "https://example.com/toalhas", carla, marriage, delivered),
-            gift("Cartao presente", null, ana, none, giftIdea)));
+            gift(
+                "Fone bluetooth",
+                "https://example.com/fone",
+                ana,
+                birthday,
+                purchased,
+                vaultGiftList,
+                true),
+            gift(
+                "Livro de receitas",
+                null,
+                bruno,
+                christmas,
+                giftIdea,
+                publicGiftList,
+                false),
+            gift(
+                "Jogo de toalhas",
+                "https://example.com/toalhas",
+                carla,
+                marriage,
+                delivered,
+                publicGiftList,
+                false),
+            gift(
+                "Cartao presente", null, ana, none, giftIdea, publicGiftList, false)));
 
     shoppingItemRepository.saveAll(
         List.of(
             shoppingItem(
-                "Teclado mecanico", "https://example.com/teclado", tech, "349.90", planned),
-            shoppingItem("Vitaminas", null, health, "79.90", toBuy),
-            shoppingItem("Base liquida", "https://example.com/base", makeup, "119.90", bought),
-            shoppingItem("Organizador", null, other, "45.50", shoppingIdea),
-            shoppingItem("Cabo USB-C", null, tech, "39.90", canceled)));
+                "Teclado mecanico",
+                "https://example.com/teclado",
+                tech,
+                "349.90",
+                planned,
+                publicShoppingList,
+                false),
+            shoppingItem(
+                "Vitaminas", null, health, "79.90", toBuy, publicShoppingList, false),
+            shoppingItem(
+                "Base liquida",
+                "https://example.com/base",
+                makeup,
+                "119.90",
+                bought,
+                vaultShoppingList,
+                true),
+            shoppingItem(
+                "Organizador", null, other, "45.50", shoppingIdea, publicShoppingList, false),
+            shoppingItem(
+                "Cabo USB-C", null, tech, "39.90", canceled, publicShoppingList, false)));
 
     log.info(
-        "Database populate created {} persons, {} gifts and {} shopping items",
+        "Database populate created {} persons, {} gift lists, {} gifts, {} shopping lists and {} shopping items",
         personsRepository.count(),
+        giftListRepository.count(),
         giftsRepository.count(),
+        shoppingListRepository.count(),
         shoppingItemRepository.count());
   }
 
-  private Gift gift(String title, String link, Person person, Event event, GiftStatus status) {
+  private GiftList giftList(String title, boolean inVault) {
+    var giftList = new GiftList();
+    giftList.setTitle(title);
+    giftList.setInVault(inVault);
+    return giftList;
+  }
+
+  private ShoppingList shoppingList(String title, boolean inVault) {
+    var shoppingList = new ShoppingList();
+    shoppingList.setTitle(title);
+    shoppingList.setInVault(inVault);
+    return shoppingList;
+  }
+
+  private Gift gift(
+      String title,
+      String link,
+      Person person,
+      Event event,
+      GiftStatus status,
+      GiftList giftList,
+      boolean inVault) {
     return Gift.builder()
         .title(title)
         .link(link)
         .giftFor(person)
         .event(event)
         .status(status)
+        .giftList(giftList)
+        .inVault(inVault)
         .build();
   }
 
@@ -131,13 +208,17 @@ public class DatabasePopulateRunner implements ApplicationRunner {
       String link,
       ShoppingItemCategory category,
       String price,
-      ShoppingItemStatus status) {
+      ShoppingItemStatus status,
+      ShoppingList shoppingList,
+      boolean inVault) {
     return ShoppingItem.builder()
         .title(title)
         .link(link)
         .category(category)
         .price(new BigDecimal(price))
         .status(status)
+        .shoppingList(shoppingList)
+        .inVault(inVault)
         .build();
   }
 

@@ -1,10 +1,5 @@
 package io.vexis.polaris.application.services;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import io.vexis.polaris.application.factories.GiftsFactory;
 import io.vexis.polaris.domain.exceptions.GiftNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.GiftsMapper;
@@ -22,8 +17,11 @@ import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.specs.GiftsSpec;
 import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -103,8 +101,8 @@ public class GiftsServiceImpl implements GiftsService {
       gift.setStatus(giftStatusService.getEntityByTag(dto.status()));
     }
 
-    if(dto.giftListId() != null) {
-     gift.setGiftList(giftListService.getEntity(dto.giftListId())); 
+    if (dto.giftListId() != null) {
+      gift.setGiftList(giftListService.getEntity(dto.giftListId()));
     }
 
     repository.save(gift);
@@ -130,5 +128,22 @@ public class GiftsServiceImpl implements GiftsService {
   @Override
   public BigDecimal getTotalPrice() {
     return repository.getTotalPrice();
+  }
+
+  @Override
+  @Transactional
+  public void moveGiftToVault(Long id) {
+    var gift = getEntity(id);
+    gift.setInVault(true);
+    repository.save(gift);
+  }
+
+  @Override
+  @Transactional
+  public void moveGiftsToVault(List<Gift> gifts) {
+    for (Gift gift : gifts) {
+      gift.setInVault(true);
+      repository.save(gift);
+    }
   }
 }
