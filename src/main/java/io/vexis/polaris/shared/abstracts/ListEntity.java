@@ -2,6 +2,8 @@ package io.vexis.polaris.shared.abstracts;
 
 import java.time.Instant;
 
+import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@SuperBuilder
 @Getter
 @Setter
 @MappedSuperclass
@@ -25,6 +28,9 @@ public abstract class ListEntity {
     private Long id;
 
     private String title;
+
+    @Builder.Default
+    private Boolean inVault = false;
 
     @CreationTimestamp
     @Column(updatable=false, nullable=false)

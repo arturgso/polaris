@@ -1,7 +1,8 @@
 package io.vexis.polaris.shared.dtos;
 
 public record NewListDTO(
-    String title
+    String title,
+    Boolean visibility
 ) {
 
 }
