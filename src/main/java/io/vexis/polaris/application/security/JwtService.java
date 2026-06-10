@@ -43,12 +43,8 @@ public class JwtService {
   }
 
   public String generateVaultToken(UserDetails userDetails) {
-    if (!userDetails.getUsername().equals(initialUser)) {
-      throw new RuntimeException("Not allowed");
-    }
-
     Instant issuedAt = Instant.now();
-    Instant expiresAt = issuedAt.plusSeconds(expirationSeconds);
+    Instant expiresAt = issuedAt.plusSeconds(900);
     return JWT.create()
         .withSubject(initialUser)
         .withClaim("scope", "vault:access")

@@ -5,6 +5,10 @@ import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingListDTO;
 import java.util.List;
+import java.util.UUID;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface VaultService {
 
@@ -16,7 +20,7 @@ public interface VaultService {
 
   List<ShoppingListDTO> listShoppingLists();
 
-  String unlock(String password);
+  String unlock(String password, UserDetails userDetails);
 
   boolean validate(String token);
 }

@@ -7,7 +7,11 @@ import io.vexis.polaris.domain.models.dtos.users.UserDTO;
 import io.vexis.polaris.domain.models.entities.User;
 import io.vexis.polaris.shared.TextUtils;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
+
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +40,10 @@ public class UserServiceImpl implements UserService {
     user = repository.saveAndFlush(user);
 
     return new UserDTO(user.getId(), user.getUsername(), user.getCreatedAt(), user.getUpdatedAt());
+  }
+
+  @Override
+  public User getEntity(UUID id) {
+    return repository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Not Found"));
   }
 }
