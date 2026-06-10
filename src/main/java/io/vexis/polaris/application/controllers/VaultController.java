@@ -8,14 +8,11 @@ import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingLis
 import io.vexis.polaris.domain.models.dtos.vault.UnlockVaultRequestDTO;
 import io.vexis.polaris.domain.models.dtos.vault.VaultTokenResponseDTO;
 import io.vexis.polaris.domain.models.dtos.vault.VaultTokenValidationResponseDTO;
-
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,9 +51,11 @@ public class VaultController {
   }
 
   @PostMapping("/unlock")
-  public ResponseEntity<VaultTokenResponseDTO> unlock(@RequestBody UnlockVaultRequestDTO request, Authentication authentication) {
+  public ResponseEntity<VaultTokenResponseDTO> unlock(
+      @RequestBody UnlockVaultRequestDTO request, Authentication authentication) {
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-    return ResponseEntity.ok().body(new VaultTokenResponseDTO(vaultService.unlock(request.password(), userDetails)));
+    return ResponseEntity.ok()
+        .body(new VaultTokenResponseDTO(vaultService.unlock(request.password(), userDetails)));
   }
 
   @PostMapping("/validate")

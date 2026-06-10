@@ -6,18 +6,10 @@ import io.vexis.polaris.shared.dtos.NewListDTO;
 import java.util.List;
 
 public interface ShoppingListService
-    extends
-        ListCrudService<
-            NewListDTO,
-            NewListDTO,
-            ShoppingListDTO,
-            ShoppingList,
-            Long
-        >
-{
-    ShoppingListDTO getById(Long id);
+    extends ListCrudService<NewListDTO, NewListDTO, ShoppingListDTO, ShoppingList, Long> {
+  ShoppingListDTO getById(Long id);
 
-    List<ShoppingListDTO> listAllInVault();
+  List<ShoppingListDTO> listAllInVault();
 
-    void moveToVault(Long id);
+  void moveToVault(Long id);
 }

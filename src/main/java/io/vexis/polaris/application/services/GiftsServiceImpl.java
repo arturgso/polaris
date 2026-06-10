@@ -140,10 +140,6 @@ public class GiftsServiceImpl implements GiftsService {
 
   @Override
   public List<GiftDTO> listAllInVault() {
-    return repository.findAllByInVaultTrue()
-    .stream()
-    .map(mapper::toDTO)
-    .toList();
+    return repository.findAllByInVaultTrue().stream().map(mapper::toDTO).toList();
   }
-
 }

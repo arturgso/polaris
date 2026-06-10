@@ -6,10 +6,8 @@ import io.vexis.polaris.domain.models.dtos.users.NewUserDTO;
 import io.vexis.polaris.domain.models.dtos.users.UserDTO;
 import io.vexis.polaris.domain.models.entities.User;
 import io.vexis.polaris.shared.TextUtils;
-import lombok.RequiredArgsConstructor;
-
 import java.util.UUID;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

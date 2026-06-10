@@ -142,9 +142,6 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
 
   @Override
   public List<ShoppingItemDTO> listAllInVault() {
-    return repository.findAllByInVaultTrue()
-    .stream()
-    .map(mapper::toDTO)
-    .toList();
+    return repository.findAllByInVaultTrue().stream().map(mapper::toDTO).toList();
   }
 }

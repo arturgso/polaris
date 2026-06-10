@@ -117,14 +117,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
                 purchased,
                 vaultGiftList,
                 true),
-            gift(
-                "Livro de receitas",
-                null,
-                bruno,
-                christmas,
-                giftIdea,
-                publicGiftList,
-                false),
+            gift("Livro de receitas", null, bruno, christmas, giftIdea, publicGiftList, false),
             gift(
                 "Jogo de toalhas",
                 "https://example.com/toalhas",
@@ -133,8 +126,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
                 delivered,
                 publicGiftList,
                 false),
-            gift(
-                "Cartao presente", null, ana, none, giftIdea, publicGiftList, false)));
+            gift("Cartao presente", null, ana, none, giftIdea, publicGiftList, false)));
 
     shoppingItemRepository.saveAll(
         List.of(
@@ -146,8 +138,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
                 planned,
                 publicShoppingList,
                 false),
-            shoppingItem(
-                "Vitaminas", null, health, "79.90", toBuy, publicShoppingList, false),
+            shoppingItem("Vitaminas", null, health, "79.90", toBuy, publicShoppingList, false),
             shoppingItem(
                 "Base liquida",
                 "https://example.com/base",
@@ -158,8 +149,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
                 true),
             shoppingItem(
                 "Organizador", null, other, "45.50", shoppingIdea, publicShoppingList, false),
-            shoppingItem(
-                "Cabo USB-C", null, tech, "39.90", canceled, publicShoppingList, false)));
+            shoppingItem("Cabo USB-C", null, tech, "39.90", canceled, publicShoppingList, false)));
 
     log.info(
         "Database populate created {} persons, {} gift lists, {} gifts, {} shopping lists and {} shopping items",

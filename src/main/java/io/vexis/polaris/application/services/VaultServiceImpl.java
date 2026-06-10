@@ -10,79 +10,75 @@ import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingListDTO;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class VaultServiceImpl implements VaultService {
 
-    private final ShoppingListService shoppingListService;
-    private final ShoppingItemService shoppingItemService;
+  private final ShoppingListService shoppingListService;
+  private final ShoppingItemService shoppingItemService;
 
-    private final GiftListService giftListService;
-    private final GiftsService giftsService;
+  private final GiftListService giftListService;
+  private final GiftsService giftsService;
 
-    private final JwtService jwtService;
+  private final JwtService jwtService;
 
-    @Value("${app.bootstrap.admin.username}")
-    public String allowedUser;
+  @Value("${app.bootstrap.admin.username}")
+  public String allowedUser;
 
+  @Value("${app.bootstrap.vault.password}")
+  public String vaultPasswordHash;
 
-    @Value("${app.bootstrap.vault.password}")
-    public String vaultPasswordHash;
+  @Override
+  public List<GiftDTO> listGifts() {
+    return giftsService.listAllInVault();
+  }
 
-    @Override
-    public List<GiftDTO> listGifts() {
-        return giftsService.listAllInVault();
+  @Override
+  public List<GiftListDTO> listGiftLists() {
+    return giftListService.listAllInVault();
+  }
+
+  @Override
+  public List<ShoppingItemDTO> listShoppingItems() {
+    return shoppingItemService.listAllInVault();
+  }
+
+  @Override
+  public List<ShoppingListDTO> listShoppingLists() {
+    return shoppingListService.listAllInVault();
+  }
+
+  @Override
+  public String unlock(String password, UserDetails userDetails) {
+    validateUser(userDetails);
+    validateVaultPassword(password);
+
+    return jwtService.generateVaultToken(userDetails);
+  }
+
+  @Override
+  public boolean validate(String token) {
+    return false;
+  }
+
+  private void validateUser(UserDetails userDetails) {
+    if (!allowedUser.equals(userDetails.getUsername())) {
+      throw new RuntimeException("Not Allowed");
     }
+  }
 
-    @Override
-    public List<GiftListDTO> listGiftLists() {
-        return giftListService.listAllInVault();
+  private void validateVaultPassword(String password) {
+    String hash = new BCryptPasswordEncoder().encode(vaultPasswordHash);
+
+    if (!new BCryptPasswordEncoder().matches(password, hash)) {
+      throw new RuntimeException("Incorrect Password");
     }
-
-    @Override
-    public List<ShoppingItemDTO> listShoppingItems() {
-        return shoppingItemService.listAllInVault();
-    }
-
-    @Override
-    public List<ShoppingListDTO> listShoppingLists() {
-        return shoppingListService.listAllInVault();
-    }
-
-    @Override
-    public String unlock(String password, UserDetails userDetails) {
-        validateUser(userDetails);
-        validateVaultPassword(password);
-
-        return jwtService.generateVaultToken(userDetails);
-
-    }
-
-    @Override
-    public boolean validate(String token) {
-        return false;
-    }
-
-    private void validateUser(UserDetails userDetails) {
-        if (!allowedUser.equals(userDetails.getUsername())) {
-            throw new RuntimeException("Not Allowed");
-        } 
-    }
-
-    private void validateVaultPassword(String password) {
-        String hash = new BCryptPasswordEncoder().encode(vaultPasswordHash);
-
-        if (!new BCryptPasswordEncoder().matches(password, hash)) {
-            throw new RuntimeException("Incorrect Password");
-        }
-    }
+  }
 }
