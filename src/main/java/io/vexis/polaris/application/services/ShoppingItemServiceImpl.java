@@ -139,4 +139,12 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
     items.forEach(item -> item.setInVault(true));
     repository.saveAll(items);
   }
+
+  @Override
+  public List<ShoppingItemDTO> listAllInVault() {
+    return repository.findAllByInVaultTrue()
+    .stream()
+    .map(mapper::toDTO)
+    .toList();
+  }
 }

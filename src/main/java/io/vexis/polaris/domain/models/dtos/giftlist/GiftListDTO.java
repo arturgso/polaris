@@ -7,7 +7,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonPropertyOrder({"id", "title", "createdAt", "updatedAt", "gifs"})
+@JsonPropertyOrder({"id", "title", "inVault", "createdAt", "updatedAt", "gifs"})
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class GiftListDTO extends ListDTO {

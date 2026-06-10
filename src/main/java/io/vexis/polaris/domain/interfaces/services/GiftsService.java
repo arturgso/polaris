@@ -11,6 +11,7 @@ import java.util.List;
 public interface GiftsService
     extends FilteredCrudService<NewGiftDTO, UpdateGiftDTO, GiftDTO, Gift, Long, GiftFiltersDTO> {
   List<GiftDTO> listByPerson(GiftFiltersDTO filtersDTO);
+  List<GiftDTO> listAllInVault();
 
   Long countAll();
 

@@ -20,6 +20,8 @@ public interface ShoppingItemRepository
       nativeQuery = true)
   List<ShoppingItem> findRecentlyInserted();
 
+  List<ShoppingItem> findAllByInVaultTrue();
+
   @Query(
       """
     select coalesce(sum(itm.price), 0)

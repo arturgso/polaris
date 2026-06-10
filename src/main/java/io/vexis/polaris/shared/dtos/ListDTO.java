@@ -7,6 +7,7 @@ import lombok.Data;
 public abstract class ListDTO {
   Long id;
   String title;
+  Boolean inVault;
   Instant createdAt;
   Instant updatedAt;
 }

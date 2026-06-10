@@ -29,8 +29,7 @@ public class VaultController {
 
   @GetMapping("/gifts")
   public ResponseEntity<List<GiftDTO>> listGifts() {
-    // TODO: Delegate to VaultService.listGifts().
-    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    return ResponseEntity.ok().body(vaultService.listGifts());
   }
 
   @GetMapping("/gift-lists")
@@ -40,14 +39,12 @@ public class VaultController {
 
   @GetMapping("/shopping-items")
   public ResponseEntity<List<ShoppingItemDTO>> listShoppingItems() {
-    // TODO: Delegate to VaultService.listShoppingItems().
-    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    return ResponseEntity.ok().body(vaultService.listShoppingItems());
   }
 
   @GetMapping("/shopping-lists")
   public ResponseEntity<List<ShoppingListDTO>> listShoppingLists() {
-    // TODO: Delegate to VaultService.listShoppingLists().
-    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    return ResponseEntity.ok().body(vaultService.listShoppingLists());
   }
 
   @PostMapping("/unlock")

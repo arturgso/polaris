@@ -138,4 +138,12 @@ public class GiftsServiceImpl implements GiftsService {
     repository.save(gift);
   }
 
+  @Override
+  public List<GiftDTO> listAllInVault() {
+    return repository.findAllByInVaultTrue()
+    .stream()
+    .map(mapper::toDTO)
+    .toList();
+  }
+
 }

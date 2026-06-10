@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-@JsonPropertyOrder({"id", "title", "createdAt", "updatedAt", "items"})
+@JsonPropertyOrder({"id", "title", "inVault", "createdAt", "updatedAt", "items"})
 @Data
 public class ShoppingListDTO extends ListDTO {
 

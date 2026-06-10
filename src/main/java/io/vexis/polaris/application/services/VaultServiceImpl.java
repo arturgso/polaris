@@ -1,13 +1,14 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
+import io.vexis.polaris.domain.interfaces.services.GiftsService;
+import io.vexis.polaris.domain.interfaces.services.ShoppingItemService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingListService;
 import io.vexis.polaris.domain.interfaces.services.VaultService;
 import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingListDTO;
-import io.vexis.polaris.domain.models.entities.ShoppingList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,14 @@ import java.util.List;
 public class VaultServiceImpl implements VaultService {
 
     private final ShoppingListService shoppingListService;
+    private final ShoppingItemService shoppingItemService;
+
     private final GiftListService giftListService;
+    private final GiftsService giftsService;
 
     @Override
     public List<GiftDTO> listGifts() {
-        return List.of();
+        return giftsService.listAllInVault();
     }
 
     @Override
@@ -32,12 +36,12 @@ public class VaultServiceImpl implements VaultService {
 
     @Override
     public List<ShoppingItemDTO> listShoppingItems() {
-        return List.of();
+        return shoppingItemService.listAllInVault();
     }
 
     @Override
     public List<ShoppingListDTO> listShoppingLists() {
-        return List.of();
+        return shoppingListService.listAllInVault();
     }
 
     @Override
