@@ -7,17 +7,14 @@ import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingIte
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingListDTO;
 import io.vexis.polaris.domain.models.dtos.vault.UnlockVaultRequestDTO;
 import io.vexis.polaris.domain.models.dtos.vault.VaultTokenResponseDTO;
-import io.vexis.polaris.domain.models.dtos.vault.VaultTokenValidationResponseDTO;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class VaultController {
 
   private final VaultService vaultService;
-
-  // TODO: Require and validate a short-lived vault token for every endpoint in this controller.
 
   @GetMapping("/gifts")
   public ResponseEntity<List<GiftDTO>> listGifts() {
@@ -56,12 +51,5 @@ public class VaultController {
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
     return ResponseEntity.ok()
         .body(new VaultTokenResponseDTO(vaultService.unlock(request.password(), userDetails)));
-  }
-
-  @PostMapping("/validate")
-  public ResponseEntity<VaultTokenValidationResponseDTO> validate(
-      @RequestHeader("X-Vault-Token") String token) {
-    // TODO: Delegate to VaultService.validate(token).
-    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
   }
 }

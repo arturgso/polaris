@@ -9,19 +9,24 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import io.vexis.polaris.application.security.VaultAccessInterceptor;
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
+  private final VaultAccessInterceptor interceptor;
   private final String[] allowedOrigins;
 
-  public CorsConfig(@Value("${app.cors.allowed-origins}") String allowedOrigins) {
+  public CorsConfig(@Value("${app.cors.allowed-origins}") String allowedOrigins, VaultAccessInterceptor interceptor) {
     this.allowedOrigins =
         Arrays.stream(allowedOrigins.split(","))
             .map(String::trim)
             .filter(origin -> !origin.isBlank())
             .toArray(String[]::new);
+            this.interceptor = interceptor;
   }
 
   @Override
@@ -48,5 +53,12 @@ public class CorsConfig implements WebMvcConfigurer {
     var source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
+  }
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(interceptor)
+    .addPathPatterns("/vault/**")
+    .excludePathPatterns("/vault/unlock", "/vault/validate");
   }
 }
