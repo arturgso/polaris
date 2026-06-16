@@ -1,6 +1,8 @@
 package io.vexis.polaris.application.controllers;
 
 import io.vexis.polaris.domain.interfaces.services.VaultService;
+import io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO;
+import io.vexis.polaris.domain.models.dtos.filters.ShoppingItemFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,18 +29,40 @@ public class VaultController {
   private final VaultService vaultService;
 
   @GetMapping("/gifts")
-  public ResponseEntity<List<GiftDTO>> listGifts() {
-    return ResponseEntity.ok().body(vaultService.listGifts());
+  public ResponseEntity<List<GiftDTO>> listGifts(
+    @RequestParam(required = false) String status,
+    @RequestParam(required = false) String event,
+    @RequestParam(required = false) String title,
+    @RequestParam(required = false) String link
+  ) {
+    return ResponseEntity.ok().body(vaultService.listGifts(
+      new GiftFiltersDTO(
+        null, status, event, title, link, Boolean.TRUE 
+      )
+    ));
   }
 
   @GetMapping("/gift-lists")
-  public ResponseEntity<List<GiftListDTO>> listGiftLists() {
+  public ResponseEntity<List<GiftListDTO>> listGiftLists(
+
+  ) {
     return ResponseEntity.ok().body(vaultService.listGiftLists());
   }
 
   @GetMapping("/shopping-items")
-  public ResponseEntity<List<ShoppingItemDTO>> listShoppingItems() {
-    return ResponseEntity.ok().body(vaultService.listShoppingItems());
+  public ResponseEntity<List<ShoppingItemDTO>> listShoppingItems(
+    @RequestParam(required = false) String status,
+    @RequestParam(required = false) String tag,
+    @RequestParam(required = false) String title
+  ) {
+    return ResponseEntity.ok().body(vaultService.listShoppingItems(
+      new ShoppingItemFiltersDTO(
+        status,
+        tag,
+        title,
+        Boolean.TRUE
+      )
+    ));
   }
 
   @GetMapping("/shopping-lists")

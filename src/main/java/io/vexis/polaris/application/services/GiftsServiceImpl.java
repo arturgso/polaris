@@ -69,10 +69,6 @@ public class GiftsServiceImpl implements GiftsService {
 
   @Override
   public List<GiftDTO> listByPerson(GiftFiltersDTO filtersDTO) {
-    if (filtersDTO.personId() == null) {
-      throw new IllegalArgumentException("personId must not be empty");
-    }
-
     var giftList = repository.findAll(GiftsSpec.byFilters(filtersDTO));
     return ListMapper.createResponseList(giftList, mapper::toDTO);
   }

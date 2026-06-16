@@ -23,8 +23,14 @@ public class ShoppingItemsSpec {
             : cb.like(cb.lower(root.get("title")), "%" + title.toLowerCase() + "%");
   }
 
+  private static Specification<ShoppingItem> byInVault(Boolean inVault) {
+    return (root, query, cb) ->
+    cb.equal(root.get("inVault"), inVault != null ? inVault : false);
+  }
+
   public static Specification<ShoppingItem> byFilters(ShoppingItemFiltersDTO filters) {
     return Specification.where(byTitle(filters.title()).and(byStatus(filters.status())))
-        .and(byTag(filters.tag()));
+        .and(byTag(filters.tag()))
+        .and(byInVault(filters.inVault()));
   }
 }

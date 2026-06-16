@@ -37,7 +37,7 @@ public class ShoppingItemsController {
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String tag,
       @RequestParam(required = false) String title) {
-    return ResponseEntity.ok(service.list(new ShoppingItemFiltersDTO(status, tag, title)));
+    return ResponseEntity.ok(service.list(new ShoppingItemFiltersDTO(status, tag, title, Boolean.FALSE)));
   }
 
   @PatchMapping("{id}")

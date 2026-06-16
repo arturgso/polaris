@@ -29,7 +29,7 @@ public class GiftsController {
       @RequestParam(required = false) String event,
       @RequestParam(required = false) String title,
       @RequestParam(required = false) String link) {
-    return ResponseEntity.ok(service.list(new GiftFiltersDTO(null, status, event, title, link)));
+    return ResponseEntity.ok(service.list(new GiftFiltersDTO(null, status, event, title, link, null)));
   }
 
   @GetMapping("by-person")
@@ -40,7 +40,7 @@ public class GiftsController {
       @RequestParam(required = false) String title,
       @RequestParam(required = false) String link) {
     return ResponseEntity.ok(
-        service.listByPerson(new GiftFiltersDTO(personId, status, event, title, link)));
+        service.listByPerson(new GiftFiltersDTO(personId, status, event, title, link, null)));
   }
 
   @PatchMapping("{id}")
