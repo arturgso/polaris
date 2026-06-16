@@ -65,7 +65,7 @@ public class VaultServiceImpl implements VaultService {
 
   @Override
   public boolean validate(String token) {
-    return false;
+    return jwtService.isVaultTokenValid(token, allowedUser);
   }
 
   private void validateUser(UserDetails userDetails) {

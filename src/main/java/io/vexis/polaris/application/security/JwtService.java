@@ -69,6 +69,20 @@ public class JwtService {
     }
   }
 
+  public boolean isVaultTokenValid(String token, String allowedUser) {
+    if (!StringUtils.hasText(token) || !StringUtils.hasText(allowedUser)) {
+      return false;
+    }
+
+    try {
+      var decodedToken = verifier.verify(token);
+      return allowedUser.equals(decodedToken.getSubject())
+          && "vault:access".equals(decodedToken.getClaim("scope").asString());
+    } catch (JWTVerificationException | IllegalArgumentException exception) {
+      return false;
+    }
+  }
+
   public long getExpirationSeconds() {
     return expirationSeconds;
   }
