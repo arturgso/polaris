@@ -13,6 +13,7 @@ import io.vexis.polaris.application.security.JwtService;
 import io.vexis.polaris.domain.exceptions.PersonNotFoundException;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.interfaces.services.PersonsService;
+import io.vexis.polaris.domain.interfaces.services.VaultService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -34,6 +35,8 @@ class GlobalExceptionHandlerWebMvcTests {
   @MockitoBean private GiftsService giftsService;
 
   @MockitoBean private JwtService jwtService;
+
+  @MockitoBean private VaultService vaultService;
 
   @Test
   void shouldReturnFriendlyErrorWhenResourceDoesNotExist() throws Exception {
