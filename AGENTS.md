@@ -28,7 +28,8 @@ This repository is a Spring Boot API for shopping lists, gift lists, and a priva
 - Do not run `spotlessApply`; leave formatting changes to the developer.
 - Before creating commits, inspect at least the 5 most recent complete commits and match their structure, language, and level of detail.
 - Before creating a commit, review the current branch context and changed files for known security gaps, and add TODO comments where future changes should be considered.
-- Do not edit code inside the project without asking first; assume the developer prefers to implement changes themselves unless explicitly asked to edit.
+- Do not edit code inside the project without asking first; assume only the developer currently works on this project and prefers to implement changes themselves unless explicitly asked to edit.
+- Keep issue and PR comments simple and objective unless more detail is explicitly requested.
 - Use the codebase as the source of truth for endpoints, request/response shapes, and security rules.
 
 ## Commands
