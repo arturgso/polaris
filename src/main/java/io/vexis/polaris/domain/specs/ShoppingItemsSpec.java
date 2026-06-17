@@ -1,5 +1,6 @@
 package io.vexis.polaris.domain.specs;
 
+import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 import io.vexis.polaris.domain.models.dtos.filters.ShoppingItemFiltersDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import org.springframework.data.jpa.domain.Specification;
@@ -8,7 +9,9 @@ public class ShoppingItemsSpec {
 
   private static Specification<ShoppingItem> byStatus(String status) {
     return ((root, query, cb) ->
-        status == null ? null : cb.equal(root.get("status").get("tag"), status));
+        status == null || status.isBlank()
+            ? null
+            : cb.equal(root.get("status"), ShoppingItemStatus.valueOf(status)));
   }
 
   private static Specification<ShoppingItem> byTag(String tag) {

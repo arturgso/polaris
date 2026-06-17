@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemStatusesRepository;
+import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 import io.vexis.polaris.shared.TextUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +28,14 @@ class ShoppingItemsControllerIntegrationTests {
 
   @Autowired private MockMvc mockMvc;
 
-  @Autowired private ShoppingItemStatusesRepository statusesRepository;
-
   @Test
   void shouldListSeededShoppingItemDependencies() throws Exception {
     mockMvc
-        .perform(get("/shopping-item-statuses"))
+        .perform(get("/statuses"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].tag", hasItem("IDEA")))
-        .andExpect(jsonPath("$[*].tag", hasItem("TO_BUY")))
-        .andExpect(jsonPath("$[*].tag", hasItem("BOUGHT")));
+        .andExpect(jsonPath("$.shoppingItemsStatus[*].value", hasItem("IDEA")))
+        .andExpect(jsonPath("$.shoppingItemsStatus[*].value", hasItem("TO_BUY")))
+        .andExpect(jsonPath("$.shoppingItemsStatus[*].value", hasItem("BOUGHT")));
 
     String categoryResponse = createCategory("e2e dep", "#111827");
     Long categoryId = readId(categoryResponse);
@@ -53,9 +51,6 @@ class ShoppingItemsControllerIntegrationTests {
   void shouldPerformCrudForShoppingItemsEndpoint() throws Exception {
     Long categoryId = readId(createCategory("e2e item cat", "#06B6D4"));
     Long updatedCategoryId = readId(createCategory("e2e upd cat", "#10B981"));
-    Long plannedStatusId = getStatusId("PLANNED");
-    Long boughtStatusId = getStatusId("BOUGHT");
-
     String createResponse =
         mockMvc
             .perform(
@@ -68,21 +63,21 @@ class ShoppingItemsControllerIntegrationTests {
                           "link":"https://example.com/cable",
                           "categoryId":%d,
                           "price":39.90,
-                          "statusId":%d
+                        "status":"PLANNED"
                         }
                         """
-                            .formatted(categoryId, plannedStatusId)))
+                          .formatted(categoryId)))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.id").isNumber())
             .andExpect(jsonPath("$.title").value("usb-c cable"))
             .andExpect(jsonPath("$.link").value("https://example.com/cable"))
             .andExpect(jsonPath("$.price").value(39.90))
-            .andExpect(jsonPath("$.category.id").value(categoryId))
             .andExpect(jsonPath("$.category.tag").value(TextUtils.normalizeTag("e2e item cat")))
             .andExpect(jsonPath("$.category.name").value("e2e item cat"))
             .andExpect(jsonPath("$.category.color").value("#06B6D4"))
-            .andExpect(jsonPath("$.status.id").value(plannedStatusId))
-            .andExpect(jsonPath("$.status.tag").value("PLANNED"))
+            .andExpect(jsonPath("$.status.value").value("PLANNED"))
+            .andExpect(jsonPath("$.status.name").value("planejado"))
+            .andExpect(jsonPath("$.status.color").value("#3B82F6"))
             .andExpect(jsonPath("$.createdAt").exists())
             .andExpect(jsonPath("$.updatedAt").exists())
             .andReturn()
@@ -121,10 +116,10 @@ class ShoppingItemsControllerIntegrationTests {
                       "title":"Wireless Mouse",
                       "categoryId":%d,
                       "price":89.50,
-                      "statusId":%d
+                      "status":"BOUGHT"
                     }
                     """
-                        .formatted(updatedCategoryId, boughtStatusId)))
+                        .formatted(updatedCategoryId)))
         .andExpect(status().isOk());
 
     mockMvc
@@ -137,7 +132,7 @@ class ShoppingItemsControllerIntegrationTests {
             jsonPath(
                 "$[?(@.id == %d)].category.tag".formatted(itemId),
                 hasItem(TextUtils.normalizeTag("e2e upd cat"))))
-        .andExpect(jsonPath("$[?(@.id == %d)].status.tag".formatted(itemId), hasItem("BOUGHT")));
+        .andExpect(jsonPath("$[?(@.id == %d)].status.value".formatted(itemId), hasItem("BOUGHT")));
 
     mockMvc.perform(delete("/shopping-items/{id}", itemId)).andExpect(status().isOk());
 
@@ -150,7 +145,7 @@ class ShoppingItemsControllerIntegrationTests {
   @Test
   void shouldReturnDashboardShoppingItemMetricsAndRecentItems() throws Exception {
     Long categoryId = readId(createCategory("e2e dash", "#EC4899"));
-    Long statusId = getStatusId("TO_BUY");
+    ShoppingItemStatus status = ShoppingItemStatus.TO_BUY;
 
     for (int index = 1; index <= 6; index++) {
       createShoppingItem(
@@ -158,7 +153,7 @@ class ShoppingItemsControllerIntegrationTests {
           "https://example.com/dashboard-" + index,
           categoryId,
           index * 10,
-          statusId);
+          status);
     }
 
     mockMvc
@@ -255,7 +250,8 @@ class ShoppingItemsControllerIntegrationTests {
   }
 
   private String createShoppingItem(
-      String title, String link, Long categoryId, int price, Long statusId) throws Exception {
+      String title, String link, Long categoryId, int price, ShoppingItemStatus status)
+      throws Exception {
     return mockMvc
         .perform(
             post("/shopping-items")
@@ -267,18 +263,14 @@ class ShoppingItemsControllerIntegrationTests {
                       "link":"%s",
                       "categoryId":%d,
                       "price":%d,
-                      "statusId":%d
+                      "status":"%s"
                     }
                     """
-                        .formatted(title, link, categoryId, price, statusId)))
+                        .formatted(title, link, categoryId, price, status.name())))
         .andExpect(status().isCreated())
         .andReturn()
         .getResponse()
         .getContentAsString();
-  }
-
-  private Long getStatusId(String tag) {
-    return statusesRepository.findByTag(tag).orElseThrow().getId();
   }
 
   private Long readId(String json) {

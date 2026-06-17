@@ -8,12 +8,16 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @MappedSuperclass
 @NoArgsConstructor
 @SuperBuilder
 public abstract class ShoppingItemAttribute {
+
+  @JsonIgnore
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -24,5 +28,6 @@ public abstract class ShoppingItemAttribute {
 
   @CreationTimestamp
   @Column(nullable = false, updatable = false)
+  @JsonIgnore
   private Instant createdAt;
 }

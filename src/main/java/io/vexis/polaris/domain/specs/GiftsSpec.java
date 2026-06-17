@@ -1,5 +1,6 @@
 package io.vexis.polaris.domain.specs;
 
+import io.vexis.polaris.domain.enums.GiftStatus;
 import io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO;
 import io.vexis.polaris.domain.models.entities.Gift;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,7 +23,9 @@ public class GiftsSpec {
 
   private static Specification<Gift> byStatus(String status) {
     return ((root, query, cb) ->
-        status == null ? null : cb.equal(root.get("status").get("tag"), status));
+        status == null || status.isBlank()
+            ? null
+            : cb.equal(root.get("status"), GiftStatus.valueOf(status)));
   }
 
   private static Specification<Gift> byEvent(String event) {

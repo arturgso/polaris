@@ -57,7 +57,7 @@ public class SecurityConfig {
                     .hasRole("ADMIN")
                     .requestMatchers("/vault/**")
                     .hasRole("ADMIN")
-                    .requestMatchers("/gift-lists/**", "/shopping-lists/**")
+                    .requestMatchers("/gift-lists/**", "/shopping-lists/**", "/statuses/**")
                     .hasRole("ADMIN")
                     .anyRequest()
                     .hasRole("ADMIN"))
