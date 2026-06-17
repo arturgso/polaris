@@ -31,48 +31,39 @@ public class VaultController {
 
   @GetMapping("/gifts")
   public ResponseEntity<List<GiftDTO>> listGifts(
-    @RequestParam(required = false) String status,
-    @RequestParam(required = false) String event,
-    @RequestParam(required = false) String title,
-    @RequestParam(required = false) String link
-  ) {
-    return ResponseEntity.ok().body(vaultService.listGifts(
-      new GiftFiltersDTO(
-        null, status, event, title, link, Boolean.TRUE 
-      )
-    ));
+      @RequestParam(required = false) String status,
+      @RequestParam(required = false) String event,
+      @RequestParam(required = false) String title,
+      @RequestParam(required = false) String link) {
+    return ResponseEntity.ok()
+        .body(
+            vaultService.listGifts(
+                new GiftFiltersDTO(null, status, event, title, link, Boolean.TRUE)));
   }
 
   @GetMapping("/gift-lists")
   public ResponseEntity<List<GiftListDTO>> listGiftLists(
-    @RequestParam(required = false) String title
-  ) {
-    return ResponseEntity.ok().body(vaultService.listGiftLists(
-      new ListEntityFiltersDTO(title, Boolean.TRUE)
-    ));
+      @RequestParam(required = false) String title) {
+    return ResponseEntity.ok()
+        .body(vaultService.listGiftLists(new ListEntityFiltersDTO(title, Boolean.TRUE)));
   }
 
   @GetMapping("/shopping-items")
   public ResponseEntity<List<ShoppingItemDTO>> listShoppingItems(
-    @RequestParam(required = false) String status,
-    @RequestParam(required = false) String tag,
-    @RequestParam(required = false) String title
-  ) {
-    return ResponseEntity.ok().body(vaultService.listShoppingItems(
-      new ShoppingItemFiltersDTO(
-        status,
-        tag,
-        title,
-        Boolean.TRUE
-      )
-    ));
+      @RequestParam(required = false) String status,
+      @RequestParam(required = false) String tag,
+      @RequestParam(required = false) String title) {
+    return ResponseEntity.ok()
+        .body(
+            vaultService.listShoppingItems(
+                new ShoppingItemFiltersDTO(status, tag, title, Boolean.TRUE)));
   }
 
   @GetMapping("/shopping-lists")
   public ResponseEntity<List<ShoppingListDTO>> listShoppingLists(
       @RequestParam(required = false) String title) {
-    return ResponseEntity.ok().body(vaultService.listShoppingLists(
-        new ListEntityFiltersDTO(title, Boolean.TRUE)));
+    return ResponseEntity.ok()
+        .body(vaultService.listShoppingLists(new ListEntityFiltersDTO(title, Boolean.TRUE)));
   }
 
   @PostMapping("/unlock")

@@ -6,7 +6,8 @@ import io.vexis.polaris.domain.models.entities.GiftList;
 import io.vexis.polaris.shared.dtos.NewListDTO;
 
 public interface GiftListService
-    extends FilteredCrudService<NewListDTO, NewListDTO, GiftListDTO, GiftList, Long, ListEntityFiltersDTO> {
+    extends FilteredCrudService<
+        NewListDTO, NewListDTO, GiftListDTO, GiftList, Long, ListEntityFiltersDTO> {
 
   GiftListDTO getById(Long id);
 

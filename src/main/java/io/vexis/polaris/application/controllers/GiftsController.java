@@ -29,7 +29,8 @@ public class GiftsController {
       @RequestParam(required = false) String event,
       @RequestParam(required = false) String title,
       @RequestParam(required = false) String link) {
-    return ResponseEntity.ok(service.list(new GiftFiltersDTO(null, status, event, title, link, null)));
+    return ResponseEntity.ok(
+        service.list(new GiftFiltersDTO(null, status, event, title, link, null)));
   }
 
   @GetMapping("by-person")

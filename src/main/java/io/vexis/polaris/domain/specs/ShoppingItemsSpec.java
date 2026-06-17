@@ -24,8 +24,7 @@ public class ShoppingItemsSpec {
   }
 
   private static Specification<ShoppingItem> byInVault(Boolean inVault) {
-    return (root, query, cb) ->
-    cb.equal(root.get("inVault"), inVault != null ? inVault : false);
+    return (root, query, cb) -> cb.equal(root.get("inVault"), inVault != null ? inVault : false);
   }
 
   public static Specification<ShoppingItem> byFilters(ShoppingItemFiltersDTO filters) {

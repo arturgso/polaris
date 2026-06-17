@@ -36,8 +36,7 @@ public class GiftsSpec {
   }
 
   private static Specification<Gift> byInVault(Boolean inVault) {
-    return (root, query, cb) -> 
-    cb.equal(root.get("inVault"), inVault != null ? inVault : false);
+    return (root, query, cb) -> cb.equal(root.get("inVault"), inVault != null ? inVault : false);
   }
 
   public static Specification<Gift> byFilters(GiftFiltersDTO filters) {

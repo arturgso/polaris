@@ -32,8 +32,7 @@ public class ShoppingListController {
 
   @GetMapping
   public ResponseEntity<List<ShoppingListDTO>> getAll(
-    @RequestParam(required =  false) String title
-  ) {
+      @RequestParam(required = false) String title) {
     return ResponseEntity.ok(service.list(new ListEntityFiltersDTO(title, Boolean.FALSE)));
   }
 

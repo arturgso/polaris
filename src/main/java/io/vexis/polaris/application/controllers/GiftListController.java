@@ -31,9 +31,7 @@ public class GiftListController {
   }
 
   @GetMapping
-  public ResponseEntity<List<GiftListDTO>> getAll(
-    @RequestParam(required = false) String title
-  ) {
+  public ResponseEntity<List<GiftListDTO>> getAll(@RequestParam(required = false) String title) {
     return ResponseEntity.ok().body(service.list(new ListEntityFiltersDTO(title, Boolean.FALSE)));
   }
 

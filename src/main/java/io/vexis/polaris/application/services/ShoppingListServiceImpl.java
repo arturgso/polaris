@@ -91,5 +91,4 @@ public class ShoppingListServiceImpl implements ShoppingListService {
     List<ShoppingList> lists = repository.findAll(ListEntitySpec.byFilters(filters));
     return ListMapper.createResponseList(lists, mapper::toDTO);
   }
-
 }
