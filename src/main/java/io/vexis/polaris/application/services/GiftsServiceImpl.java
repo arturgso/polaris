@@ -2,6 +2,7 @@ package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.GiftsFactory;
 import io.vexis.polaris.application.security.VaultPasswordValidator;
+import io.vexis.polaris.domain.enums.GiftStatus;
 import io.vexis.polaris.domain.exceptions.GiftNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.GiftsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
@@ -30,11 +31,9 @@ import org.springframework.stereotype.Service;
 public class GiftsServiceImpl implements GiftsService {
 
   private static final String DEFAULT_EVENT = "NONE";
-  private static final String DEFAULT_STATUS = "IDEA";
 
   private final PersonsService personsService;
   private final EventsService eventsService;
-  private final GiftStatusService giftStatusService;
   private final GiftListService giftListService;
 
   private final GiftsRepository repository;
@@ -52,8 +51,8 @@ public class GiftsServiceImpl implements GiftsService {
             : eventsService.getEntityByTag(dto.event());
     var status =
         dto.status() == null
-            ? giftStatusService.getEntityByTag(DEFAULT_STATUS)
-            : giftStatusService.getEntityByTag(dto.status());
+            ? GiftStatus.IDEA  
+            : dto.status();
 
     var gift = factory.create(dto.title(), dto.link(), person, event, status);
 
@@ -102,10 +101,6 @@ public class GiftsServiceImpl implements GiftsService {
 
     if (dto.event() != null) {
       gift.setEvent(eventsService.getEntityByTag(dto.event()));
-    }
-
-    if (dto.status() != null) {
-      gift.setStatus(giftStatusService.getEntityByTag(dto.status()));
     }
 
     if (dto.giftListId() != null) {

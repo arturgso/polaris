@@ -12,7 +12,7 @@ import io.vexis.polaris.domain.interfaces.repositories.ShoppingListRepository;
 import io.vexis.polaris.domain.models.entities.Event;
 import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.models.entities.GiftList;
-import io.vexis.polaris.domain.models.entities.GiftStatus;
+import io.vexis.polaris.domain.enums.GiftStatus;
 import io.vexis.polaris.domain.models.entities.Person;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
@@ -40,7 +40,6 @@ public class DatabasePopulateRunner implements ApplicationRunner {
   private final ShoppingItemRepository shoppingItemRepository;
   private final ShoppingListRepository shoppingListRepository;
   private final EventsRepository eventsRepository;
-  private final GiftStatusRepository giftStatusRepository;
   private final ShoppingItemCategoriesRepository shoppingItemCategoriesRepository;
   private final ShoppingItemStatusesRepository shoppingItemStatusesRepository;
 
@@ -63,9 +62,9 @@ public class DatabasePopulateRunner implements ApplicationRunner {
     var marriage = getEvent("MARRIAGE");
     var none = getEvent("NONE");
 
-    var giftIdea = getGiftStatus("IDEA");
-    var purchased = getGiftStatus("PURCHASED");
-    var delivered = getGiftStatus("DELIVERED");
+    var giftIdea = GiftStatus.IDEA;
+    var purchased = GiftStatus.PURCHASED;
+    var delivered = GiftStatus.DELIVERED;
 
     var tech = getShoppingItemCategory("TECH");
     var health = getShoppingItemCategory("HEALTH");
@@ -214,12 +213,6 @@ public class DatabasePopulateRunner implements ApplicationRunner {
 
   private Event getEvent(String tag) {
     return eventsRepository.findByTag(tag).orElseThrow(() -> missingCatalog("event", tag));
-  }
-
-  private GiftStatus getGiftStatus(String tag) {
-    return giftStatusRepository
-        .findByTag(tag)
-        .orElseThrow(() -> missingCatalog("gift status", tag));
   }
 
   private ShoppingItemCategory getShoppingItemCategory(String tag) {
