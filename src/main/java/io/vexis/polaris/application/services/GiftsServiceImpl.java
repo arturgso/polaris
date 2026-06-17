@@ -8,7 +8,6 @@ import io.vexis.polaris.domain.interfaces.mappers.GiftsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.services.EventsService;
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
-import io.vexis.polaris.domain.interfaces.services.GiftStatusService;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.interfaces.services.PersonsService;
 import io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO;

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import io.vexis.polaris.domain.enums.GiftStatus;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.interfaces.services.PersonsService;
@@ -31,10 +32,12 @@ class GiftsServiceIntegrationTests {
 
     var gift =
         giftsService.create(
-            new NewGiftDTO("book", "http://example.com", person.id(), "birthday", "purchased"));
+            new NewGiftDTO(
+                "book", "http://example.com", person.id(), "birthday", GiftStatus.PURCHASED));
 
     assertEquals("BIRTHDAY", gift.event());
-    assertEquals("PURCHASED", gift.status());
+    assertEquals(GiftStatus.PURCHASED.getName(), gift.status().name());
+    assertEquals(GiftStatus.PURCHASED.getColor(), gift.status().title());
     assertEquals("alice", gift.giftFor());
   }
 
@@ -45,7 +48,8 @@ class GiftsServiceIntegrationTests {
     var gift = giftsService.create(new NewGiftDTO("book", null, person.id(), null, null));
 
     assertEquals("NONE", gift.event());
-    assertEquals("IDEA", gift.status());
+    assertEquals(GiftStatus.IDEA.getName(), gift.status().name());
+    assertEquals(GiftStatus.IDEA.getColor(), gift.status().title());
   }
 
   @Test
@@ -54,14 +58,13 @@ class GiftsServiceIntegrationTests {
     var created = giftsService.create(new NewGiftDTO("book", null, person.id(), null, null));
 
     giftsService.update(
-        new UpdateGiftDTO(null, null, null, null, "christmas", "delivered"), created.id());
+        new UpdateGiftDTO(null, null, null, null, "christmas", "DELIVERED"), created.id());
 
     var updated = giftsRepository.findById(created.id()).orElseThrow();
 
     assertEquals("CHRISTMAS", updated.getEvent().getTag());
-    assertEquals("DELIVERED", updated.getStatus().getTag());
+    assertEquals(GiftStatus.DELIVERED, updated.getStatus());
     assertNotNull(updated.getEvent().getId());
-    assertNotNull(updated.getStatus().getId());
   }
 
   @Test

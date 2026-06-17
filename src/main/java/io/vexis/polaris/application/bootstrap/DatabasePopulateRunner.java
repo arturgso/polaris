@@ -2,7 +2,6 @@ package io.vexis.polaris.application.bootstrap;
 
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
-import io.vexis.polaris.domain.interfaces.repositories.GiftStatusRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.PersonsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemCategoriesRepository;

@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
-import io.vexis.polaris.domain.interfaces.repositories.GiftStatusRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.PersonsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemCategoriesRepository;
@@ -23,12 +22,12 @@ import io.vexis.polaris.domain.interfaces.repositories.ShoppingListRepository;
 import io.vexis.polaris.domain.models.entities.Event;
 import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.models.entities.GiftList;
-import io.vexis.polaris.domain.models.entities.GiftStatus;
 import io.vexis.polaris.domain.models.entities.Person;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
 import io.vexis.polaris.domain.models.entities.ShoppingItemStatus;
 import io.vexis.polaris.domain.models.entities.ShoppingList;
+import io.vexis.polaris.domain.enums.GiftStatus;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +52,6 @@ class VaultIntegrationTests {
   @Autowired private GiftListRepository giftListRepository;
 
   @Autowired private GiftsRepository giftsRepository;
-
-  @Autowired private GiftStatusRepository giftStatusRepository;
 
   @Autowired private EventsRepository eventRepository;
 
@@ -213,9 +210,7 @@ class VaultIntegrationTests {
     Event event =
         eventRepository.save(
             Event.builder().tag("birthday").name("Birthday").color("#111827").build());
-    GiftStatus giftStatus =
-        giftStatusRepository.save(
-            GiftStatus.builder().tag("idea").name("Idea").color("#F97316").build());
+    GiftStatus giftStatus = GiftStatus.IDEA;
     GiftList publicGiftList = new GiftList();
     publicGiftList.setTitle("public gift list");
     publicGiftList.setInVault(false);

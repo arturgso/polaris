@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import io.vexis.polaris.application.bootstrap.DatabasePopulateRunner;
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
-import io.vexis.polaris.domain.interfaces.repositories.GiftStatusRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.PersonsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemCategoriesRepository;
@@ -27,8 +26,6 @@ class DatabasePopulateRunnerDisabledTests {
 
   @Autowired private EventsRepository eventsRepository;
 
-  @Autowired private GiftStatusRepository giftStatusRepository;
-
   @Autowired private ShoppingItemCategoriesRepository shoppingItemCategoriesRepository;
 
   @Autowired private ShoppingItemStatusesRepository shoppingItemStatusesRepository;
@@ -44,7 +41,6 @@ class DatabasePopulateRunnerDisabledTests {
     assertNull(databasePopulateRunner.getIfAvailable());
 
     assertEquals(4, eventsRepository.count());
-    assertEquals(3, giftStatusRepository.count());
     assertEquals(4, shoppingItemCategoriesRepository.count());
     assertEquals(5, shoppingItemStatusesRepository.count());
 

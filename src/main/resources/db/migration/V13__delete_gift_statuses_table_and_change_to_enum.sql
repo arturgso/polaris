@@ -26,9 +26,12 @@ alter column status set not null;
 -- alter table tab_shopping_items
 -- alter column status set not null;
 
+drop index if exists idx_gifts_person_status;
+
 alter table tab_gifts
 drop column status_id;
 
--- add drop in shopping_items
+drop table tab_gift_statuses;
 
+-- add drop in shopping_items
 
