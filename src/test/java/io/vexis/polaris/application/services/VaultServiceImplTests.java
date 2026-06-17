@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.vexis.polaris.application.security.JwtService;
+import io.vexis.polaris.application.security.VaultPasswordValidator;
 import io.vexis.polaris.domain.exceptions.VaultAuthenticationException;
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
@@ -31,8 +32,6 @@ class VaultServiceImplTests {
 
   private static final String ALLOWED_USER = "admin";
   private static final String VAULT_PASSWORD = "teste";
-  private static final String VAULT_PASSWORD_HASH =
-      "$2a$10$/OwZIOq7JcxWSEBeD8UpmePsSir8xxZUkNY.osDa64n3yc5.RMOWi";
 
   @Mock private ShoppingListService shoppingListService;
 
@@ -44,12 +43,13 @@ class VaultServiceImplTests {
 
   @Mock private JwtService jwtService;
 
+  @Mock private VaultPasswordValidator vaultPasswordValidator;
+
   @InjectMocks private VaultServiceImpl vaultService;
 
   @BeforeEach
   void setUp() {
     vaultService.allowedUser = ALLOWED_USER;
-    vaultService.vaultPasswordHash = VAULT_PASSWORD_HASH;
   }
 
   @Test
@@ -75,6 +75,9 @@ class VaultServiceImplTests {
   @Test
   void shouldRejectUnlockWhenPasswordIsWrong() {
     UserDetails userDetails = User.withUsername(ALLOWED_USER).password("password").roles("ADMIN").build();
+    org.mockito.Mockito.doThrow(new VaultAuthenticationException("Incorrect Password"))
+        .when(vaultPasswordValidator)
+        .validate("wrong-password");
 
     org.assertj.core.api.Assertions.assertThatThrownBy(
             () -> vaultService.unlock("wrong-password", userDetails))

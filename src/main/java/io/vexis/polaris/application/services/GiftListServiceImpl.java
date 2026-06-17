@@ -2,6 +2,7 @@ package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.domain.exceptions.GiftListNotFoundException;
 import io.vexis.polaris.domain.exceptions.VaultAccessDeniedException;
+import io.vexis.polaris.application.security.VaultPasswordValidator;
 import io.vexis.polaris.domain.interfaces.mappers.GiftListMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
@@ -28,6 +29,7 @@ public class GiftListServiceImpl implements GiftListService {
   private final GiftListMapper mapper;
   private final GiftListRepository repository;
   private final GiftsRepository giftsRepository;
+  private final VaultPasswordValidator vaultPasswordValidator;
 
   @Override
   public GiftListDTO create(NewListDTO dto) {
@@ -79,8 +81,17 @@ public class GiftListServiceImpl implements GiftListService {
   @Transactional
   @Override
   public void update(NewListDTO dto, Long id) {
+    update(dto, id, null);
+  }
+
+  @Transactional
+  @Override
+  public void update(NewListDTO dto, Long id, String vaultPassword) {
     log.info("Updating gift list id={}", id);
     var giftList = EntityUtils.findOrThrow(repository, id);
+    if (Boolean.TRUE.equals(giftList.getInVault())) {
+      vaultPasswordValidator.validate(vaultPassword);
+    }
     if (dto.title() != null) {
       giftList.setTitle(TextUtils.normalizeText(dto.title()));
     }
@@ -92,9 +103,19 @@ public class GiftListServiceImpl implements GiftListService {
   @Transactional
   @Override
   public void delete(Long id) {
+    delete(id, null);
+  }
+
+  @Transactional
+  @Override
+  public void delete(Long id, String vaultPassword) {
     log.info("Deleting gift list id={}", id);
     if (!repository.existsById(id)) {
       throw new GiftListNotFoundException();
+    }
+    var giftList = EntityUtils.findOrThrow(repository, id);
+    if (Boolean.TRUE.equals(giftList.getInVault())) {
+      vaultPasswordValidator.validate(vaultPassword);
     }
     repository.deleteById(id);
     log.info("Gift list deleted id={}", id);

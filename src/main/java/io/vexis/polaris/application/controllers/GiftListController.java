@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -41,8 +42,11 @@ public class GiftListController {
   }
 
   @PatchMapping("{id}")
-  public ResponseEntity<Void> update(@RequestBody NewListDTO dto, @PathVariable Long id) {
-    service.update(dto, id);
+  public ResponseEntity<Void> update(
+      @RequestBody NewListDTO dto,
+      @PathVariable Long id,
+      @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
+    service.update(dto, id, vaultPassword);
     return ResponseEntity.ok().body(null);
   }
 
@@ -53,8 +57,10 @@ public class GiftListController {
   }
 
   @DeleteMapping("{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    service.delete(id);
+  public ResponseEntity<Void> delete(
+      @PathVariable Long id,
+      @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
+    service.delete(id, vaultPassword);
     return ResponseEntity.ok().body(null);
   }
 }

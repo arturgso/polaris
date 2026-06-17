@@ -2,6 +2,7 @@ package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.ShoppingItemFactory;
 import io.vexis.polaris.domain.exceptions.ShoppingItemNotFoundException;
+import io.vexis.polaris.application.security.VaultPasswordValidator;
 import io.vexis.polaris.domain.interfaces.mappers.ShoppingItemMapper;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemCategoriesService;
@@ -33,6 +34,7 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   private final ShoppingItemFactory factory;
   private final ShoppingItemStatusesService statusesService;
   private final ShoppingItemCategoriesService categoriesService;
+  private final VaultPasswordValidator vaultPasswordValidator;
 
   private final ShoppingListService shoppingListService;
 
@@ -92,8 +94,17 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   @Transactional
   @Override
   public void update(UpdateShoppingItemDTO dto, Long id) {
+    update(dto, id, null);
+  }
+
+  @Transactional
+  @Override
+  public void update(UpdateShoppingItemDTO dto, Long id, String vaultPassword) {
     log.info("Updating shopping item id={}", id);
     var item = getEntity(id);
+    if (Boolean.TRUE.equals(item.getInVault())) {
+      vaultPasswordValidator.validate(vaultPassword);
+    }
     item = mapper.partialUpdate(dto, item);
 
     if (dto.title() != null) {
@@ -119,8 +130,17 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   @Transactional
   @Override
   public void delete(Long id) {
+    delete(id, null);
+  }
+
+  @Transactional
+  @Override
+  public void delete(Long id, String vaultPassword) {
     log.info("Deleting shopping item id={}", id);
     var item = getEntity(id);
+    if (Boolean.TRUE.equals(item.getInVault())) {
+      vaultPasswordValidator.validate(vaultPassword);
+    }
     repository.delete(item);
     log.info("Shopping item deleted id={}", id);
   }

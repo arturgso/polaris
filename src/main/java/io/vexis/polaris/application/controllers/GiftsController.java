@@ -45,8 +45,11 @@ public class GiftsController {
   }
 
   @PatchMapping("{id}")
-  public ResponseEntity<Void> update(@RequestBody UpdateGiftDTO dto, @PathVariable Long id) {
-    service.update(dto, id);
+  public ResponseEntity<Void> update(
+      @RequestBody UpdateGiftDTO dto,
+      @PathVariable Long id,
+      @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
+    service.update(dto, id, vaultPassword);
     return ResponseEntity.ok(null);
   }
 
@@ -57,8 +60,10 @@ public class GiftsController {
   }
 
   @DeleteMapping("{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    service.delete(id);
+  public ResponseEntity<Void> delete(
+      @PathVariable Long id,
+      @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
+    service.delete(id, vaultPassword);
     return ResponseEntity.ok(null);
   }
 }

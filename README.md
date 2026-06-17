@@ -55,6 +55,8 @@ O vault protege itens marcados como secretos. O fluxo é:
 2. chamar `POST /api/v1/vault/unlock` com a senha do vault;
 3. usar o token retornado no header `X-Vault-Token` nas requisições do vault.
 
+Para alterar ou remover um item secreto diretamente, envie também `X-Vault-Password`; ele só valida a senha e não abre o vault.
+
 ### Configuração local
 
 Variáveis de ambiente principais:
@@ -144,6 +146,8 @@ The vault protects items marked as secret. The flow is:
 1. authenticate with an ADMIN account;
 2. call `POST /api/v1/vault/unlock` with the vault password;
 3. send the returned token in the `X-Vault-Token` header for vault requests.
+
+To update or delete a secret item directly, also send `X-Vault-Password`; it only validates the password and does not unlock the vault.
 
 ### Local setup
 

@@ -3,6 +3,8 @@ package io.vexis.polaris;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -128,6 +130,75 @@ class VaultIntegrationTests {
                 .header("Authorization", bearer(authToken))
                 .header("X-Vault-Token", "invalid-token"))
         .andExpect(status().isForbidden());
+  }
+
+  @Test
+  void shouldRequireVaultPasswordForSecretListChanges() throws Exception {
+    seedVaultData();
+    String authToken = loginAdmin();
+    Long secretGiftListId =
+        giftListRepository.findAll().stream()
+            .filter(list -> Boolean.TRUE.equals(list.getInVault()))
+            .filter(list -> "secret gift list".equals(list.getTitle()))
+            .findFirst()
+            .orElseThrow()
+            .getId();
+
+    mockMvc
+        .perform(
+            patch("/gift-lists/{id}", secretGiftListId)
+                .header("Authorization", bearer(authToken))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {"title":"updated secret gift list"}
+                    """))
+        .andExpect(status().isUnauthorized());
+
+    mockMvc
+        .perform(
+            patch("/gift-lists/{id}", secretGiftListId)
+                .header("Authorization", bearer(authToken))
+                .header("X-Vault-Password", "teste")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {"title":"updated secret gift list"}
+                    """))
+        .andExpect(status().isOk());
+
+    mockMvc
+        .perform(
+            delete("/gift-lists/{id}", secretGiftListId)
+                .header("Authorization", bearer(authToken))
+                .header("X-Vault-Password", "teste"))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  void shouldRequireVaultPasswordForSecretShoppingListDeletion() throws Exception {
+    seedVaultData();
+    String authToken = loginAdmin();
+    Long secretShoppingListId =
+        shoppingListRepository.findAll().stream()
+            .filter(list -> Boolean.TRUE.equals(list.getInVault()))
+            .filter(list -> "secret shopping list".equals(list.getTitle()))
+            .findFirst()
+            .orElseThrow()
+            .getId();
+
+    mockMvc
+        .perform(
+            delete("/shopping-lists/{id}", secretShoppingListId)
+                .header("Authorization", bearer(authToken)))
+        .andExpect(status().isUnauthorized());
+
+    mockMvc
+        .perform(
+            delete("/shopping-lists/{id}", secretShoppingListId)
+                .header("Authorization", bearer(authToken))
+                .header("X-Vault-Password", "teste"))
+        .andExpect(status().isOk());
   }
 
   private void seedVaultData() {

@@ -1,6 +1,7 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.security.JwtService;
+import io.vexis.polaris.application.security.VaultPasswordValidator;
 import io.vexis.polaris.domain.exceptions.VaultAuthenticationException;
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
@@ -18,7 +19,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,12 +32,10 @@ public class VaultServiceImpl implements VaultService {
   private final GiftsService giftsService;
 
   private final JwtService jwtService;
+  private final VaultPasswordValidator vaultPasswordValidator;
 
   @Value("${app.bootstrap.admin.username}")
   public String allowedUser;
-
-  @Value("${app.bootstrap.vault.password}")
-  public String vaultPasswordHash;
 
   @Override
   public List<GiftDTO> listGifts(GiftFiltersDTO filters) {
@@ -62,7 +60,7 @@ public class VaultServiceImpl implements VaultService {
   @Override
   public String unlock(String password, UserDetails userDetails) {
     validateUser(userDetails);
-    validateVaultPassword(password);
+    vaultPasswordValidator.validate(password);
 
     return jwtService.generateVaultToken(userDetails);
   }
@@ -75,12 +73,6 @@ public class VaultServiceImpl implements VaultService {
   private void validateUser(UserDetails userDetails) {
     if (!allowedUser.equals(userDetails.getUsername())) {
       throw new VaultAuthenticationException("Not Allowed");
-    }
-  }
-
-  private void validateVaultPassword(String password) {
-    if (!new BCryptPasswordEncoder().matches(password, vaultPasswordHash)) {
-      throw new VaultAuthenticationException("Incorrect Password");
     }
   }
 }

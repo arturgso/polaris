@@ -2,6 +2,7 @@ package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.GiftsFactory;
 import io.vexis.polaris.domain.exceptions.GiftNotFoundException;
+import io.vexis.polaris.application.security.VaultPasswordValidator;
 import io.vexis.polaris.domain.interfaces.mappers.GiftsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.services.EventsService;
@@ -39,6 +40,7 @@ public class GiftsServiceImpl implements GiftsService {
   private final GiftsRepository repository;
   private final GiftsFactory factory;
   private final GiftsMapper mapper;
+  private final VaultPasswordValidator vaultPasswordValidator;
 
   @Override
   public GiftDTO create(NewGiftDTO dto) {
@@ -81,8 +83,17 @@ public class GiftsServiceImpl implements GiftsService {
   @Transactional
   @Override
   public void update(UpdateGiftDTO dto, Long id) {
+    update(dto, id, null);
+  }
+
+  @Transactional
+  @Override
+  public void update(UpdateGiftDTO dto, Long id, String vaultPassword) {
     log.info("Updating gift id={}", id);
     var gift = getEntity(id);
+    if (Boolean.TRUE.equals(gift.getInVault())) {
+      vaultPasswordValidator.validate(vaultPassword);
+    }
     gift = mapper.update(dto, gift);
 
     if (dto.giftFor() != null) {
@@ -108,7 +119,17 @@ public class GiftsServiceImpl implements GiftsService {
   @Transactional
   @Override
   public void delete(Long id) {
+    delete(id, null);
+  }
+
+  @Transactional
+  @Override
+  public void delete(Long id, String vaultPassword) {
     log.info("Deleting gift id={}", id);
+    var gift = getEntity(id);
+    if (Boolean.TRUE.equals(gift.getInVault())) {
+      vaultPasswordValidator.validate(vaultPassword);
+    }
     if (!repository.existsById(id)) {
       throw new GiftNotFoundException();
     }
