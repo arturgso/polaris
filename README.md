@@ -76,7 +76,6 @@ Variáveis de ambiente principais:
 | `BOOTSTRAP_ADMIN_USERNAME` | cria o primeiro admin |
 | `BOOTSTRAP_ADMIN_PASSWORD` | senha do primeiro admin |
 | `VAULT_PASSWORD` | senha para liberar o vault |
-| `VAULT_OWNER_USERNAME` | referência do usuário dono do vault |
 
 ### Executando
 
@@ -168,7 +167,6 @@ Main environment variables:
 | `BOOTSTRAP_ADMIN_USERNAME` | creates the first admin |
 | `BOOTSTRAP_ADMIN_PASSWORD` | first admin password |
 | `VAULT_PASSWORD` | password that unlocks the vault |
-| `VAULT_OWNER_USERNAME` | vault owner reference |
 
 ### Run
 
