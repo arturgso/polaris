@@ -30,7 +30,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 class VaultServiceImplTests {
 
   private static final String ALLOWED_USER = "admin";
-  private static final String VAULT_PASSWORD = "vault-secret";
+  private static final String VAULT_PASSWORD = "teste";
+  private static final String VAULT_PASSWORD_HASH =
+      "$2a$10$/OwZIOq7JcxWSEBeD8UpmePsSir8xxZUkNY.osDa64n3yc5.RMOWi";
 
   @Mock private ShoppingListService shoppingListService;
 
@@ -47,7 +49,7 @@ class VaultServiceImplTests {
   @BeforeEach
   void setUp() {
     vaultService.allowedUser = ALLOWED_USER;
-    vaultService.vaultPasswordHash = VAULT_PASSWORD;
+    vaultService.vaultPasswordHash = VAULT_PASSWORD_HASH;
   }
 
   @Test

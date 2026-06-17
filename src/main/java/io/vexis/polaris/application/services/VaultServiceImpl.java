@@ -79,9 +79,7 @@ public class VaultServiceImpl implements VaultService {
   }
 
   private void validateVaultPassword(String password) {
-    String hash = new BCryptPasswordEncoder().encode(vaultPasswordHash);
-
-    if (!new BCryptPasswordEncoder().matches(password, hash)) {
+    if (!new BCryptPasswordEncoder().matches(password, vaultPasswordHash)) {
       throw new VaultAuthenticationException("Incorrect Password");
     }
   }

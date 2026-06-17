@@ -227,7 +227,7 @@ class VaultIntegrationTests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                         """
-                        {"password":"vault-secret"}
+                        {"password":"teste"}
                         """))
             .andExpect(status().isOk())
             .andReturn()
