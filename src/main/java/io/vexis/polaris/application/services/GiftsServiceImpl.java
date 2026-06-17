@@ -1,8 +1,8 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.GiftsFactory;
-import io.vexis.polaris.domain.exceptions.GiftNotFoundException;
 import io.vexis.polaris.application.security.VaultPasswordValidator;
+import io.vexis.polaris.domain.exceptions.GiftNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.GiftsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.services.EventsService;

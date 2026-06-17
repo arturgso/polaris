@@ -7,8 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.vexis.polaris.application.controllers.GiftsController;
 import io.vexis.polaris.application.controllers.GiftListController;
+import io.vexis.polaris.application.controllers.GiftsController;
 import io.vexis.polaris.application.controllers.PersonsController;
 import io.vexis.polaris.application.controllers.ShoppingListController;
 import io.vexis.polaris.application.security.JwtService;

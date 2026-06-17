@@ -100,5 +100,4 @@ class SecurityIntegrationTests {
                     """))
         .andExpect(status().isUnauthorized());
   }
-
 }

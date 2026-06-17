@@ -1,8 +1,8 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.ShoppingItemFactory;
-import io.vexis.polaris.domain.exceptions.ShoppingItemNotFoundException;
 import io.vexis.polaris.application.security.VaultPasswordValidator;
+import io.vexis.polaris.domain.exceptions.ShoppingItemNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.ShoppingItemMapper;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemCategoriesService;

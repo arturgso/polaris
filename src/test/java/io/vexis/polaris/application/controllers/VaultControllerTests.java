@@ -36,7 +36,8 @@ class VaultControllerTests {
   void shouldForwardVaultGiftFiltersWithVaultFlag() {
     when(vaultService.listGifts(any())).thenReturn(List.of());
 
-    ResponseEntity<List<GiftDTO>> response = controller.listGifts("idea", "birthday", "book", "link");
+    ResponseEntity<List<GiftDTO>> response =
+        controller.listGifts("idea", "birthday", "book", "link");
 
     assertThat(response.getBody()).isEmpty();
 
@@ -58,12 +59,14 @@ class VaultControllerTests {
     controller.listGiftLists("secret gifts");
     controller.listShoppingLists("secret shopping");
 
-    ArgumentCaptor<ListEntityFiltersDTO> listCaptor = ArgumentCaptor.forClass(ListEntityFiltersDTO.class);
+    ArgumentCaptor<ListEntityFiltersDTO> listCaptor =
+        ArgumentCaptor.forClass(ListEntityFiltersDTO.class);
     verify(vaultService).listGiftLists(listCaptor.capture());
     assertThat(listCaptor.getValue().title()).isEqualTo("secret gifts");
     assertThat(listCaptor.getValue().inVault()).isTrue();
 
-    ArgumentCaptor<ListEntityFiltersDTO> shoppingCaptor = ArgumentCaptor.forClass(ListEntityFiltersDTO.class);
+    ArgumentCaptor<ListEntityFiltersDTO> shoppingCaptor =
+        ArgumentCaptor.forClass(ListEntityFiltersDTO.class);
     verify(vaultService).listShoppingLists(shoppingCaptor.capture());
     assertThat(shoppingCaptor.getValue().title()).isEqualTo("secret shopping");
     assertThat(shoppingCaptor.getValue().inVault()).isTrue();
@@ -86,7 +89,8 @@ class VaultControllerTests {
 
   @Test
   void shouldUnlockVaultForAuthenticatedUser() {
-    UserDetails userDetails = User.withUsername("admin").password("password").roles("ADMIN").build();
+    UserDetails userDetails =
+        User.withUsername("admin").password("password").roles("ADMIN").build();
     when(authentication.getPrincipal()).thenReturn(userDetails);
     when(vaultService.unlock("vault-secret", userDetails)).thenReturn("vault-token");
 

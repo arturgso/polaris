@@ -2,9 +2,9 @@ package io.vexis.polaris;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -204,9 +204,15 @@ class VaultIntegrationTests {
   private void seedVaultData() {
     Person person =
         personsRepository.save(
-            Person.builder().name("Aline").birthdayMonth((short) 4).birthdayDay((short) 20).build());
+            Person.builder()
+                .name("Aline")
+                .birthdayMonth((short) 4)
+                .birthdayDay((short) 20)
+                .build());
 
-    Event event = eventRepository.save(Event.builder().tag("birthday").name("Birthday").color("#111827").build());
+    Event event =
+        eventRepository.save(
+            Event.builder().tag("birthday").name("Birthday").color("#111827").build());
     GiftStatus giftStatus =
         giftStatusRepository.save(
             GiftStatus.builder().tag("idea").name("Idea").color("#F97316").build());

@@ -54,7 +54,8 @@ class VaultServiceImplTests {
 
   @Test
   void shouldGenerateVaultTokenForAllowedUserWithCorrectPassword() {
-    UserDetails userDetails = User.withUsername(ALLOWED_USER).password("password").roles("ADMIN").build();
+    UserDetails userDetails =
+        User.withUsername(ALLOWED_USER).password("password").roles("ADMIN").build();
     when(jwtService.generateVaultToken(userDetails)).thenReturn("vault-token");
 
     String token = vaultService.unlock(VAULT_PASSWORD, userDetails);
@@ -74,7 +75,8 @@ class VaultServiceImplTests {
 
   @Test
   void shouldRejectUnlockWhenPasswordIsWrong() {
-    UserDetails userDetails = User.withUsername(ALLOWED_USER).password("password").roles("ADMIN").build();
+    UserDetails userDetails =
+        User.withUsername(ALLOWED_USER).password("password").roles("ADMIN").build();
     org.mockito.Mockito.doThrow(new VaultAuthenticationException("Incorrect Password"))
         .when(vaultPasswordValidator)
         .validate("wrong-password");
@@ -87,7 +89,8 @@ class VaultServiceImplTests {
 
   @Test
   void shouldRejectUnlockWhenUserIsNotAllowed() {
-    UserDetails userDetails = User.withUsername("other-admin").password("password").roles("ADMIN").build();
+    UserDetails userDetails =
+        User.withUsername("other-admin").password("password").roles("ADMIN").build();
 
     org.assertj.core.api.Assertions.assertThatThrownBy(
             () -> vaultService.unlock(VAULT_PASSWORD, userDetails))
@@ -103,18 +106,29 @@ class VaultServiceImplTests {
     ShoppingItemDTO shoppingItemDTO =
         new ShoppingItemDTO(null, null, null, null, null, null, null, null);
 
-    when(giftListService.list(new ListEntityFiltersDTO("title", true))).thenReturn(List.of(giftListDTO));
-    when(shoppingListService.list(new ListEntityFiltersDTO("title", true))).thenReturn(List.of(shoppingListDTO));
-    when(giftsService.list(new io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO(null, "status", "event", "title", "link", true)))
+    when(giftListService.list(new ListEntityFiltersDTO("title", true)))
+        .thenReturn(List.of(giftListDTO));
+    when(shoppingListService.list(new ListEntityFiltersDTO("title", true)))
+        .thenReturn(List.of(shoppingListDTO));
+    when(giftsService.list(
+            new io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO(
+                null, "status", "event", "title", "link", true)))
         .thenReturn(List.of(giftDTO));
     when(shoppingItemService.list(new ShoppingItemFiltersDTO("status", "tag", "title", true)))
         .thenReturn(List.of(shoppingItemDTO));
 
-    assertThat(vaultService.listGiftLists(new ListEntityFiltersDTO("title", true))).containsExactly(giftListDTO);
-    assertThat(vaultService.listShoppingLists(new ListEntityFiltersDTO("title", true))).containsExactly(shoppingListDTO);
-    assertThat(vaultService.listGifts(new io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO(null, "status", "event", "title", "link", true)))
+    assertThat(vaultService.listGiftLists(new ListEntityFiltersDTO("title", true)))
+        .containsExactly(giftListDTO);
+    assertThat(vaultService.listShoppingLists(new ListEntityFiltersDTO("title", true)))
+        .containsExactly(shoppingListDTO);
+    assertThat(
+            vaultService.listGifts(
+                new io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO(
+                    null, "status", "event", "title", "link", true)))
         .containsExactly(giftDTO);
-    assertThat(vaultService.listShoppingItems(new ShoppingItemFiltersDTO("status", "tag", "title", true)))
+    assertThat(
+            vaultService.listShoppingItems(
+                new ShoppingItemFiltersDTO("status", "tag", "title", true)))
         .containsExactly(shoppingItemDTO);
   }
 }
