@@ -92,8 +92,4 @@ public class ShoppingListServiceImpl implements ShoppingListService {
     return ListMapper.createResponseList(lists, mapper::toDTO);
   }
 
-  @Override
-  public List<ShoppingListDTO> listAllInVault() {
-    return repository.findAllByInVaultTrue().stream().map(mapper::toDTO).toList();
-  }
 }
