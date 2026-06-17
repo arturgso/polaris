@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -77,6 +78,12 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleAuthenticationException(
       AuthenticationException exception, HttpServletRequest request) {
     return build(HttpStatus.UNAUTHORIZED, "Credenciais inválidas.", request);
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<ErrorResponse> handleAccessDenied(
+      AccessDeniedException exception, HttpServletRequest request) {
+    return build(HttpStatus.FORBIDDEN, "Acesso negado.", request);
   }
 
   @ExceptionHandler(Exception.class)

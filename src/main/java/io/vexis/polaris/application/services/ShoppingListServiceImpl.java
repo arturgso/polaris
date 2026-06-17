@@ -1,6 +1,7 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.domain.exceptions.ShoppingListNotFoundException;
+import io.vexis.polaris.domain.exceptions.VaultAccessDeniedException;
 import io.vexis.polaris.domain.interfaces.mappers.ShoppingListMapper;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingListRepository;
@@ -48,7 +49,14 @@ public class ShoppingListServiceImpl implements ShoppingListService {
   @Override
   public ShoppingListDTO getById(Long id) {
     log.debug("Loading shopping list DTO id={}", id);
-    return mapper.toDTO(getEntity(id));
+
+    var list = getEntity(id);
+
+    if (Boolean.TRUE.equals(list.getInVault())) {
+      throw new VaultAccessDeniedException("Vault access denied");
+    }
+
+    return mapper.toDTO(list);
   }
 
   @Override

@@ -1,6 +1,7 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.domain.exceptions.GiftListNotFoundException;
+import io.vexis.polaris.domain.exceptions.VaultAccessDeniedException;
 import io.vexis.polaris.domain.interfaces.mappers.GiftListMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
@@ -48,7 +49,14 @@ public class GiftListServiceImpl implements GiftListService {
   @Override
   public GiftListDTO getById(Long id) {
     log.debug("Loading gift list DTO id={}", id);
-    return mapper.toDTO(getEntity(id));
+
+    var list = getEntity(id);
+
+    if (Boolean.TRUE.equals(list.getInVault())) {
+      throw new VaultAccessDeniedException("Vault access denied");
+    }
+
+    return mapper.toDTO(list);
   }
 
   @Override
