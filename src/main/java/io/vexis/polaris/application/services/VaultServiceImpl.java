@@ -7,6 +7,7 @@ import io.vexis.polaris.domain.interfaces.services.ShoppingItemService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingListService;
 import io.vexis.polaris.domain.interfaces.services.VaultService;
 import io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO;
+import io.vexis.polaris.domain.models.dtos.filters.ListEntityFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.filters.ShoppingItemFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
@@ -43,8 +44,8 @@ public class VaultServiceImpl implements VaultService {
   }
 
   @Override
-  public List<GiftListDTO> listGiftLists() {
-    return giftListService.listAllInVault();
+  public List<GiftListDTO> listGiftLists(ListEntityFiltersDTO filters) {
+    return giftListService.list(filters);
   }
 
   @Override
@@ -53,8 +54,8 @@ public class VaultServiceImpl implements VaultService {
   }
 
   @Override
-  public List<ShoppingListDTO> listShoppingLists() {
-    return shoppingListService.listAllInVault();
+  public List<ShoppingListDTO> listShoppingLists(ListEntityFiltersDTO filters) {
+    return shoppingListService.list(filters);
   }
 
   @Override

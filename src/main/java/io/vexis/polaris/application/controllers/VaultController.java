@@ -2,6 +2,7 @@ package io.vexis.polaris.application.controllers;
 
 import io.vexis.polaris.domain.interfaces.services.VaultService;
 import io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO;
+import io.vexis.polaris.domain.models.dtos.filters.ListEntityFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.filters.ShoppingItemFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
@@ -44,9 +45,11 @@ public class VaultController {
 
   @GetMapping("/gift-lists")
   public ResponseEntity<List<GiftListDTO>> listGiftLists(
-
+    @RequestParam(required = false) String title
   ) {
-    return ResponseEntity.ok().body(vaultService.listGiftLists());
+    return ResponseEntity.ok().body(vaultService.listGiftLists(
+      new ListEntityFiltersDTO(title, Boolean.TRUE)
+    ));
   }
 
   @GetMapping("/shopping-items")
@@ -66,8 +69,10 @@ public class VaultController {
   }
 
   @GetMapping("/shopping-lists")
-  public ResponseEntity<List<ShoppingListDTO>> listShoppingLists() {
-    return ResponseEntity.ok().body(vaultService.listShoppingLists());
+  public ResponseEntity<List<ShoppingListDTO>> listShoppingLists(
+      @RequestParam(required = false) String title) {
+    return ResponseEntity.ok().body(vaultService.listShoppingLists(
+        new ListEntityFiltersDTO(title, Boolean.TRUE)));
   }
 
   @PostMapping("/unlock")

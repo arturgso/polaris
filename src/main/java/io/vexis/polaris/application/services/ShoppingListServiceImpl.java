@@ -5,8 +5,10 @@ import io.vexis.polaris.domain.interfaces.mappers.ShoppingListMapper;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingListRepository;
 import io.vexis.polaris.domain.interfaces.services.ShoppingListService;
+import io.vexis.polaris.domain.models.dtos.filters.ListEntityFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingListDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingList;
+import io.vexis.polaris.domain.specs.ListEntitySpec;
 import io.vexis.polaris.shared.ListMapper;
 import io.vexis.polaris.shared.TextUtils;
 import io.vexis.polaris.shared.dtos.NewListDTO;
@@ -84,9 +86,9 @@ public class ShoppingListServiceImpl implements ShoppingListService {
   }
 
   @Override
-  public List<ShoppingListDTO> list() {
+  public List<ShoppingListDTO> list(ListEntityFiltersDTO filters) {
     log.debug("Listing shopping lists");
-    var lists = repository.findAll();
+    List<ShoppingList> lists = repository.findAll(ListEntitySpec.byFilters(filters));
     return ListMapper.createResponseList(lists, mapper::toDTO);
   }
 

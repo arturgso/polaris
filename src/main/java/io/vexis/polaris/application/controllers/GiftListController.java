@@ -1,6 +1,7 @@
 package io.vexis.polaris.application.controllers;
 
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
+import io.vexis.polaris.domain.models.dtos.filters.ListEntityFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
 import io.vexis.polaris.shared.dtos.NewListDTO;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,8 +31,10 @@ public class GiftListController {
   }
 
   @GetMapping
-  public ResponseEntity<List<GiftListDTO>> getAll() {
-    return ResponseEntity.ok().body(service.list());
+  public ResponseEntity<List<GiftListDTO>> getAll(
+    @RequestParam(required = false) String title
+  ) {
+    return ResponseEntity.ok().body(service.list(new ListEntityFiltersDTO(title, Boolean.FALSE)));
   }
 
   @GetMapping("{id}")

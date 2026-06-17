@@ -5,8 +5,10 @@ import io.vexis.polaris.domain.interfaces.mappers.GiftListMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
+import io.vexis.polaris.domain.models.dtos.filters.ListEntityFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
 import io.vexis.polaris.domain.models.entities.GiftList;
+import io.vexis.polaris.domain.specs.ListEntitySpec;
 import io.vexis.polaris.shared.ListMapper;
 import io.vexis.polaris.shared.TextUtils;
 import io.vexis.polaris.shared.dtos.NewListDTO;
@@ -50,9 +52,10 @@ public class GiftListServiceImpl implements GiftListService {
   }
 
   @Override
-  public List<GiftListDTO> listAllInVault() {
-    var list = repository.findAllByInVaultTrue();
-    return ListMapper.createResponseList(list, mapper::toDTO);
+  public List<GiftListDTO> list(ListEntityFiltersDTO filters) {
+    log.debug("Listing gift lists");
+    List<GiftList> lists = repository.findAll(ListEntitySpec.byFilters(filters));
+    return ListMapper.createResponseList(lists, mapper::toDTO);
   }
 
   @Override
@@ -87,12 +90,5 @@ public class GiftListServiceImpl implements GiftListService {
     }
     repository.deleteById(id);
     log.info("Gift list deleted id={}", id);
-  }
-
-  @Override
-  public List<GiftListDTO> list() {
-    log.debug("Listing gift lists");
-    var lists = repository.findAll();
-    return ListMapper.createResponseList(lists, mapper::toDTO);
   }
 }
