@@ -1,6 +1,7 @@
 package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.security.JwtService;
+import io.vexis.polaris.domain.exceptions.VaultAuthenticationException;
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemService;
@@ -73,7 +74,7 @@ public class VaultServiceImpl implements VaultService {
 
   private void validateUser(UserDetails userDetails) {
     if (!allowedUser.equals(userDetails.getUsername())) {
-      throw new RuntimeException("Not Allowed");
+      throw new VaultAuthenticationException("Not Allowed");
     }
   }
 
@@ -81,7 +82,7 @@ public class VaultServiceImpl implements VaultService {
     String hash = new BCryptPasswordEncoder().encode(vaultPasswordHash);
 
     if (!new BCryptPasswordEncoder().matches(password, hash)) {
-      throw new RuntimeException("Incorrect Password");
+      throw new VaultAuthenticationException("Incorrect Password");
     }
   }
 }

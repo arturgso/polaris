@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.vexis.polaris.application.security.JwtService;
+import io.vexis.polaris.domain.exceptions.VaultAuthenticationException;
 import io.vexis.polaris.domain.interfaces.services.GiftListService;
 import io.vexis.polaris.domain.interfaces.services.GiftsService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemService;
@@ -75,7 +76,7 @@ class VaultServiceImplTests {
 
     org.assertj.core.api.Assertions.assertThatThrownBy(
             () -> vaultService.unlock("wrong-password", userDetails))
-        .isInstanceOf(RuntimeException.class)
+        .isInstanceOf(VaultAuthenticationException.class)
         .hasMessage("Incorrect Password");
   }
 
@@ -85,7 +86,7 @@ class VaultServiceImplTests {
 
     org.assertj.core.api.Assertions.assertThatThrownBy(
             () -> vaultService.unlock(VAULT_PASSWORD, userDetails))
-        .isInstanceOf(RuntimeException.class)
+        .isInstanceOf(VaultAuthenticationException.class)
         .hasMessage("Not Allowed");
   }
 
