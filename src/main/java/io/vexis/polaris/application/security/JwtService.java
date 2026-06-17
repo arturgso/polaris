@@ -1,16 +1,14 @@
 package io.vexis.polaris.application.security;
 
-import java.time.Instant;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import java.time.Instant;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class JwtService {
@@ -45,18 +43,14 @@ public class JwtService {
   }
 
   public String generateVaultToken(UserDetails userDetails) {
-    if (!userDetails.getUsername().equals(initialUser)) {
-      throw new RuntimeException("Not allowed");
-    }
-
     Instant issuedAt = Instant.now();
-    Instant expiresAt = issuedAt.plusSeconds(expirationSeconds);
+    Instant expiresAt = issuedAt.plusSeconds(900);
     return JWT.create()
-    .withSubject(initialUser)
-    .withClaim("scope", "vault:access")
-    .withIssuedAt(issuedAt)
-    .withExpiresAt(expiresAt)
-    .sign(algorithm);
+        .withSubject(initialUser)
+        .withClaim("scope", "vault:access")
+        .withIssuedAt(issuedAt)
+        .withExpiresAt(expiresAt)
+        .sign(algorithm);
   }
 
   public String extractUsername(String token) {
@@ -70,6 +64,20 @@ public class JwtService {
   public boolean isTokenValid(String token, UserDetails userDetails) {
     try {
       return userDetails.getUsername().equals(verifier.verify(token).getSubject());
+    } catch (JWTVerificationException | IllegalArgumentException exception) {
+      return false;
+    }
+  }
+
+  public boolean isVaultTokenValid(String token, String allowedUser) {
+    if (!StringUtils.hasText(token) || !StringUtils.hasText(allowedUser)) {
+      return false;
+    }
+
+    try {
+      var decodedToken = verifier.verify(token);
+      return allowedUser.equals(decodedToken.getSubject())
+          && "vault:access".equals(decodedToken.getClaim("scope").asString());
     } catch (JWTVerificationException | IllegalArgumentException exception) {
       return false;
     }

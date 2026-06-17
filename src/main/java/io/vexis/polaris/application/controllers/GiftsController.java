@@ -29,7 +29,8 @@ public class GiftsController {
       @RequestParam(required = false) String event,
       @RequestParam(required = false) String title,
       @RequestParam(required = false) String link) {
-    return ResponseEntity.ok(service.list(new GiftFiltersDTO(null, status, event, title, link)));
+    return ResponseEntity.ok(
+        service.list(new GiftFiltersDTO(null, status, event, title, link, null)));
   }
 
   @GetMapping("by-person")
@@ -40,18 +41,29 @@ public class GiftsController {
       @RequestParam(required = false) String title,
       @RequestParam(required = false) String link) {
     return ResponseEntity.ok(
-        service.listByPerson(new GiftFiltersDTO(personId, status, event, title, link)));
+        service.listByPerson(new GiftFiltersDTO(personId, status, event, title, link, null)));
   }
 
   @PatchMapping("{id}")
-  public ResponseEntity<Void> update(@RequestBody UpdateGiftDTO dto, @PathVariable Long id) {
-    service.update(dto, id);
+  public ResponseEntity<Void> update(
+      @RequestBody UpdateGiftDTO dto,
+      @PathVariable Long id,
+      @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
+    service.update(dto, id, vaultPassword);
     return ResponseEntity.ok(null);
   }
 
+  @PatchMapping("{id}/vault")
+  public ResponseEntity<Void> moveToVault(@PathVariable Long id) {
+    service.moveGiftToVault(id);
+    return ResponseEntity.noContent().build();
+  }
+
   @DeleteMapping("{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    service.delete(id);
+  public ResponseEntity<Void> delete(
+      @PathVariable Long id,
+      @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
+    service.delete(id, vaultPassword);
     return ResponseEntity.ok(null);
   }
 }

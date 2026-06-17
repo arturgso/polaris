@@ -1,15 +1,14 @@
 package io.vexis.polaris.domain.interfaces.mappers;
 
+import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
+import io.vexis.polaris.domain.models.dtos.gifts.UpdateGiftDTO;
+import io.vexis.polaris.domain.models.entities.Gift;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
-
-import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
-import io.vexis.polaris.domain.models.dtos.gifts.UpdateGiftDTO;
-import io.vexis.polaris.domain.models.entities.Gift;
 
 @Mapper(
     unmappedTargetPolicy = ReportingPolicy.IGNORE,

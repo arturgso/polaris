@@ -6,6 +6,7 @@ import io.vexis.polaris.application.security.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.util.ReflectionTestUtils;
 
 class JwtServiceTests {
 
@@ -48,6 +49,28 @@ class JwtServiceTests {
     String token = jwtService.generateToken(userDetails);
 
     assertThat(jwtService.isTokenValid(token, userDetails)).isFalse();
+  }
+
+  @Test
+  void shouldGenerateAndValidateVaultTokenForAllowedUser() {
+    JwtService jwtService = new JwtService(SECRET, 604800);
+    ReflectionTestUtils.setField(jwtService, "initialUser", "admin");
+    UserDetails userDetails = userDetails("admin");
+
+    String token = jwtService.generateVaultToken(userDetails);
+
+    assertThat(jwtService.isVaultTokenValid(token, "admin")).isTrue();
+  }
+
+  @Test
+  void shouldRejectVaultTokenForDifferentAllowedUser() {
+    JwtService jwtService = new JwtService(SECRET, 604800);
+    ReflectionTestUtils.setField(jwtService, "initialUser", "admin");
+    UserDetails userDetails = userDetails("admin");
+
+    String token = jwtService.generateVaultToken(userDetails);
+
+    assertThat(jwtService.isVaultTokenValid(token, "other-admin")).isFalse();
   }
 
   private UserDetails userDetails(String username) {

@@ -1,8 +1,11 @@
 package io.vexis.polaris.application.controllers;
 
-import java.util.List;
-
+import io.vexis.polaris.domain.interfaces.services.GiftListService;
+import io.vexis.polaris.domain.models.dtos.filters.ListEntityFiltersDTO;
+import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
 import io.vexis.polaris.shared.dtos.NewListDTO;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,12 +14,10 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.vexis.polaris.domain.interfaces.services.GiftListService;
-import io.vexis.polaris.domain.models.dtos.giftlist.GiftListDTO;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/gift-lists")
@@ -31,8 +32,8 @@ public class GiftListController {
   }
 
   @GetMapping
-  public ResponseEntity<List<GiftListDTO>> getAll() {
-    return ResponseEntity.ok().body(service.list());
+  public ResponseEntity<List<GiftListDTO>> getAll(@RequestParam(required = false) String title) {
+    return ResponseEntity.ok().body(service.list(new ListEntityFiltersDTO(title, Boolean.FALSE)));
   }
 
   @GetMapping("{id}")
@@ -41,14 +42,25 @@ public class GiftListController {
   }
 
   @PatchMapping("{id}")
-  public ResponseEntity<Void> update(@RequestBody NewListDTO dto, @PathVariable Long id) {
-    service.update(dto, id);
+  public ResponseEntity<Void> update(
+      @RequestBody NewListDTO dto,
+      @PathVariable Long id,
+      @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
+    service.update(dto, id, vaultPassword);
     return ResponseEntity.ok().body(null);
   }
 
+  @PatchMapping("{id}/vault")
+  public ResponseEntity<Void> moveToVault(@PathVariable Long id) {
+    service.moveToVault(id);
+    return ResponseEntity.noContent().build();
+  }
+
   @DeleteMapping("{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    service.delete(id);
+  public ResponseEntity<Void> delete(
+      @PathVariable Long id,
+      @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
+    service.delete(id, vaultPassword);
     return ResponseEntity.ok().body(null);
   }
 }

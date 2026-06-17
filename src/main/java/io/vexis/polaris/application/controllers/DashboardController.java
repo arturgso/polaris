@@ -28,6 +28,9 @@ public class DashboardController {
   public ResponseEntity<DashboardMetricsDTO> getMetrics() {
     return ResponseEntity.ok(
         new DashboardMetricsDTO(
-            shoppingItemService.countAll(), giftsService.countAll(), shoppingItemService.getTotalPrice(), giftsService.getTotalPrice()));
+            shoppingItemService.countAll(),
+            giftsService.countAll(),
+            shoppingItemService.getTotalPrice(),
+            giftsService.getTotalPrice()));
   }
 }

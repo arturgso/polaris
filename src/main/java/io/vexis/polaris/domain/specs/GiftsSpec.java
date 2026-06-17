@@ -35,11 +35,16 @@ public class GiftsSpec {
         personId == null ? null : cb.equal(root.get("giftFor").get("id"), personId));
   }
 
+  private static Specification<Gift> byInVault(Boolean inVault) {
+    return (root, query, cb) -> cb.equal(root.get("inVault"), inVault != null ? inVault : false);
+  }
+
   public static Specification<Gift> byFilters(GiftFiltersDTO filters) {
     return Specification.where(byTitle(filters.title()))
         .and(byLink(filters.link()))
         .and(byStatus(filters.status()))
         .and(byEvent(filters.event()))
-        .and(byGiftForId(filters.personId()));
+        .and(byGiftForId(filters.personId()))
+        .and(byInVault(filters.inVault()));
   }
 }

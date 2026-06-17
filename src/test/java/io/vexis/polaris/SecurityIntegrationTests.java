@@ -7,28 +7,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.vexis.polaris.domain.interfaces.repositories.UserRepository;
-import io.vexis.polaris.domain.models.entities.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 class SecurityIntegrationTests {
 
   @Autowired private MockMvc mockMvc;
-
-  @Autowired private UserRepository userRepository;
-
-  @Autowired private PasswordEncoder passwordEncoder;
 
   @Test
   void shouldReturnUnauthorizedForPrivateRouteWithoutToken() throws Exception {
@@ -83,8 +74,6 @@ class SecurityIntegrationTests {
 
   @Test
   void shouldLoginWithValidCredentials() throws Exception {
-    createUser("admin", "secret123");
-
     mockMvc
         .perform(
             post("/auth/login")
@@ -101,8 +90,6 @@ class SecurityIntegrationTests {
 
   @Test
   void shouldRejectInvalidCredentials() throws Exception {
-    createUser("admin", "secret123");
-
     mockMvc
         .perform(
             post("/auth/login")
@@ -112,14 +99,5 @@ class SecurityIntegrationTests {
                     {"username":"admin","password":"wrong-password"}
                     """))
         .andExpect(status().isUnauthorized());
-  }
-
-  private void createUser(String username, String password) {
-    userRepository.save(
-        User.builder()
-            .username(username)
-            .password(passwordEncoder.encode(password))
-            .role("ADMIN")
-            .build());
   }
 }

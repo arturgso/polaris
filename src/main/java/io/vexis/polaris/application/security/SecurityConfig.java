@@ -47,8 +47,16 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.OPTIONS, "/**")
                     .permitAll()
                     .requestMatchers(
-                        "/auth/login", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**")
+                        "/auth/login",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/v3/api-docs/**",
+                        "/health")
                     .permitAll()
+                    .requestMatchers("/vault/unlock")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/vault/**")
+                    .hasRole("ADMIN")
                     .requestMatchers("/gift-lists/**", "/shopping-lists/**")
                     .hasRole("ADMIN")
                     .anyRequest()

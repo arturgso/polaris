@@ -1,11 +1,7 @@
 package io.vexis.polaris.application.services;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import io.vexis.polaris.application.factories.GiftsFactory;
+import io.vexis.polaris.application.security.VaultPasswordValidator;
 import io.vexis.polaris.domain.exceptions.GiftNotFoundException;
 import io.vexis.polaris.domain.interfaces.mappers.GiftsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
@@ -22,8 +18,11 @@ import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.specs.GiftsSpec;
 import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +40,7 @@ public class GiftsServiceImpl implements GiftsService {
   private final GiftsRepository repository;
   private final GiftsFactory factory;
   private final GiftsMapper mapper;
+  private final VaultPasswordValidator vaultPasswordValidator;
 
   @Override
   public GiftDTO create(NewGiftDTO dto) {
@@ -71,10 +71,6 @@ public class GiftsServiceImpl implements GiftsService {
 
   @Override
   public List<GiftDTO> listByPerson(GiftFiltersDTO filtersDTO) {
-    if (filtersDTO.personId() == null) {
-      throw new IllegalArgumentException("personId must not be empty");
-    }
-
     var giftList = repository.findAll(GiftsSpec.byFilters(filtersDTO));
     return ListMapper.createResponseList(giftList, mapper::toDTO);
   }
@@ -87,8 +83,17 @@ public class GiftsServiceImpl implements GiftsService {
   @Transactional
   @Override
   public void update(UpdateGiftDTO dto, Long id) {
+    update(dto, id, null);
+  }
+
+  @Transactional
+  @Override
+  public void update(UpdateGiftDTO dto, Long id, String vaultPassword) {
     log.info("Updating gift id={}", id);
     var gift = getEntity(id);
+    if (Boolean.TRUE.equals(gift.getInVault())) {
+      vaultPasswordValidator.validate(vaultPassword);
+    }
     gift = mapper.update(dto, gift);
 
     if (dto.giftFor() != null) {
@@ -103,8 +108,8 @@ public class GiftsServiceImpl implements GiftsService {
       gift.setStatus(giftStatusService.getEntityByTag(dto.status()));
     }
 
-    if(dto.giftListId() != null) {
-     gift.setGiftList(giftListService.getEntity(dto.giftListId())); 
+    if (dto.giftListId() != null) {
+      gift.setGiftList(giftListService.getEntity(dto.giftListId()));
     }
 
     repository.save(gift);
@@ -114,7 +119,17 @@ public class GiftsServiceImpl implements GiftsService {
   @Transactional
   @Override
   public void delete(Long id) {
+    delete(id, null);
+  }
+
+  @Transactional
+  @Override
+  public void delete(Long id, String vaultPassword) {
     log.info("Deleting gift id={}", id);
+    var gift = getEntity(id);
+    if (Boolean.TRUE.equals(gift.getInVault())) {
+      vaultPasswordValidator.validate(vaultPassword);
+    }
     if (!repository.existsById(id)) {
       throw new GiftNotFoundException();
     }
@@ -130,5 +145,18 @@ public class GiftsServiceImpl implements GiftsService {
   @Override
   public BigDecimal getTotalPrice() {
     return repository.getTotalPrice();
+  }
+
+  @Override
+  @Transactional
+  public void moveGiftToVault(Long id) {
+    var gift = getEntity(id);
+    gift.setInVault(true);
+    repository.save(gift);
+  }
+
+  @Override
+  public List<GiftDTO> listAllInVault() {
+    return repository.findAllByInVaultTrue().stream().map(mapper::toDTO).toList();
   }
 }

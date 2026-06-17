@@ -18,7 +18,13 @@ public interface ShoppingItemService
         ShoppingItemFiltersDTO> {
   List<ShoppingItemDTO> listRecent();
 
+  List<ShoppingItemDTO> listAllInVault();
+
   Long countAll();
 
   BigDecimal getTotalPrice();
+
+  void moveShoppingItemToVault(Long id);
+
+  void moveShoppingItemsToVault(List<ShoppingItem> items);
 }

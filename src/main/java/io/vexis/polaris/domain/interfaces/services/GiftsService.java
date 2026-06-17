@@ -12,7 +12,11 @@ public interface GiftsService
     extends FilteredCrudService<NewGiftDTO, UpdateGiftDTO, GiftDTO, Gift, Long, GiftFiltersDTO> {
   List<GiftDTO> listByPerson(GiftFiltersDTO filtersDTO);
 
+  List<GiftDTO> listAllInVault();
+
   Long countAll();
 
   BigDecimal getTotalPrice();
+
+  void moveGiftToVault(Long id);
 }
