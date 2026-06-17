@@ -4,9 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+import io.vexis.polaris.domain.enums.ShoppingItemStatus;
+
 public record NewShoppingItemDTO(
     @NotBlank String title,
     @NotBlank String link,
     Long categoryId,
     @NotNull BigDecimal price,
-    Long statusId) {}
+    ShoppingItemStatus status) {}

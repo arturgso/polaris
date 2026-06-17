@@ -1,6 +1,6 @@
 package io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem;
 
-import io.vexis.polaris.domain.models.dtos.shoppinglist.statuses.ShoppingItemStatusDTO;
+import io.vexis.polaris.domain.models.dtos.StatusDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -11,6 +11,6 @@ public record ShoppingItemDTO(
     String link,
     ShoppingItemCategory category,
     BigDecimal price,
-    ShoppingItemStatusDTO status,
+    StatusDTO status,
     Instant createdAt,
     Instant updatedAt) {}

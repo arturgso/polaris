@@ -13,22 +13,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
-import io.vexis.polaris.domain.interfaces.repositories.GiftStatusRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.PersonsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemCategoriesRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
-import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemStatusesRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingListRepository;
 import io.vexis.polaris.domain.models.entities.Event;
 import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.models.entities.GiftList;
-import io.vexis.polaris.domain.models.entities.GiftStatus;
 import io.vexis.polaris.domain.models.entities.Person;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
-import io.vexis.polaris.domain.models.entities.ShoppingItemStatus;
 import io.vexis.polaris.domain.models.entities.ShoppingList;
+import io.vexis.polaris.domain.enums.GiftStatus;
+import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +52,6 @@ class VaultIntegrationTests {
 
   @Autowired private GiftsRepository giftsRepository;
 
-  @Autowired private GiftStatusRepository giftStatusRepository;
-
   @Autowired private EventsRepository eventRepository;
 
   @Autowired private ShoppingListRepository shoppingListRepository;
@@ -63,8 +59,6 @@ class VaultIntegrationTests {
   @Autowired private ShoppingItemRepository shoppingItemRepository;
 
   @Autowired private ShoppingItemCategoriesRepository shoppingItemCategoriesRepository;
-
-  @Autowired private ShoppingItemStatusesRepository shoppingItemStatusesRepository;
 
   @Test
   void shouldUnlockVaultAndListOnlySecretResources() throws Exception {
@@ -213,9 +207,7 @@ class VaultIntegrationTests {
     Event event =
         eventRepository.save(
             Event.builder().tag("birthday").name("Birthday").color("#111827").build());
-    GiftStatus giftStatus =
-        giftStatusRepository.save(
-            GiftStatus.builder().tag("idea").name("Idea").color("#F97316").build());
+    GiftStatus giftStatus = GiftStatus.IDEA;
     GiftList publicGiftList = new GiftList();
     publicGiftList.setTitle("public gift list");
     publicGiftList.setInVault(false);
@@ -247,9 +239,6 @@ class VaultIntegrationTests {
     ShoppingItemCategory category =
         shoppingItemCategoriesRepository.save(
             ShoppingItemCategory.builder().tag("tech").name("Tech").color("#0EA5E9").build());
-    ShoppingItemStatus shoppingStatus =
-        shoppingItemStatusesRepository.save(
-            ShoppingItemStatus.builder().tag("idea").name("Idea").color("#14B8A6").build());
     ShoppingList publicShoppingList = new ShoppingList();
     publicShoppingList.setTitle("public shopping list");
     publicShoppingList.setInVault(false);
@@ -264,7 +253,7 @@ class VaultIntegrationTests {
             .title("public shopping item")
             .category(category)
             .price(new BigDecimal("10.00"))
-            .status(shoppingStatus)
+            .status(ShoppingItemStatus.IDEA)
             .shoppingList(publicShoppingList)
             .inVault(false)
             .build());
@@ -273,7 +262,7 @@ class VaultIntegrationTests {
             .title("secret shopping item")
             .category(category)
             .price(new BigDecimal("20.00"))
-            .status(shoppingStatus)
+            .status(ShoppingItemStatus.IDEA)
             .shoppingList(secretShoppingList)
             .inVault(true)
             .build());

@@ -8,6 +8,12 @@ public record GiftDTO(
     String link,
     String giftFor,
     String event,
-    String status,
+    GiftDTO.Status status,
     Instant createdAt,
-    Instant updatedAt) {}
+    Instant updatedAt) {
+        public record Status(
+            String name, 
+            String title
+        ) {
+        }
+    }

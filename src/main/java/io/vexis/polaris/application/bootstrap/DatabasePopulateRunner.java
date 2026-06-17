@@ -2,21 +2,18 @@ package io.vexis.polaris.application.bootstrap;
 
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
-import io.vexis.polaris.domain.interfaces.repositories.GiftStatusRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.PersonsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemCategoriesRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
-import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemStatusesRepository;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingListRepository;
 import io.vexis.polaris.domain.models.entities.Event;
 import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.models.entities.GiftList;
-import io.vexis.polaris.domain.models.entities.GiftStatus;
+import io.vexis.polaris.domain.enums.GiftStatus;
 import io.vexis.polaris.domain.models.entities.Person;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
-import io.vexis.polaris.domain.models.entities.ShoppingItemStatus;
 import io.vexis.polaris.domain.models.entities.ShoppingList;
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,9 +37,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
   private final ShoppingItemRepository shoppingItemRepository;
   private final ShoppingListRepository shoppingListRepository;
   private final EventsRepository eventsRepository;
-  private final GiftStatusRepository giftStatusRepository;
   private final ShoppingItemCategoriesRepository shoppingItemCategoriesRepository;
-  private final ShoppingItemStatusesRepository shoppingItemStatusesRepository;
 
   @Override
   @Transactional
@@ -63,20 +58,14 @@ public class DatabasePopulateRunner implements ApplicationRunner {
     var marriage = getEvent("MARRIAGE");
     var none = getEvent("NONE");
 
-    var giftIdea = getGiftStatus("IDEA");
-    var purchased = getGiftStatus("PURCHASED");
-    var delivered = getGiftStatus("DELIVERED");
+    var giftIdea = GiftStatus.IDEA;
+    var purchased = GiftStatus.PURCHASED;
+    var delivered = GiftStatus.DELIVERED;
 
     var tech = getShoppingItemCategory("TECH");
     var health = getShoppingItemCategory("HEALTH");
     var makeup = getShoppingItemCategory("MAKEUP");
     var other = getShoppingItemCategory("OTHER");
-
-    var shoppingIdea = getShoppingItemStatus("IDEA");
-    var planned = getShoppingItemStatus("PLANNED");
-    var toBuy = getShoppingItemStatus("TO_BUY");
-    var bought = getShoppingItemStatus("BOUGHT");
-    var canceled = getShoppingItemStatus("CANCELED");
 
     var persons =
         personsRepository.saveAll(
@@ -135,21 +124,41 @@ public class DatabasePopulateRunner implements ApplicationRunner {
                 "https://example.com/teclado",
                 tech,
                 "349.90",
-                planned,
+                io.vexis.polaris.domain.enums.ShoppingItemStatus.PLANNED,
                 publicShoppingList,
                 false),
-            shoppingItem("Vitaminas", null, health, "79.90", toBuy, publicShoppingList, false),
+            shoppingItem(
+                "Vitaminas",
+                null,
+                health,
+                "79.90",
+                io.vexis.polaris.domain.enums.ShoppingItemStatus.TO_BUY,
+                publicShoppingList,
+                false),
             shoppingItem(
                 "Base liquida",
                 "https://example.com/base",
                 makeup,
                 "119.90",
-                bought,
+                io.vexis.polaris.domain.enums.ShoppingItemStatus.BOUGHT,
                 vaultShoppingList,
                 true),
             shoppingItem(
-                "Organizador", null, other, "45.50", shoppingIdea, publicShoppingList, false),
-            shoppingItem("Cabo USB-C", null, tech, "39.90", canceled, publicShoppingList, false)));
+                "Organizador",
+                null,
+                other,
+                "45.50",
+                io.vexis.polaris.domain.enums.ShoppingItemStatus.IDEA,
+                publicShoppingList,
+                false),
+            shoppingItem(
+                "Cabo USB-C",
+                null,
+                tech,
+                "39.90",
+                io.vexis.polaris.domain.enums.ShoppingItemStatus.CANCELED,
+                publicShoppingList,
+                false)));
 
     log.info(
         "Database populate created {} persons, {} gift lists, {} gifts, {} shopping lists and {} shopping items",
@@ -198,7 +207,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
       String link,
       ShoppingItemCategory category,
       String price,
-      ShoppingItemStatus status,
+      io.vexis.polaris.domain.enums.ShoppingItemStatus status,
       ShoppingList shoppingList,
       boolean inVault) {
     return ShoppingItem.builder()
@@ -216,22 +225,10 @@ public class DatabasePopulateRunner implements ApplicationRunner {
     return eventsRepository.findByTag(tag).orElseThrow(() -> missingCatalog("event", tag));
   }
 
-  private GiftStatus getGiftStatus(String tag) {
-    return giftStatusRepository
-        .findByTag(tag)
-        .orElseThrow(() -> missingCatalog("gift status", tag));
-  }
-
   private ShoppingItemCategory getShoppingItemCategory(String tag) {
     return shoppingItemCategoriesRepository
         .findByTag(tag)
         .orElseThrow(() -> missingCatalog("shopping item category", tag));
-  }
-
-  private ShoppingItemStatus getShoppingItemStatus(String tag) {
-    return shoppingItemStatusesRepository
-        .findByTag(tag)
-        .orElseThrow(() -> missingCatalog("shopping item status", tag));
   }
 
   private IllegalStateException missingCatalog(String catalog, String tag) {

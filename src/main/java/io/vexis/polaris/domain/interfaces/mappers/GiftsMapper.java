@@ -1,5 +1,6 @@
 package io.vexis.polaris.domain.interfaces.mappers;
 
+import io.vexis.polaris.domain.enums.GiftStatus;
 import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.UpdateGiftDTO;
 import io.vexis.polaris.domain.models.entities.Gift;
@@ -18,12 +19,21 @@ public interface GiftsMapper {
 
   @Mapping(target = "giftFor", source = "giftFor.name")
   @Mapping(target = "event", source = "event.tag")
-  @Mapping(target = "status", source = "status.tag")
   GiftDTO toDTO(Gift gift);
 
   @Mapping(target = "giftFor", ignore = true)
   @Mapping(target = "giftList", ignore = true)
   @Mapping(target = "event", ignore = true)
-  @Mapping(target = "status", ignore = true)
   Gift update(UpdateGiftDTO update, @MappingTarget Gift gift);
+
+  default GiftDTO.Status map(GiftStatus status) {
+    if (status == null) {
+      return null;
+
+    }
+
+    return new GiftDTO.Status(
+        status.getName(),
+        status.getColor());
+  }
 }

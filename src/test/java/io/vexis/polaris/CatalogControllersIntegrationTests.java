@@ -71,51 +71,6 @@ class CatalogControllersIntegrationTests {
     mockMvc.perform(delete("/events/{id}", id)).andExpect(status().isOk());
   }
 
-  @Test
-  void shouldPerformCrudForGiftStatusEndpoint() throws Exception {
-    String createResponse =
-        mockMvc
-            .perform(
-                post("/gift-statuses")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(
-                        """
-                                {"tag":"wrapped","name":"embrulhado","color":"#F97316"}
-                                """))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.tag").value(TextUtils.normalizeTag("embrulhado")))
-            .andExpect(jsonPath("$.name").value("embrulhado"))
-            .andExpect(jsonPath("$.color").value("#F97316"))
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-
-    Long id = readId(createResponse);
-
-    mockMvc
-        .perform(get("/gift-statuses"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].tag", hasItem(TextUtils.normalizeTag("embrulhado"))));
-
-    mockMvc
-        .perform(
-            patch("/gift-statuses/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    """
-                                {"tag":"shipped","name":"enviado"}
-                                """))
-        .andExpect(status().isOk());
-
-    mockMvc
-        .perform(get("/gift-statuses"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].tag", hasItem(TextUtils.normalizeTag("shipped"))))
-        .andExpect(jsonPath("$[*].name", hasItem("enviado")));
-
-    mockMvc.perform(delete("/gift-statuses/{id}", id)).andExpect(status().isOk());
-  }
-
   private Long readId(String json) {
     int start = json.indexOf("\"id\":");
     int end = json.indexOf(",", start);
