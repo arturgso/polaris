@@ -2,6 +2,7 @@ package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.EventsFactory;
 import io.vexis.polaris.domain.exceptions.EventNotFoundException;
+import io.vexis.polaris.domain.exceptions.OperationNotImplementedException;
 import io.vexis.polaris.domain.interfaces.mappers.EventsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
 import io.vexis.polaris.domain.interfaces.services.EventsService;
@@ -43,15 +44,14 @@ public class EventsServiceImpl implements EventsService {
 
   @Override
   public Event getEntity(Long id) {
-    log.debug("Loading event id={}", id);
-    return repository.findById(id).orElseThrow(EventNotFoundException::new);
+    throw new OperationNotImplementedException("not implemented");
   }
 
   @Override
-  public Event getEntityByTag(String tag) {
+  public Event getEntity(String tag) {
     log.debug("Loading event by tag");
     return repository
-        .findByTag(TextUtils.normalizeTag(tag))
+        .findByTag(tag)
         .orElseThrow(EventNotFoundException::new);
   }
 

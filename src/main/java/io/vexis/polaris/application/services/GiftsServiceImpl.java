@@ -46,8 +46,8 @@ public class GiftsServiceImpl implements GiftsService {
     var person = personsService.getEntity(dto.personId());
     var event =
         dto.event() == null
-            ? eventsService.getEntityByTag(DEFAULT_EVENT)
-            : eventsService.getEntityByTag(dto.event());
+            ? eventsService.getEntity(DEFAULT_EVENT)
+            : eventsService.getEntity(dto.event().toUpperCase());
     var status =
         dto.status() == null
             ? GiftStatus.IDEA  
@@ -99,7 +99,7 @@ public class GiftsServiceImpl implements GiftsService {
     }
 
     if (dto.event() != null) {
-      gift.setEvent(eventsService.getEntityByTag(dto.event()));
+      gift.setEvent(eventsService.getEntity(dto.event().toUpperCase()));
     }
 
     if (dto.giftListId() != null) {
