@@ -15,11 +15,11 @@ public class ShoppingItemFactory {
   private final ShoppingItemCategoriesService categoriesService;
 
   public ShoppingItem create(
-      String title, String link, Long categoryId, BigDecimal price, ShoppingItemStatus status) {
+      String title, String link, String category, BigDecimal price, ShoppingItemStatus status) {
     return ShoppingItem.builder()
         .title(TextUtils.normalizeText(title))
         .link(link)
-        .category(categoriesService.getEntity(categoryId))
+        .category(categoriesService.getEntity(category))
         .price(price)
         .status(status)
         .build();

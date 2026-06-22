@@ -40,10 +40,10 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   public ShoppingItemDTO create(NewShoppingItemDTO dto) {
     log.info(
         "Creating shopping item with categoryId={} and status={}",
-        dto.categoryId(),
+        dto.category(),
         dto.status());
     var item =
-        factory.create(dto.title(), dto.link(), dto.categoryId(), dto.price(), dto.status());
+        factory.create(dto.title(), dto.link(), dto.category(), dto.price(), dto.status());
 
     item = repository.save(item);
     log.info("Shopping item created with id={}", item.getId());
@@ -109,8 +109,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
       item.setTitle(TextUtils.normalizeText(dto.title()));
     }
 
-    if (dto.categoryId() != null) {
-      item.setCategory(categoriesService.getEntity(dto.categoryId()));
+    if (dto.category() != null) {
+      item.setCategory(categoriesService.getEntity(dto.category()));
     }
 
     if (dto.shoppingListId() != null) {

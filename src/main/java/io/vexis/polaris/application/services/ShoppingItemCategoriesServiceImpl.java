@@ -40,9 +40,9 @@ public class ShoppingItemCategoriesServiceImpl implements ShoppingItemCategories
   }
 
   @Override
-  public ShoppingItemCategory getEntity(Long id) {
-    log.debug("Loading shopping item category id={}", id);
-    return repository.findById(id).orElseThrow(ShoppingItemCategoryNotFoundException::new);
+  public ShoppingItemCategory getEntity(String tag) {
+    log.debug("Loading shopping item category tag={}", tag);
+    return repository.findByTag(tag).orElseThrow(ShoppingItemCategoryNotFoundException::new);
   }
 
   @Transactional

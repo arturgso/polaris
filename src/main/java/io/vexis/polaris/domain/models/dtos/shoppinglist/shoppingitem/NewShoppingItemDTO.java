@@ -8,7 +8,7 @@ import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 
 public record NewShoppingItemDTO(
     @NotBlank String title,
-    @NotBlank String link,
-    Long categoryId,
+    String link,
+    String category,
     @NotNull BigDecimal price,
     ShoppingItemStatus status) {}
