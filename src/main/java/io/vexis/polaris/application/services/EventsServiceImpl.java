@@ -2,7 +2,6 @@ package io.vexis.polaris.application.services;
 
 import io.vexis.polaris.application.factories.EventsFactory;
 import io.vexis.polaris.domain.exceptions.EventNotFoundException;
-import io.vexis.polaris.domain.exceptions.OperationNotImplementedException;
 import io.vexis.polaris.domain.interfaces.mappers.EventsMapper;
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
 import io.vexis.polaris.domain.interfaces.services.EventsService;
@@ -43,27 +42,23 @@ public class EventsServiceImpl implements EventsService {
   }
 
   @Override
-  public Event getEntity(Long id) {
-    throw new OperationNotImplementedException("not implemented");
-  }
-
-  @Override
   public Event getEntity(String tag) {
     log.debug("Loading event by tag");
     return repository
         .findByTag(tag)
         .orElseThrow(EventNotFoundException::new);
+
   }
 
   @Transactional
   @Override
-  public void update(UpdateEventDTO dto, Long id) {
-    log.info("Updating event id={}", id);
-    var event = repository.findById(id).orElseThrow(EventNotFoundException::new);
+  public void update(UpdateEventDTO dto, String tag) {
+    log.info("Updating event tag={}", tag);
+    var event = getEntity(tag);
     event = mapper.update(dto, event);
 
     if (dto.tag() != null) {
-      event.setTag(TextUtils.normalizeTag(dto.tag()));
+      event.setTag(dto.tag().toUpperCase());
     }
 
     if (dto.color() != null) {
@@ -71,14 +66,14 @@ public class EventsServiceImpl implements EventsService {
     }
 
     repository.save(event);
-    log.info("Event updated id={}", id);
+    log.info("Event updated tag={}", tag);
   }
 
   @Transactional
   @Override
-  public void delete(Long id) {
-    log.info("Deleting event id={}", id);
-    repository.deleteById(id);
-    log.info("Event deleted id={}", id);
+  public void delete(String tag) {
+    log.info("Deleting event tag={}", tag);
+    repository.deleteByTag(tag);
+    log.info("Event deleted tag={}", tag);
   }
 }

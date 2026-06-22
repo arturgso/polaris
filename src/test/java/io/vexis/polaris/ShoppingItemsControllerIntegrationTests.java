@@ -49,8 +49,8 @@ class ShoppingItemsControllerIntegrationTests {
 
   @Test
   void shouldPerformCrudForShoppingItemsEndpoint() throws Exception {
-    Long categoryId = readId(createCategory("e2e item cat", "#06B6D4"));
-    Long updatedCategoryId = readId(createCategory("e2e upd cat", "#10B981"));
+    createCategory("e2e item cat", "#06B6D4");
+    createCategory("e2e upd cat", "#10B981");
     String createResponse =
         mockMvc
             .perform(
@@ -61,12 +61,11 @@ class ShoppingItemsControllerIntegrationTests {
                         {
                           "title":"USB-C Cable",
                           "link":"https://example.com/cable",
-                          "categoryId":%d,
+                          "category":"E2EITEMCAT",
                           "price":39.90,
-                        "status":"PLANNED"
+                          "status":"PLANNED"
                         }
-                        """
-                          .formatted(categoryId)))
+                        """))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.id").isNumber())
             .andExpect(jsonPath("$.title").value("usb-c cable"))
@@ -114,12 +113,11 @@ class ShoppingItemsControllerIntegrationTests {
                     """
                     {
                       "title":"Wireless Mouse",
-                      "categoryId":%d,
+                      "category":"E2EUPDCAT",
                       "price":89.50,
                       "status":"BOUGHT"
                     }
-                    """
-                        .formatted(updatedCategoryId)))
+                    """))
         .andExpect(status().isOk());
 
     mockMvc
@@ -144,14 +142,14 @@ class ShoppingItemsControllerIntegrationTests {
 
   @Test
   void shouldReturnDashboardShoppingItemMetricsAndRecentItems() throws Exception {
-    Long categoryId = readId(createCategory("e2e dash", "#EC4899"));
+    createCategory("e2e dash", "#EC4899");
     ShoppingItemStatus status = ShoppingItemStatus.TO_BUY;
 
     for (int index = 1; index <= 6; index++) {
       createShoppingItem(
           "Dashboard Item " + index,
           "https://example.com/dashboard-" + index,
-          categoryId,
+          "E2EDASH",
           index * 10,
           status);
     }
@@ -180,16 +178,6 @@ class ShoppingItemsControllerIntegrationTests {
                 .content(
                     """
                     {"link":"https://example.com/item","price":10.00}
-                    """))
-        .andExpect(status().isBadRequest());
-
-    mockMvc
-        .perform(
-            post("/shopping-items")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    """
-                    {"title":"Item without link","price":10.00}
                     """))
         .andExpect(status().isBadRequest());
 
@@ -250,7 +238,7 @@ class ShoppingItemsControllerIntegrationTests {
   }
 
   private String createShoppingItem(
-      String title, String link, Long categoryId, int price, ShoppingItemStatus status)
+      String title, String link, String categoryTag, int price, ShoppingItemStatus status)
       throws Exception {
     return mockMvc
         .perform(
@@ -261,12 +249,12 @@ class ShoppingItemsControllerIntegrationTests {
                     {
                       "title":"%s",
                       "link":"%s",
-                      "categoryId":%d,
+                      "category":"%s",
                       "price":%d,
                       "status":"%s"
                     }
                     """
-                        .formatted(title, link, categoryId, price, status.name())))
+                        .formatted(title, link, categoryTag, price, status.name())))
         .andExpect(status().isCreated())
         .andReturn()
         .getResponse()

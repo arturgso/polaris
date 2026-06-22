@@ -45,16 +45,16 @@ class CatalogControllersIntegrationTests {
             .getResponse()
             .getContentAsString();
 
-    Long id = readId(createResponse);
+    String tag = readTag(createResponse);
 
     mockMvc
         .perform(get("/events"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].tag", hasItem(TextUtils.normalizeTag("graduacao"))));
+        .andExpect(jsonPath("$[*].tag", hasItem(tag)));
 
     mockMvc
         .perform(
-            patch("/events/{id}", id)
+            patch("/events/{tag}", tag)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
@@ -65,10 +65,16 @@ class CatalogControllersIntegrationTests {
     mockMvc
         .perform(get("/events"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].tag", hasItem(TextUtils.normalizeTag("retirement"))))
+        .andExpect(jsonPath("$[*].tag", hasItem("RETIREMENT")))
         .andExpect(jsonPath("$[*].name", hasItem("aposentadoria")));
 
-    mockMvc.perform(delete("/events/{id}", id)).andExpect(status().isOk());
+    mockMvc.perform(delete("/events/{tag}", "RETIREMENT")).andExpect(status().isOk());
+  }
+
+  private String readTag(String json) {
+    int start = json.indexOf("\"tag\":\"");
+    int end = json.indexOf("\"", start + 7);
+    return json.substring(start + 7, end);
   }
 
   private Long readId(String json) {

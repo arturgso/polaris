@@ -35,15 +35,15 @@ public class EventsController {
     return ResponseEntity.ok(service.list());
   }
 
-  @PatchMapping("{id}")
-  public ResponseEntity<Void> update(@RequestBody UpdateEventDTO dto, @PathVariable Long id) {
-    service.update(dto, id);
+  @PatchMapping("{tag}")
+  public ResponseEntity<Void> update(@RequestBody UpdateEventDTO dto, @PathVariable String tag) {
+    service.update(dto, tag);
     return ResponseEntity.ok().body(null);
   }
 
-  @DeleteMapping("{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    service.delete(id);
+  @DeleteMapping("{tag}")
+  public ResponseEntity<Void> delete(@PathVariable String tag) {
+    service.delete(tag);
     return ResponseEntity.ok().body(null);
   }
 }

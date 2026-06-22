@@ -58,7 +58,7 @@ class GiftsServiceIntegrationTests {
     var created = giftsService.create(new NewGiftDTO("book", null, person.id(), null, null));
 
     giftsService.update(
-        new UpdateGiftDTO(null, null, null, null, "christmas", "DELIVERED"), created.id());
+        new UpdateGiftDTO(null, null, null, null, "christmas", GiftStatus.DELIVERED), created.id());
 
     var updated = giftsRepository.findById(created.id()).orElseThrow();
 
