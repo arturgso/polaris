@@ -33,11 +33,11 @@ class GiftsServiceIntegrationTests {
     var gift =
         giftsService.create(
             new NewGiftDTO(
-                "book", "http://example.com", person.id(), "birthday", GiftStatus.PURCHASED));
+                "book", "http://example.com", person.id(), "birthday", GiftStatus.COMPRADO));
 
     assertEquals("BIRTHDAY", gift.event());
-    assertEquals(GiftStatus.PURCHASED.getName(), gift.status().name());
-    assertEquals(GiftStatus.PURCHASED.getColor(), gift.status().title());
+    assertEquals(GiftStatus.COMPRADO.getName(), gift.status().name());
+    assertEquals(GiftStatus.COMPRADO.getColor(), gift.status().title());
     assertEquals("alice", gift.giftFor());
   }
 
@@ -48,8 +48,8 @@ class GiftsServiceIntegrationTests {
     var gift = giftsService.create(new NewGiftDTO("book", null, person.id(), null, null));
 
     assertEquals("NONE", gift.event());
-    assertEquals(GiftStatus.IDEA.getName(), gift.status().name());
-    assertEquals(GiftStatus.IDEA.getColor(), gift.status().title());
+    assertEquals(GiftStatus.IDEIA.getName(), gift.status().name());
+    assertEquals(GiftStatus.IDEIA.getColor(), gift.status().title());
   }
 
   @Test
@@ -58,12 +58,12 @@ class GiftsServiceIntegrationTests {
     var created = giftsService.create(new NewGiftDTO("book", null, person.id(), null, null));
 
     giftsService.update(
-        new UpdateGiftDTO(null, null, null, null, "christmas", GiftStatus.DELIVERED), created.id());
+        new UpdateGiftDTO(null, null, null, null, "christmas", GiftStatus.ENTREGUE), created.id());
 
     var updated = giftsRepository.findById(created.id()).orElseThrow();
 
     assertEquals("CHRISTMAS", updated.getEvent().getTag());
-    assertEquals(GiftStatus.DELIVERED, updated.getStatus());
+    assertEquals(GiftStatus.ENTREGUE, updated.getStatus());
     assertNotNull(updated.getEvent().getId());
   }
 

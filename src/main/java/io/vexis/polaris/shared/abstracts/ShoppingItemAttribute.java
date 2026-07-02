@@ -23,8 +23,6 @@ public abstract class ShoppingItemAttribute {
   private Long id;
 
   private String tag;
-  private String name;
-  private String color;
 
   @CreationTimestamp
   @Column(nullable = false, updatable = false)

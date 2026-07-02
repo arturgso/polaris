@@ -53,19 +53,19 @@ public class DatabasePopulateRunner implements ApplicationRunner {
       return;
     }
 
-    var birthday = getEvent("BIRTHDAY");
-    var christmas = getEvent("CHRISTMAS");
-    var marriage = getEvent("MARRIAGE");
-    var none = getEvent("NONE");
+    var birthday = getEvent("ANIVERSARIO");
+    var christmas = getEvent("NATAL");
+    var marriage = getEvent("CASAMENTO");
+    var none = getEvent("SEM_EVENTO");
 
-    var giftIdea = GiftStatus.IDEA;
-    var purchased = GiftStatus.PURCHASED;
-    var delivered = GiftStatus.DELIVERED;
+    var giftIdea = GiftStatus.IDEIA;
+    var purchased = GiftStatus.COMPRADO;
+    var delivered = GiftStatus.ENTREGUE;
 
     var tech = getShoppingItemCategory("TECH");
-    var health = getShoppingItemCategory("HEALTH");
-    var makeup = getShoppingItemCategory("MAKEUP");
-    var other = getShoppingItemCategory("OTHER");
+    var health = getShoppingItemCategory("SAUDE");
+    var makeup = getShoppingItemCategory("MAQUIAGEM");
+    var other = getShoppingItemCategory("SEM_CATEGORIA");
 
     var persons =
         personsRepository.saveAll(
@@ -124,7 +124,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
                 "https://example.com/teclado",
                 tech,
                 "349.90",
-                io.vexis.polaris.domain.enums.ShoppingItemStatus.PLANNED,
+                io.vexis.polaris.domain.enums.ShoppingItemStatus.PLANEJADO,
                 publicShoppingList,
                 false),
             shoppingItem(
@@ -132,7 +132,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
                 null,
                 health,
                 "79.90",
-                io.vexis.polaris.domain.enums.ShoppingItemStatus.TO_BUY,
+                io.vexis.polaris.domain.enums.ShoppingItemStatus.COMPRAR,
                 publicShoppingList,
                 false),
             shoppingItem(
@@ -140,7 +140,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
                 "https://example.com/base",
                 makeup,
                 "119.90",
-                io.vexis.polaris.domain.enums.ShoppingItemStatus.BOUGHT,
+                io.vexis.polaris.domain.enums.ShoppingItemStatus.COMPRADO,
                 vaultShoppingList,
                 true),
             shoppingItem(
@@ -148,7 +148,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
                 null,
                 other,
                 "45.50",
-                io.vexis.polaris.domain.enums.ShoppingItemStatus.IDEA,
+                io.vexis.polaris.domain.enums.ShoppingItemStatus.IDEIA,
                 publicShoppingList,
                 false),
             shoppingItem(
@@ -156,7 +156,7 @@ public class DatabasePopulateRunner implements ApplicationRunner {
                 null,
                 tech,
                 "39.90",
-                io.vexis.polaris.domain.enums.ShoppingItemStatus.CANCELED,
+                io.vexis.polaris.domain.enums.ShoppingItemStatus.CANCELADO,
                 publicShoppingList,
                 false)));
 

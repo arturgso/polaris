@@ -20,14 +20,12 @@ public class StatusController {
     var giftStatuses = Arrays.stream(GiftStatus.values())
     .map(status -> new StatusDTO(
       status.name(),
-      status.getName(),
       status.getColor()
     )).toList();
 
     var shoppingItemStatuses = Arrays.stream(ShoppingItemStatus.values())
     .map(status -> new StatusDTO(
       status.name(),
-      status.getName(),
       status.getColor()
     )).toList();
 

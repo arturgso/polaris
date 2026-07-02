@@ -7,11 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventsFactory {
 
-  public Event create(String name, String color) {
+  public Event create(String tag) {
     return Event.builder()
-        .tag(TextUtils.normalizeTag(name))
-        .name(name)
-        .color(TextUtils.normalizeColor(color))
+        .tag(TextUtils.normalizeTag(tag))
         .build();
   }
 }

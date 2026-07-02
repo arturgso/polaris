@@ -7,11 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShoppingItemCategoryFactory {
 
-  public ShoppingItemCategory create(String name, String color) {
+  public ShoppingItemCategory create(String tag) {
     return ShoppingItemCategory.builder()
-        .tag(TextUtils.normalizeTag(name))
-        .name(name)
-        .color(color)
+        .tag(TextUtils.normalizeTag(tag))
         .build();
   }
 }

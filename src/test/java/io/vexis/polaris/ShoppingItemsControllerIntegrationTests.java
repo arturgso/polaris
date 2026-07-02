@@ -143,7 +143,7 @@ class ShoppingItemsControllerIntegrationTests {
   @Test
   void shouldReturnDashboardShoppingItemMetricsAndRecentItems() throws Exception {
     createCategory("e2e dash", "#EC4899");
-    ShoppingItemStatus status = ShoppingItemStatus.TO_BUY;
+    ShoppingItemStatus status = ShoppingItemStatus.COMPRAR;
 
     for (int index = 1; index <= 6; index++) {
       createShoppingItem(

@@ -207,7 +207,7 @@ class VaultIntegrationTests {
     Event event =
         eventRepository.save(
             Event.builder().tag("birthday").name("Birthday").color("#111827").build());
-    GiftStatus giftStatus = GiftStatus.IDEA;
+    GiftStatus giftStatus = GiftStatus.IDEIA;
     GiftList publicGiftList = new GiftList();
     publicGiftList.setTitle("public gift list");
     publicGiftList.setInVault(false);
@@ -253,7 +253,7 @@ class VaultIntegrationTests {
             .title("public shopping item")
             .category(category)
             .price(new BigDecimal("10.00"))
-            .status(ShoppingItemStatus.IDEA)
+            .status(ShoppingItemStatus.IDEIA)
             .shoppingList(publicShoppingList)
             .inVault(false)
             .build());
@@ -262,7 +262,7 @@ class VaultIntegrationTests {
             .title("secret shopping item")
             .category(category)
             .price(new BigDecimal("20.00"))
-            .status(ShoppingItemStatus.IDEA)
+            .status(ShoppingItemStatus.IDEIA)
             .shoppingList(secretShoppingList)
             .inVault(true)
             .build());

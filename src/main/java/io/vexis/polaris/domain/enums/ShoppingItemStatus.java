@@ -6,27 +6,21 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ShoppingItemStatus {
-    IDEA(
-        "ideia",
+    IDEIA(
         "#A855F7"
     ),
-    PLANNED(
-        "planejado",
+    PLANEJADO(
         "#3B82F6"
     ),
-    TO_BUY(
-        "a comprar",
+    COMPRAR(
         "#F59E0B"
     ),
-    BOUGHT(
-        "comprado",
+    COMPRADO(
         "#22C55E"
     ),
-    CANCELED(
-        "cancelado",
+    CANCELADO(
         "#EF4444"
     );
 
-    private final String name;
     private final String color;
 }

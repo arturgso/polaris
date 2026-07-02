@@ -7,19 +7,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum GiftStatus {
 
-    IDEA(
-        "ideia",
+    IDEIA(
         "#A855F7"
     ),
-    PURCHASED(
-        "comprado",
+    COMPRADO(
         "#3B82F6"
     ),
-    DELIVERED(
-        "entregue",
+    ENTREGUE(
         "#22C55E"
     );
 
-    private final String name;
     private final String color;
 }

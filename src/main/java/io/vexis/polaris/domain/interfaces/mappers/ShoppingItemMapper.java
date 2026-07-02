@@ -25,7 +25,6 @@ default StatusDTO map(ShoppingItemStatus status) {
 
     return new StatusDTO(
         status.name(),
-        status.getName(),
         status.getColor());
   }
 }
