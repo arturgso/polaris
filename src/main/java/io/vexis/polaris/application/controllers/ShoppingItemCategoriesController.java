@@ -33,9 +33,9 @@ public class ShoppingItemCategoriesController {
     return ResponseEntity.ok(service.list());
   }
 
-  @DeleteMapping("{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    service.delete(id);
+  @DeleteMapping("{tag}")
+  public ResponseEntity<Void> delete(@PathVariable String tag) {
+    service.delete(tag);
     return ResponseEntity.ok().body(null);
   }
 }

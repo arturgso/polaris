@@ -13,5 +13,5 @@ public interface ShoppingItemCategoriesService {
 
   ShoppingItemCategory getEntity(String tag);
 
-  void delete(Long id);
+  void delete(String tag);
 }

@@ -47,9 +47,9 @@ public class ShoppingItemCategoriesServiceImpl implements ShoppingItemCategories
 
   @Transactional
   @Override
-  public void delete(Long id) {
-    log.info("Deleting shopping item category id={}", id);
-    repository.deleteById(id);
-    log.info("Shopping item category deleted id={}", id);
+  public void delete(String tag) {
+    log.info("Deleting shopping item category tag={}", tag);
+    repository.deleteByTag(tag);
+    log.info("Shopping item category deleted tag={}", tag);
   }
 }
