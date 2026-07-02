@@ -9,4 +9,4 @@ public record UpdateShoppingItemDTO(
     String category,
     BigDecimal price,
     ShoppingItemStatus status,
-    Long shoppingListId) {}
+    Long listId) {}

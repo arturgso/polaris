@@ -110,8 +110,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
       item.setCategory(categoriesService.getEntity(dto.category()));
     }
 
-    if (dto.shoppingListId() != null) {
-      item.setShoppingList(shoppingListService.getEntity(dto.shoppingListId()));
+    if (dto.listId() != null) {
+      item.setShoppingList(shoppingListService.getEntity(dto.listId()));
     }
 
     repository.save(item);
