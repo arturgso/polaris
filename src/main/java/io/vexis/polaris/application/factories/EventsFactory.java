@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 public class EventsFactory {
 
   public Event create(String tag) {
-    return Event.builder()
-        .tag(TextUtils.normalizeTag(tag))
-        .build();
+    return Event.builder().tag(TextUtils.normalizeTag(tag)).build();
   }
 }

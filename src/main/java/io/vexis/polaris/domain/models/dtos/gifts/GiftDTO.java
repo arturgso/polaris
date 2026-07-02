@@ -1,8 +1,7 @@
 package io.vexis.polaris.domain.models.dtos.gifts;
 
-import java.time.Instant;
-
 import io.vexis.polaris.domain.models.dtos.StatusDTO;
+import java.time.Instant;
 
 public record GiftDTO(
     Long id,
@@ -12,5 +11,4 @@ public record GiftDTO(
     String event,
     StatusDTO status,
     Instant createdAt,
-    Instant updatedAt) {
-    }
+    Instant updatedAt) {}

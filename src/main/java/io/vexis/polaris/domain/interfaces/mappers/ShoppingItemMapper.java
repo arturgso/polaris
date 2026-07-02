@@ -17,14 +17,11 @@ public interface ShoppingItemMapper {
   @Mapping(target = "category", ignore = true)
   ShoppingItem partialUpdate(UpdateShoppingItemDTO dto, @MappingTarget ShoppingItem item);
 
-default StatusDTO map(ShoppingItemStatus status) {
+  default StatusDTO map(ShoppingItemStatus status) {
     if (status == null) {
       return null;
-
     }
 
-    return new StatusDTO(
-        status.name(),
-        status.getColor());
+    return new StatusDTO(status.name(), status.getColor());
   }
 }

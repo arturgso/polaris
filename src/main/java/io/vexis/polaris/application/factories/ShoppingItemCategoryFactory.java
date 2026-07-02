@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 public class ShoppingItemCategoryFactory {
 
   public ShoppingItemCategory create(String tag) {
-    return ShoppingItemCategory.builder()
-        .tag(TextUtils.normalizeTag(tag))
-        .build();
+    return ShoppingItemCategory.builder().tag(TextUtils.normalizeTag(tag)).build();
   }
 }

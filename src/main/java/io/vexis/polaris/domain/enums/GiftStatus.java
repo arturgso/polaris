@@ -6,16 +6,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum GiftStatus {
+  IDEIA("#A855F7"),
+  COMPRADO("#3B82F6"),
+  ENTREGUE("#22C55E");
 
-    IDEIA(
-        "#A855F7"
-    ),
-    COMPRADO(
-        "#3B82F6"
-    ),
-    ENTREGUE(
-        "#22C55E"
-    );
-
-    private final String color;
+  private final String color;
 }

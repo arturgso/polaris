@@ -10,7 +10,6 @@ import io.vexis.polaris.domain.models.dtos.events.NewEventDTO;
 import io.vexis.polaris.domain.models.dtos.events.UpdateEventDTO;
 import io.vexis.polaris.domain.models.entities.Event;
 import io.vexis.polaris.shared.ListMapper;
-import io.vexis.polaris.shared.TextUtils;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -44,10 +43,7 @@ public class EventsServiceImpl implements EventsService {
   @Override
   public Event getEntity(String tag) {
     log.debug("Loading event by tag");
-    return repository
-        .findByTag(tag)
-        .orElseThrow(EventNotFoundException::new);
-
+    return repository.findByTag(tag).orElseThrow(EventNotFoundException::new);
   }
 
   @Transactional

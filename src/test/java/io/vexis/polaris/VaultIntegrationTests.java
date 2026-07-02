@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.vexis.polaris.domain.enums.GiftStatus;
+import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
@@ -25,8 +27,6 @@ import io.vexis.polaris.domain.models.entities.Person;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
 import io.vexis.polaris.domain.models.entities.ShoppingList;
-import io.vexis.polaris.domain.enums.GiftStatus;
-import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

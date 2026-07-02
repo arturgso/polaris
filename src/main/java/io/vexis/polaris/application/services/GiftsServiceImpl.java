@@ -48,10 +48,7 @@ public class GiftsServiceImpl implements GiftsService {
         dto.event() == null
             ? eventsService.getEntity(DEFAULT_EVENT)
             : eventsService.getEntity(dto.event().toUpperCase());
-    var status =
-        dto.status() == null
-            ? GiftStatus.IDEIA  
-            : dto.status();
+    var status = dto.status() == null ? GiftStatus.IDEIA : dto.status();
 
     var gift = factory.create(dto.title(), dto.link(), person, event, status);
 

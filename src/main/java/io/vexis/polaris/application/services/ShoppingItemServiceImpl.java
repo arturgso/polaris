@@ -39,11 +39,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   @Override
   public ShoppingItemDTO create(NewShoppingItemDTO dto) {
     log.info(
-        "Creating shopping item with categoryId={} and status={}",
-        dto.category(),
-        dto.status());
-    var item =
-        factory.create(dto.title(), dto.link(), dto.category(), dto.price(), dto.status());
+        "Creating shopping item with categoryId={} and status={}", dto.category(), dto.status());
+    var item = factory.create(dto.title(), dto.link(), dto.category(), dto.price(), dto.status());
 
     item = repository.save(item);
     log.info("Shopping item created with id={}", item.getId());

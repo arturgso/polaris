@@ -1,10 +1,9 @@
 package io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem;
 
+import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
-
-import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 
 public record NewShoppingItemDTO(
     @NotBlank String title,

@@ -43,7 +43,7 @@ public class ShoppingItem {
   private BigDecimal price;
 
   @Enumerated(EnumType.STRING)
-  private io.vexis.polaris.domain.enums.ShoppingItemStatus  status;
+  private io.vexis.polaris.domain.enums.ShoppingItemStatus status;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "list_id")

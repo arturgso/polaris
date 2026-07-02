@@ -1,5 +1,6 @@
 package io.vexis.polaris.application.bootstrap;
 
+import io.vexis.polaris.domain.enums.GiftStatus;
 import io.vexis.polaris.domain.interfaces.repositories.EventsRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftListRepository;
 import io.vexis.polaris.domain.interfaces.repositories.GiftsRepository;
@@ -10,7 +11,6 @@ import io.vexis.polaris.domain.interfaces.repositories.ShoppingListRepository;
 import io.vexis.polaris.domain.models.entities.Event;
 import io.vexis.polaris.domain.models.entities.Gift;
 import io.vexis.polaris.domain.models.entities.GiftList;
-import io.vexis.polaris.domain.enums.GiftStatus;
 import io.vexis.polaris.domain.models.entities.Person;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;

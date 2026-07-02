@@ -30,11 +30,8 @@ public interface GiftsMapper {
   default StatusDTO map(GiftStatus status) {
     if (status == null) {
       return null;
-
     }
 
-    return new StatusDTO(
-        status.name(),
-        status.getColor());
+    return new StatusDTO(status.name(), status.getColor());
   }
 }
