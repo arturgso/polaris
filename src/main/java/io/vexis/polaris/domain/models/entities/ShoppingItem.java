@@ -1,6 +1,8 @@
 package io.vexis.polaris.domain.models.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,9 +42,8 @@ public class ShoppingItem {
 
   private BigDecimal price;
 
-  @ManyToOne
-  @JoinColumn(name = "status_id")
-  private ShoppingItemStatus status;
+  @Enumerated(EnumType.STRING)
+  private io.vexis.polaris.domain.enums.ShoppingItemStatus status;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "list_id")

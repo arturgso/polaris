@@ -4,4 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record NewGiftDTO(
-    @NotBlank String title, String link, @NotNull Long personId, String event, String status) {}
+    @NotBlank String title,
+    String link,
+    @NotNull Long personId,
+    String event,
+    io.vexis.polaris.domain.enums.GiftStatus status) {}

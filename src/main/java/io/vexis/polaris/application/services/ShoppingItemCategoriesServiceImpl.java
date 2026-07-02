@@ -27,7 +27,7 @@ public class ShoppingItemCategoriesServiceImpl implements ShoppingItemCategories
   @Override
   public CategoryDTO create(NewCategoryDTO dto) {
     log.info("Creating shopping item category");
-    var shoppingItemCategory = repository.save(factory.create(dto.name(), dto.color()));
+    var shoppingItemCategory = repository.save(factory.create(dto.tag()));
     log.info("Shopping item category created with id={}", shoppingItemCategory.getId());
     return mapper.toDTO(shoppingItemCategory);
   }
@@ -40,16 +40,16 @@ public class ShoppingItemCategoriesServiceImpl implements ShoppingItemCategories
   }
 
   @Override
-  public ShoppingItemCategory getEntity(Long id) {
-    log.debug("Loading shopping item category id={}", id);
-    return repository.findById(id).orElseThrow(ShoppingItemCategoryNotFoundException::new);
+  public ShoppingItemCategory getEntity(String tag) {
+    log.debug("Loading shopping item category tag={}", tag);
+    return repository.findByTag(tag).orElseThrow(ShoppingItemCategoryNotFoundException::new);
   }
 
   @Transactional
   @Override
-  public void delete(Long id) {
-    log.info("Deleting shopping item category id={}", id);
-    repository.deleteById(id);
-    log.info("Shopping item category deleted id={}", id);
+  public void delete(String tag) {
+    log.info("Deleting shopping item category tag={}", tag);
+    repository.deleteByTag(tag);
+    log.info("Shopping item category deleted tag={}", tag);
   }
 }

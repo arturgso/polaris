@@ -1,8 +1,8 @@
 package io.vexis.polaris.application.factories;
 
+import io.vexis.polaris.domain.enums.GiftStatus;
 import io.vexis.polaris.domain.models.entities.Event;
 import io.vexis.polaris.domain.models.entities.Gift;
-import io.vexis.polaris.domain.models.entities.GiftStatus;
 import io.vexis.polaris.domain.models.entities.Person;
 import io.vexis.polaris.shared.TextUtils;
 import org.springframework.stereotype.Component;

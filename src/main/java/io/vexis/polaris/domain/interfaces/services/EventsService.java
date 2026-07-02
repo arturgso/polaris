@@ -6,6 +6,4 @@ import io.vexis.polaris.domain.models.dtos.events.UpdateEventDTO;
 import io.vexis.polaris.domain.models.entities.Event;
 
 public interface EventsService
-    extends ListCrudService<NewEventDTO, UpdateEventDTO, EventDTO, Event, Long> {
-  Event getEntityByTag(String tag);
-}
+    extends ListCrudService<NewEventDTO, UpdateEventDTO, EventDTO, Event, String> {}

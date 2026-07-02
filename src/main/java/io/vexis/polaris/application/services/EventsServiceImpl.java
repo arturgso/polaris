@@ -10,7 +10,6 @@ import io.vexis.polaris.domain.models.dtos.events.NewEventDTO;
 import io.vexis.polaris.domain.models.dtos.events.UpdateEventDTO;
 import io.vexis.polaris.domain.models.entities.Event;
 import io.vexis.polaris.shared.ListMapper;
-import io.vexis.polaris.shared.TextUtils;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class EventsServiceImpl implements EventsService {
   @Override
   public EventDTO create(NewEventDTO dto) {
     log.info("Creating event");
-    var event = repository.save(factory.create(dto.name(), dto.color()));
+    var event = repository.save(factory.create(dto.tag()));
     log.info("Event created with id={}", event.getId());
     return mapper.toDTO(event);
   }
@@ -42,43 +41,30 @@ public class EventsServiceImpl implements EventsService {
   }
 
   @Override
-  public Event getEntity(Long id) {
-    log.debug("Loading event id={}", id);
-    return repository.findById(id).orElseThrow(EventNotFoundException::new);
-  }
-
-  @Override
-  public Event getEntityByTag(String tag) {
+  public Event getEntity(String tag) {
     log.debug("Loading event by tag");
-    return repository
-        .findByTag(TextUtils.normalizeTag(tag))
-        .orElseThrow(EventNotFoundException::new);
+    return repository.findByTag(tag).orElseThrow(EventNotFoundException::new);
   }
 
   @Transactional
   @Override
-  public void update(UpdateEventDTO dto, Long id) {
-    log.info("Updating event id={}", id);
-    var event = repository.findById(id).orElseThrow(EventNotFoundException::new);
-    event = mapper.update(dto, event);
+  public void update(UpdateEventDTO dto, String tag) {
+    log.info("Updating event tag={}", tag);
+    var event = getEntity(tag);
 
     if (dto.tag() != null) {
-      event.setTag(TextUtils.normalizeTag(dto.tag()));
-    }
-
-    if (dto.color() != null) {
-      event.setColor(TextUtils.normalizeColor(dto.color()));
+      event.setTag(dto.tag().toUpperCase());
     }
 
     repository.save(event);
-    log.info("Event updated id={}", id);
+    log.info("Event updated tag={}", tag);
   }
 
   @Transactional
   @Override
-  public void delete(Long id) {
-    log.info("Deleting event id={}", id);
-    repository.deleteById(id);
-    log.info("Event deleted id={}", id);
+  public void delete(String tag) {
+    log.info("Deleting event tag={}", tag);
+    repository.deleteByTag(tag);
+    log.info("Event deleted tag={}", tag);
   }
 }

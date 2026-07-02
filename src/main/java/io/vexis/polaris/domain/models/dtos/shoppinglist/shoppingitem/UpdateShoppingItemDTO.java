@@ -1,11 +1,12 @@
 package io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem;
 
+import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 import java.math.BigDecimal;
 
 public record UpdateShoppingItemDTO(
     String title,
     String link,
-    Long categoryId,
+    String category,
     BigDecimal price,
-    Long statusId,
+    ShoppingItemStatus status,
     Long shoppingListId) {}

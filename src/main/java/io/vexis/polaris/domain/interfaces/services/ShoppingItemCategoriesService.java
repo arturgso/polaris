@@ -11,7 +11,7 @@ public interface ShoppingItemCategoriesService {
 
   List<CategoryDTO> list();
 
-  ShoppingItemCategory getEntity(Long id);
+  ShoppingItemCategory getEntity(String tag);
 
-  void delete(Long id);
+  void delete(String tag);
 }

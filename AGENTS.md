@@ -54,3 +54,5 @@ Use `./gradlew spotlessCheck` if you need formatting validation. Do not apply fo
 - Document the actual API routes under `/api/v1`.
 - Mention the vault unlock flow when updating user-facing docs.
 - Keep examples consistent with the existing controllers and tests.
+- When creating technical summaries for another AI or for frontend refactors, write them with high implementation detail and store them in `ai-docs/` so they stay out of version control.
+- If the user sends only `RESUMO_BRANCH_FRONTEND`, inspect the current branch changes and relevant tests/controllers/DTOs, then create or update a compact frontend-ready technical summary in `ai-docs/` with implemented behavior, API routes, payload shapes, response shapes, state rules, and implementation caveats.

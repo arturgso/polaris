@@ -7,7 +7,6 @@ import io.vexis.polaris.domain.interfaces.mappers.ShoppingItemMapper;
 import io.vexis.polaris.domain.interfaces.repositories.ShoppingItemRepository;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemCategoriesService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemService;
-import io.vexis.polaris.domain.interfaces.services.ShoppingItemStatusesService;
 import io.vexis.polaris.domain.interfaces.services.ShoppingListService;
 import io.vexis.polaris.domain.models.dtos.filters.ShoppingItemFiltersDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.NewShoppingItemDTO;
@@ -32,7 +31,6 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   private final ShoppingItemRepository repository;
   private final ShoppingItemMapper mapper;
   private final ShoppingItemFactory factory;
-  private final ShoppingItemStatusesService statusesService;
   private final ShoppingItemCategoriesService categoriesService;
   private final VaultPasswordValidator vaultPasswordValidator;
 
@@ -41,11 +39,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   @Override
   public ShoppingItemDTO create(NewShoppingItemDTO dto) {
     log.info(
-        "Creating shopping item with categoryId={} and status={}",
-        dto.categoryId(),
-        dto.statusId());
-    var item =
-        factory.create(dto.title(), dto.link(), dto.categoryId(), dto.price(), dto.statusId());
+        "Creating shopping item with categoryId={} and status={}", dto.category(), dto.status());
+    var item = factory.create(dto.title(), dto.link(), dto.category(), dto.price(), dto.status());
 
     item = repository.save(item);
     log.info("Shopping item created with id={}", item.getId());
@@ -111,12 +106,8 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
       item.setTitle(TextUtils.normalizeText(dto.title()));
     }
 
-    if (dto.categoryId() != null) {
-      item.setCategory(categoriesService.getEntity(dto.categoryId()));
-    }
-
-    if (dto.statusId() != null) {
-      item.setStatus(statusesService.getEntity(dto.statusId()));
+    if (dto.category() != null) {
+      item.setCategory(categoriesService.getEntity(dto.category()));
     }
 
     if (dto.shoppingListId() != null) {

@@ -8,4 +8,5 @@ public interface ShoppingItemCategoriesRepository
     extends JpaRepository<ShoppingItemCategory, Long> {
 
   Optional<ShoppingItemCategory> findByTag(String tag);
+  void deleteByTag(String tag);
 }
