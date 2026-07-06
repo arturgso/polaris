@@ -8,7 +8,6 @@ import io.vexis.polaris.domain.interfaces.services.ShoppingItemCategoriesService
 import io.vexis.polaris.domain.models.dtos.shoppinglist.categories.CategoryDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.categories.NewCategoryDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
-import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +32,10 @@ public class ShoppingItemCategoriesServiceImpl implements ShoppingItemCategories
   }
 
   @Override
-  public List<CategoryDTO> list() {
+  public List<String> listTags() {
     log.debug("Listing shopping item categories");
     List<ShoppingItemCategory> shoppingItemCategoryList = repository.findAll();
-    return ListMapper.createResponseList(shoppingItemCategoryList, mapper::toDTO);
+    return shoppingItemCategoryList.stream().map(ShoppingItemCategory::getTag).toList();
   }
 
   @Override

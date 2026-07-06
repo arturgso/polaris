@@ -2,9 +2,9 @@ package io.vexis.polaris.application.controllers;
 
 import io.vexis.polaris.domain.interfaces.services.ShoppingItemCategoriesService;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.categories.CategoryDTO;
+import io.vexis.polaris.domain.models.dtos.shoppinglist.categories.CategoryTagsDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.categories.NewCategoryDTO;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +29,8 @@ public class ShoppingItemCategoriesController {
   }
 
   @GetMapping
-  public ResponseEntity<List<CategoryDTO>> list() {
-    return ResponseEntity.ok(service.list());
+  public ResponseEntity<CategoryTagsDTO> list() {
+    return ResponseEntity.ok(new CategoryTagsDTO(service.listTags()));
   }
 
   @DeleteMapping("{tag}")

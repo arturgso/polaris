@@ -43,8 +43,7 @@ class ShoppingItemsControllerIntegrationTests {
     mockMvc
         .perform(get("/shopping-item-categories"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[*].id", hasItem(categoryId.intValue())))
-        .andExpect(jsonPath("$[*].tag", hasItem(TextUtils.normalizeTag("e2e dep"))));
+        .andExpect(jsonPath("$.tags", hasItem(TextUtils.normalizeTag("e2e dep"))));
   }
 
   @Test
@@ -71,9 +70,7 @@ class ShoppingItemsControllerIntegrationTests {
             .andExpect(jsonPath("$.title").value("usb-c cable"))
             .andExpect(jsonPath("$.link").value("https://example.com/cable"))
             .andExpect(jsonPath("$.price").value(39.90))
-            .andExpect(jsonPath("$.category.tag").value(TextUtils.normalizeTag("e2e item cat")))
-            .andExpect(jsonPath("$.category.name").value("e2e item cat"))
-            .andExpect(jsonPath("$.category.color").value("#06B6D4"))
+            .andExpect(jsonPath("$.category").value(TextUtils.normalizeTag("e2e item cat")))
             .andExpect(jsonPath("$.status.value").value("PLANNED"))
             .andExpect(jsonPath("$.status.name").value("planejado"))
             .andExpect(jsonPath("$.status.color").value("#3B82F6"))
@@ -128,7 +125,7 @@ class ShoppingItemsControllerIntegrationTests {
         .andExpect(jsonPath("$[?(@.id == %d)].price".formatted(itemId), hasItem(89.50)))
         .andExpect(
             jsonPath(
-                "$[?(@.id == %d)].category.tag".formatted(itemId),
+                "$[?(@.id == %d)].category".formatted(itemId),
                 hasItem(TextUtils.normalizeTag("e2e upd cat"))))
         .andExpect(jsonPath("$[?(@.id == %d)].status.value".formatted(itemId), hasItem("BOUGHT")));
 
