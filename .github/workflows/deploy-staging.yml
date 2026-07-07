@@ -34,6 +34,7 @@ jobs:
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: integrity
+          port: ${{ vars.INTEGRITY_SSH_PORT || '22' }}
           username: ${{ secrets.INTEGRITY_USER }}
           password: ${{ secrets.INTEGRITY_PASSWORD }}
           script_stop: true
