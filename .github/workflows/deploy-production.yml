@@ -27,7 +27,7 @@ jobs:
         run: |
           set -euo pipefail
           tailscale status
-          tailscale ping --timeout=10s integrity
+          tailscale ping --timeout=10s --until-direct=false integrity
 
       - name: Deploy backend service to production
         uses: appleboy/ssh-action@v1.2.0
