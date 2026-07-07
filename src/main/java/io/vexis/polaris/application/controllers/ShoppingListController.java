@@ -2,6 +2,7 @@ package io.vexis.polaris.application.controllers;
 
 import io.vexis.polaris.domain.interfaces.services.ShoppingListService;
 import io.vexis.polaris.domain.models.dtos.filters.ListEntityFiltersDTO;
+import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingListBasicInfoDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingListDTO;
 import io.vexis.polaris.shared.dtos.NewListDTO;
 import java.util.List;
@@ -29,6 +30,11 @@ public class ShoppingListController {
   @PostMapping
   public ResponseEntity<ShoppingListDTO> create(@RequestBody NewListDTO dto) {
     return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
+  }
+
+  @GetMapping("/basic-info")
+  public ResponseEntity<List<ShoppingListBasicInfoDTO>> listBasicInfo() {
+    return ResponseEntity.ok(service.listBasicInfo());
   }
 
   @GetMapping
