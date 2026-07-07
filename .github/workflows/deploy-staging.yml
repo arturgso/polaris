@@ -30,11 +30,19 @@ jobs:
           tailscale status
           tailscale ping --timeout=10s --until-direct=false integrity
 
+      - name: Validate SSH port configuration
+        run: |
+          set -euo pipefail
+          if [ -z "${{ vars.INTEGRITY_SSH_PORT }}" ] && [ -z "${{ secrets.INTEGRITY_SSH_PORT }}" ]; then
+            echo "Missing SSH port. Set vars.INTEGRITY_SSH_PORT or secrets.INTEGRITY_SSH_PORT." >&2
+            exit 1
+          fi
+
       - name: Deploy backend service to staging
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: integrity
-          port: ${{ vars.INTEGRITY_SSH_PORT || '22' }}
+          port: ${{ vars.INTEGRITY_SSH_PORT != '' && vars.INTEGRITY_SSH_PORT || secrets.INTEGRITY_SSH_PORT }}
           username: ${{ secrets.INTEGRITY_USER }}
           password: ${{ secrets.INTEGRITY_PASSWORD }}
           script_stop: true
