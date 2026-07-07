@@ -85,6 +85,12 @@ Variáveis de ambiente principais:
 ./gradlew bootRun
 ```
 
+### Versionamento automático
+
+- A workflow `Version Bump` roda em push para `master` (ou manualmente).
+- Ela incrementa a versão **minor** no `build.gradle` (ex.: `1.0.0` -> `1.1.0`), cria commit de release e gera tag `vX.Y.Z`.
+- Incremento **major** permanece manual.
+
 ### Estrutura
 
 - `src/main/java/io/vexis/polaris` — aplicação e módulos de domínio
@@ -175,6 +181,12 @@ Main environment variables:
 ./gradlew build
 ./gradlew bootRun
 ```
+
+### Automatic versioning
+
+- The `Version Bump` workflow runs on pushes to `master` (or manually).
+- It increments the **minor** version in `build.gradle` (for example `1.0.0` -> `1.1.0`), creates a release commit, and creates a `vX.Y.Z` tag.
+- **Major** increments remain manual.
 
 ### Structure
 

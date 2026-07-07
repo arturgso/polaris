@@ -1,0 +1,65 @@
+name: Version Bump
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: version-bump-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bump-minor:
+    if: github.actor != 'github-actions[bot]' && (github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, 'chore(release):'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump minor version in build.gradle
+        id: bump
+        run: |
+          set -euo pipefail
+
+          current="$(grep -E "^version = '[^']+'$" build.gradle | sed -E "s/version = '([^']+)'/\\1/")"
+          base="${current%-SNAPSHOT}"
+
+          if [[ ! "$base" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+            echo "Unsupported project version format: $current" >&2
+            exit 1
+          fi
+
+          major="${BASH_REMATCH[1]}"
+          minor="${BASH_REMATCH[2]}"
+          next_minor=$((minor + 1))
+          next="${major}.${next_minor}.0"
+
+          sed -i -E "s/^version = '[^']+'$/version = '${next}'/" build.gradle
+
+          echo "current=$current" >> "$GITHUB_OUTPUT"
+          echo "next=$next" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and tag
+        run: |
+          set -euo pipefail
+
+          git add build.gradle
+          if git diff --cached --quiet; then
+            echo "No version change to commit."
+            exit 0
+          fi
+
+          version="${{ steps.bump.outputs.next }}"
+          git commit -m "chore(release): bump version to ${version}"
+          git tag "v${version}"
+          git push origin HEAD:master --follow-tags

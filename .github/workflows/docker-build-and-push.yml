@@ -9,6 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Extract project version
+        id: project_version
+        run: |
+          set -euo pipefail
+          version="$(grep -E "^version = '[^']+'$" build.gradle | sed -E "s/version = '([^']+)'/\\1/")"
+          echo "value=${version}" >> "$GITHUB_OUTPUT"
+
       - name: Docker Hub Login
         uses: docker/login-action@v3
         with:
@@ -23,3 +30,4 @@ jobs:
           tags: |
             aetus/polaris-api:latest
             aetus/polaris-api:${{ github.sha }}
+            aetus/polaris-api:${{ steps.project_version.outputs.value }}
