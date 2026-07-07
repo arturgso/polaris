@@ -81,6 +81,7 @@ class ShoppingItemsControllerIntegrationTests {
             .getContentAsString();
 
     Long itemId = readId(createResponse);
+    Long shoppingListId = readId(createShoppingList("e2e list"));
 
     mockMvc
         .perform(get("/shopping-items"))
@@ -112,9 +113,11 @@ class ShoppingItemsControllerIntegrationTests {
                       "title":"Wireless Mouse",
                       "category":"E2EUPDCAT",
                       "price":89.50,
-                      "status":"BOUGHT"
+                      "status":"BOUGHT",
+                      "listId":%d
                     }
-                    """))
+                    """
+                        .formatted(shoppingListId)))
         .andExpect(status().isOk());
 
     mockMvc
@@ -127,7 +130,13 @@ class ShoppingItemsControllerIntegrationTests {
             jsonPath(
                 "$[?(@.id == %d)].category".formatted(itemId),
                 hasItem(TextUtils.normalizeTag("e2e upd cat"))))
-        .andExpect(jsonPath("$[?(@.id == %d)].status.value".formatted(itemId), hasItem("BOUGHT")));
+        .andExpect(jsonPath("$[?(@.id == %d)].status.value".formatted(itemId), hasItem("BOUGHT")))
+        .andExpect(
+            jsonPath(
+                "$[?(@.id == %d)].shoppingList.id".formatted(itemId),
+                hasItem(shoppingListId.intValue())))
+        .andExpect(
+            jsonPath("$[?(@.id == %d)].shoppingList.title".formatted(itemId), hasItem("e2e list")));
 
     mockMvc.perform(delete("/shopping-items/{id}", itemId)).andExpect(status().isOk());
 
@@ -253,6 +262,24 @@ class ShoppingItemsControllerIntegrationTests {
                     """
                         .formatted(title, link, categoryTag, price, status.name())))
         .andExpect(status().isCreated())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+  }
+
+  private String createShoppingList(String title) throws Exception {
+    return mockMvc
+        .perform(
+            post("/shopping-lists")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {"title":"%s"}
+                    """
+                        .formatted(title)))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.id").isNumber())
+        .andExpect(jsonPath("$.title").value(title))
         .andReturn()
         .getResponse()
         .getContentAsString();

@@ -104,7 +104,7 @@ class VaultServiceImplTests {
     ShoppingListDTO shoppingListDTO = new ShoppingListDTO();
     GiftDTO giftDTO = new GiftDTO(null, null, null, null, null, null, null, null);
     ShoppingItemDTO shoppingItemDTO =
-        new ShoppingItemDTO(null, null, null, null, null, null, null, null);
+        new ShoppingItemDTO(null, null, null, null, null, null, null, null, null);
 
     when(giftListService.list(new ListEntityFiltersDTO("title", true)))
         .thenReturn(List.of(giftListDTO));

@@ -3,9 +3,11 @@ package io.vexis.polaris.domain.interfaces.mappers;
 import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 import io.vexis.polaris.domain.models.dtos.StatusDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
+import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppinglist.ShoppingListBasicInfoDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.UpdateShoppingItemDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
 import io.vexis.polaris.domain.models.entities.ShoppingItemCategory;
+import io.vexis.polaris.domain.models.entities.ShoppingList;
 import io.vexis.polaris.shared.TextUtils;
 import org.mapstruct.*;
 
@@ -33,5 +35,13 @@ public interface ShoppingItemMapper {
     }
 
     return new StatusDTO(status.name(), status.getColor());
+  }
+
+  default ShoppingListBasicInfoDTO map(ShoppingList shoppingList) {
+    if (shoppingList == null) {
+      return null;
+    }
+
+    return new ShoppingListBasicInfoDTO(shoppingList.getId(), shoppingList.getTitle());
   }
 }
