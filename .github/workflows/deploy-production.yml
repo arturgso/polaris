@@ -1,0 +1,45 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+    steps:
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          hostname: gha-polaris-production
+
+      - name: Verify Tailscale connectivity
+        run: |
+          set -euo pipefail
+          tailscale status
+          tailscale ping --timeout=10s integrity
+
+      - name: Deploy backend service to production
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: integrity
+          username: ${{ secrets.INTEGRITY_USER }}
+          password: ${{ secrets.INTEGRITY_PASSWORD }}
+          script_stop: true
+          timeout: 120s
+          command_timeout: 20m
+          script: |
+            set -euo pipefail
+            cd "/home/${{ secrets.INTEGRITY_USER }}/apps/polaris"
+            docker compose pull polaris-api
+            docker compose up -d --force-recreate --no-deps polaris-api
