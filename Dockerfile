@@ -7,6 +7,8 @@ COPY gradle ./gradle
 RUN ./gradlew --no-daemon dependencies
 
 COPY src ./src
+RUN ./gradlew --no-daemon spotlessApply
+RUN ./gradlew --no-daemon spotlessCheck
 RUN ./gradlew --no-daemon bootJar
 
 FROM eclipse-temurin:25-jre-alpine
