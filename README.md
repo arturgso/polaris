@@ -25,7 +25,7 @@ Este projeto é uma API Spring Boot para organizar:
 
 ### Funcionalidades
 
-- autenticação com login e cadastro;
+- autenticação com login por senha usando o usuário bootstrap;
 - CRUD de pessoas;
 - CRUD de presentes e listas de presentes;
 - CRUD de itens e listas de compras;
@@ -35,7 +35,6 @@ Este projeto é uma API Spring Boot para organizar:
 ### Endpoints principais
 
 - `POST /api/v1/auth/login`
-- `POST /api/v1/auth/signup`
 - `GET /api/v1/persons`
 - `GET /api/v1/gifts`
 - `GET /api/v1/gift-lists`
@@ -55,6 +54,8 @@ O vault protege itens marcados como secretos. O fluxo é:
 2. chamar `POST /api/v1/vault/unlock` com a senha do vault;
 3. usar o token retornado no header `X-Vault-Token` nas requisições do vault.
 
+O login recebe apenas senha e autentica sempre com o usuário definido em `BOOTSTRAP_ADMIN_USERNAME`.
+
 Para alterar ou remover um item secreto diretamente, envie também `X-Vault-Password`; ele só valida a senha e não abre o vault.
 
 ### Configuração local
@@ -73,8 +74,8 @@ Variáveis de ambiente principais:
 | `APP_DB_POPULATE_ENABLED` | popula dados iniciais |
 | `JWT_SECRET` | segredo do JWT |
 | `JWT_EXPIRATION_SECONDS` | expiração do token normal |
-| `BOOTSTRAP_ADMIN_USERNAME` | cria o primeiro admin |
-| `BOOTSTRAP_ADMIN_PASSWORD` | senha do primeiro admin |
+| `BOOTSTRAP_ADMIN_USERNAME` | username do admin em memória |
+| `BOOTSTRAP_ADMIN_PASSWORD` | senha do admin em memória |
 | `VAULT_PASSWORD` | senha para liberar o vault |
 
 ### Executando
@@ -122,7 +123,7 @@ This project is a Spring Boot API for organizing:
 
 ### Features
 
-- login and signup authentication;
+- password-only login authentication using the bootstrap user;
 - people CRUD;
 - gift and gift list CRUD;
 - shopping item and shopping list CRUD;
@@ -132,7 +133,6 @@ This project is a Spring Boot API for organizing:
 ### Main endpoints
 
 - `POST /api/v1/auth/login`
-- `POST /api/v1/auth/signup`
 - `GET /api/v1/persons`
 - `GET /api/v1/gifts`
 - `GET /api/v1/gift-lists`
@@ -152,6 +152,8 @@ The vault protects items marked as secret. The flow is:
 2. call `POST /api/v1/vault/unlock` with the vault password;
 3. send the returned token in the `X-Vault-Token` header for vault requests.
 
+Login accepts only password and always authenticates with the user configured in `BOOTSTRAP_ADMIN_USERNAME`.
+
 To update or delete a secret item directly, also send `X-Vault-Password`; it only validates the password and does not unlock the vault.
 
 ### Local setup
@@ -170,8 +172,8 @@ Main environment variables:
 | `APP_DB_POPULATE_ENABLED` | seeds initial data |
 | `JWT_SECRET` | JWT secret |
 | `JWT_EXPIRATION_SECONDS` | normal token lifetime |
-| `BOOTSTRAP_ADMIN_USERNAME` | creates the first admin |
-| `BOOTSTRAP_ADMIN_PASSWORD` | first admin password |
+| `BOOTSTRAP_ADMIN_USERNAME` | in-memory admin username |
+| `BOOTSTRAP_ADMIN_PASSWORD` | in-memory admin password |
 | `VAULT_PASSWORD` | password that unlocks the vault |
 
 ### Run

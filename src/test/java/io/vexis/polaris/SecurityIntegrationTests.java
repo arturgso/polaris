@@ -49,7 +49,24 @@ class SecurityIntegrationTests {
   }
 
   @Test
-  void shouldReturnUnauthorizedForSignupWithoutToken() throws Exception {
+  @WithMockUser(roles = "ADMIN")
+  void shouldAllowPrivateRouteForAdmin() throws Exception {
+    mockMvc.perform(get("/persons")).andExpect(status().isOk());
+  }
+
+  @Test
+  @WithMockUser(roles = "ADMIN")
+  void shouldNotExposeUserCreationRoutes() throws Exception {
+    mockMvc
+        .perform(
+            post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {"username":"new-admin","password":"secret123"}
+                    """))
+        .andExpect(status().isInternalServerError());
+
     mockMvc
         .perform(
             post("/auth/signup")
@@ -58,13 +75,7 @@ class SecurityIntegrationTests {
                     """
                     {"username":"new-admin","password":"secret123"}
                     """))
-        .andExpect(status().isUnauthorized());
-  }
-
-  @Test
-  @WithMockUser(roles = "ADMIN")
-  void shouldAllowPrivateRouteForAdmin() throws Exception {
-    mockMvc.perform(get("/persons")).andExpect(status().isOk());
+        .andExpect(status().isInternalServerError());
   }
 
   @Test
@@ -80,7 +91,7 @@ class SecurityIntegrationTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                    {"username":"admin","password":"secret123"}
+                    {"password":"secret123"}
                     """))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.token").isString())
@@ -96,7 +107,7 @@ class SecurityIntegrationTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                    {"username":"admin","password":"wrong-password"}
+                    {"password":"wrong-password"}
                     """))
         .andExpect(status().isUnauthorized());
   }

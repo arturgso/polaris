@@ -36,8 +36,8 @@ class GiftsServiceIntegrationTests {
                 "book", "http://example.com", person.id(), "birthday", GiftStatus.COMPRADO));
 
     assertEquals("BIRTHDAY", gift.event());
-    assertEquals(GiftStatus.COMPRADO.getName(), gift.status().name());
-    assertEquals(GiftStatus.COMPRADO.getColor(), gift.status().title());
+    assertEquals(GiftStatus.COMPRADO.name(), gift.status().value());
+    assertEquals(GiftStatus.COMPRADO.getColor(), gift.status().color());
     assertEquals("alice", gift.giftFor());
   }
 
@@ -48,8 +48,8 @@ class GiftsServiceIntegrationTests {
     var gift = giftsService.create(new NewGiftDTO("book", null, person.id(), null, null));
 
     assertEquals("NONE", gift.event());
-    assertEquals(GiftStatus.IDEIA.getName(), gift.status().name());
-    assertEquals(GiftStatus.IDEIA.getColor(), gift.status().title());
+    assertEquals(GiftStatus.IDEIA.name(), gift.status().value());
+    assertEquals(GiftStatus.IDEIA.getColor(), gift.status().color());
   }
 
   @Test

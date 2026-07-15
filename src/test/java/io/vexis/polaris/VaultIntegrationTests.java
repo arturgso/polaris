@@ -206,7 +206,7 @@ class VaultIntegrationTests {
 
     Event event =
         eventRepository.save(
-            Event.builder().tag("birthday").name("Birthday").color("#111827").build());
+            Event.builder().tag("birthday").build());
     GiftStatus giftStatus = GiftStatus.IDEIA;
     GiftList publicGiftList = new GiftList();
     publicGiftList.setTitle("public gift list");
@@ -238,7 +238,7 @@ class VaultIntegrationTests {
 
     ShoppingItemCategory category =
         shoppingItemCategoriesRepository.save(
-            ShoppingItemCategory.builder().tag("tech").name("Tech").color("#0EA5E9").build());
+            ShoppingItemCategory.builder().tag("tech").build());
     ShoppingList publicShoppingList = new ShoppingList();
     publicShoppingList.setTitle("public shopping list");
     publicShoppingList.setInVault(false);
@@ -276,7 +276,7 @@ class VaultIntegrationTests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                         """
-                        {"username":"admin","password":"secret123"}
+                        {"password":"secret123"}
                         """))
             .andExpect(status().isOk())
             .andReturn()
