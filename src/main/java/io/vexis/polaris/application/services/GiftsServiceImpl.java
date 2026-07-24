@@ -15,7 +15,9 @@ import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.NewGiftDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.UpdateGiftDTO;
 import io.vexis.polaris.domain.models.entities.Gift;
+import io.vexis.polaris.domain.models.entities.GiftList;
 import io.vexis.polaris.domain.specs.GiftsSpec;
+import io.vexis.polaris.shared.ListConstants;
 import io.vexis.polaris.shared.ListMapper;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
@@ -42,6 +44,11 @@ public class GiftsServiceImpl implements GiftsService {
 
   @Override
   public GiftDTO create(NewGiftDTO dto) {
+    return create(dto, null);
+  }
+
+  @Override
+  public GiftDTO create(NewGiftDTO dto, String vaultPassword) {
     log.info("Creating gift for personId={}", dto.personId());
     var person = personsService.getEntity(dto.personId());
     var event =
@@ -51,6 +58,11 @@ public class GiftsServiceImpl implements GiftsService {
     var status = dto.status() == null ? GiftStatus.IDEIA : dto.status();
 
     var gift = factory.create(dto.title(), dto.link(), person, event, status);
+    GiftList giftList = resolveGiftList(dto.giftListId(), vaultPassword);
+    if (giftList != null) {
+      gift.setGiftList(giftList);
+      gift.setInVault(giftList.getInVault());
+    }
 
     gift = repository.save(gift);
     log.info("Gift created with id={} for personId={}", gift.getId(), person.getId());
@@ -99,8 +111,12 @@ public class GiftsServiceImpl implements GiftsService {
       gift.setEvent(eventsService.getEntity(dto.event().toUpperCase()));
     }
 
-    if (dto.giftListId() != null) {
-      gift.setGiftList(giftListService.getEntity(dto.giftListId()));
+    if (ListConstants.NO_LIST_ID.equals(dto.giftListId())) {
+      gift.setGiftList(null);
+    } else if (dto.giftListId() != null) {
+      GiftList giftList = resolveGiftList(dto.giftListId(), vaultPassword);
+      gift.setGiftList(giftList);
+      gift.setInVault(giftList.getInVault());
     }
 
     repository.save(gift);
@@ -149,5 +165,17 @@ public class GiftsServiceImpl implements GiftsService {
   @Override
   public List<GiftDTO> listAllInVault() {
     return repository.findAllByInVaultTrue().stream().map(mapper::toDTO).toList();
+  }
+
+  private GiftList resolveGiftList(Long giftListId, String vaultPassword) {
+    if (giftListId == null || ListConstants.NO_LIST_ID.equals(giftListId)) {
+      return null;
+    }
+
+    GiftList giftList = giftListService.getEntity(giftListId);
+    if (Boolean.TRUE.equals(giftList.getInVault())) {
+      vaultPasswordValidator.validate(vaultPassword);
+    }
+    return giftList;
   }
 }

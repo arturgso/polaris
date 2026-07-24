@@ -17,4 +17,6 @@ public interface GiftsRepository extends JpaRepository<Gift, Long>, JpaSpecifica
   BigDecimal getTotalPrice();
 
   List<Gift> findAllByInVaultTrue();
+
+  List<Gift> findAllByGiftListId(Long giftListId);
 }

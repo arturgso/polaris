@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface GiftsService
     extends FilteredCrudService<NewGiftDTO, UpdateGiftDTO, GiftDTO, Gift, Long, GiftFiltersDTO> {
+  GiftDTO create(NewGiftDTO dto, String vaultPassword);
+
   List<GiftDTO> listByPerson(GiftFiltersDTO filtersDTO);
 
   List<GiftDTO> listAllInVault();

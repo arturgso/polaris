@@ -10,4 +10,5 @@ public record NewShoppingItemDTO(
     String link,
     String category,
     @NotNull BigDecimal price,
-    ShoppingItemStatus status) {}
+    ShoppingItemStatus status,
+    Long listId) {}

@@ -66,8 +66,9 @@ public class ShoppingListController {
   @DeleteMapping("{id}")
   public ResponseEntity<Void> delete(
       @PathVariable Long id,
+      @RequestParam(defaultValue = "false") boolean deleteItems,
       @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
-    service.delete(id, vaultPassword);
+    service.delete(id, deleteItems, vaultPassword);
     return ResponseEntity.ok().build();
   }
 }

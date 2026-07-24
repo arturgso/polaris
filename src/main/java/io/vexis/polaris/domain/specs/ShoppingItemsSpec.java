@@ -3,6 +3,7 @@ package io.vexis.polaris.domain.specs;
 import io.vexis.polaris.domain.enums.ShoppingItemStatus;
 import io.vexis.polaris.domain.models.dtos.filters.ShoppingItemFiltersDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
+import io.vexis.polaris.shared.ListConstants;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ShoppingItemsSpec {
@@ -30,9 +31,22 @@ public class ShoppingItemsSpec {
     return (root, query, cb) -> cb.equal(root.get("inVault"), inVault != null ? inVault : false);
   }
 
+  private static Specification<ShoppingItem> byListId(Long listId) {
+    return (root, query, cb) -> {
+      if (listId == null) {
+        return null;
+      }
+      if (ListConstants.NO_LIST_ID.equals(listId)) {
+        return cb.isNull(root.get("shoppingList"));
+      }
+      return cb.equal(root.get("shoppingList").get("id"), listId);
+    };
+  }
+
   public static Specification<ShoppingItem> byFilters(ShoppingItemFiltersDTO filters) {
     return Specification.where(byTitle(filters.title()).and(byStatus(filters.status())))
         .and(byTag(filters.tag()))
+        .and(byListId(filters.listId()))
         .and(byInVault(filters.inVault()));
   }
 }

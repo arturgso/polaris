@@ -12,4 +12,6 @@ public interface GiftListService
   GiftListDTO getById(Long id);
 
   void moveToVault(Long id);
+
+  void delete(Long id, boolean deleteItems, String vaultPassword);
 }

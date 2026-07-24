@@ -2,9 +2,11 @@ package io.vexis.polaris.domain.interfaces.mappers;
 
 import io.vexis.polaris.domain.enums.GiftStatus;
 import io.vexis.polaris.domain.models.dtos.StatusDTO;
+import io.vexis.polaris.domain.models.dtos.giftlist.GiftListBasicInfoDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.GiftDTO;
 import io.vexis.polaris.domain.models.dtos.gifts.UpdateGiftDTO;
 import io.vexis.polaris.domain.models.entities.Gift;
+import io.vexis.polaris.domain.models.entities.GiftList;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -33,5 +35,13 @@ public interface GiftsMapper {
     }
 
     return new StatusDTO(status.name(), status.getColor());
+  }
+
+  default GiftListBasicInfoDTO map(GiftList giftList) {
+    if (giftList == null) {
+      return null;
+    }
+
+    return new GiftListBasicInfoDTO(giftList.getId(), giftList.getTitle());
   }
 }

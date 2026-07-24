@@ -8,4 +8,5 @@ public record NewGiftDTO(
     String link,
     @NotNull Long personId,
     String event,
-    io.vexis.polaris.domain.enums.GiftStatus status) {}
+    io.vexis.polaris.domain.enums.GiftStatus status,
+    Long giftListId) {}

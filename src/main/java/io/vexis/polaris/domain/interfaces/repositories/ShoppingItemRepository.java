@@ -22,6 +22,8 @@ public interface ShoppingItemRepository
 
   List<ShoppingItem> findAllByInVaultTrue();
 
+  List<ShoppingItem> findAllByShoppingListId(Long shoppingListId);
+
   @Query(
       """
     select coalesce(sum(itm.price), 0)

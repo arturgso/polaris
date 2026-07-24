@@ -103,15 +103,29 @@ public class ShoppingListServiceImpl implements ShoppingListService {
   @Transactional
   @Override
   public void delete(Long id, String vaultPassword) {
+    delete(id, false, vaultPassword);
+  }
+
+  @Transactional
+  @Override
+  public void delete(Long id, boolean deleteItems, String vaultPassword) {
     log.info("Deleting shopping list id={}", id);
-    if (!repository.existsById(id)) {
-      throw new ShoppingListNotFoundException();
-    }
-    var shoppingList = EntityUtils.findOrThrow(repository, id);
-    if (Boolean.TRUE.equals(shoppingList.getInVault())) {
+    var shoppingList = getEntity(id);
+    var items = shoppingItemRepository.findAllByShoppingListId(id);
+    boolean containsVaultItems =
+        items.stream().anyMatch(item -> Boolean.TRUE.equals(item.getInVault()));
+    if (Boolean.TRUE.equals(shoppingList.getInVault()) || containsVaultItems) {
       vaultPasswordValidator.validate(vaultPassword);
     }
-    repository.deleteById(id);
+
+    if (deleteItems) {
+      shoppingItemRepository.deleteAll(items);
+    } else {
+      items.forEach(item -> item.setShoppingList(null));
+      shoppingItemRepository.saveAll(items);
+    }
+
+    repository.delete(shoppingList);
     log.info("Shopping list deleted id={}", id);
   }
 
@@ -125,7 +139,9 @@ public class ShoppingListServiceImpl implements ShoppingListService {
   @Override
   public List<ShoppingListBasicInfoDTO> listBasicInfo() {
     return repository.findAll().stream()
-        .map(shoppingList -> new ShoppingListBasicInfoDTO(shoppingList.getId(), shoppingList.getTitle()))
+        .map(
+            shoppingList ->
+                new ShoppingListBasicInfoDTO(shoppingList.getId(), shoppingList.getTitle()))
         .toList();
   }
 }

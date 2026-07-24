@@ -29,17 +29,20 @@ public class ShoppingItemsController {
   private final ShoppingItemService service;
 
   @PostMapping
-  public ResponseEntity<ShoppingItemDTO> create(@RequestBody @Valid NewShoppingItemDTO dto) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
+  public ResponseEntity<ShoppingItemDTO> create(
+      @RequestBody @Valid NewShoppingItemDTO dto,
+      @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto, vaultPassword));
   }
 
   @GetMapping
   public ResponseEntity<List<ShoppingItemDTO>> list(
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String tag,
-      @RequestParam(required = false) String title) {
+      @RequestParam(required = false) String title,
+      @RequestParam(required = false) Long listId) {
     return ResponseEntity.ok(
-        service.list(new ShoppingItemFiltersDTO(status, tag, title, Boolean.FALSE)));
+        service.list(new ShoppingItemFiltersDTO(status, tag, title, listId, Boolean.FALSE)));
   }
 
   @PatchMapping("{id}")

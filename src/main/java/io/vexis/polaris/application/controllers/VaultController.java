@@ -34,11 +34,12 @@ public class VaultController {
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String event,
       @RequestParam(required = false) String title,
-      @RequestParam(required = false) String link) {
+      @RequestParam(required = false) String link,
+      @RequestParam(required = false) Long giftListId) {
     return ResponseEntity.ok()
         .body(
             vaultService.listGifts(
-                new GiftFiltersDTO(null, status, event, title, link, Boolean.TRUE)));
+                new GiftFiltersDTO(null, status, event, title, link, giftListId, Boolean.TRUE)));
   }
 
   @GetMapping("/gift-lists")
@@ -52,11 +53,12 @@ public class VaultController {
   public ResponseEntity<List<ShoppingItemDTO>> listShoppingItems(
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String tag,
-      @RequestParam(required = false) String title) {
+      @RequestParam(required = false) String title,
+      @RequestParam(required = false) Long listId) {
     return ResponseEntity.ok()
         .body(
             vaultService.listShoppingItems(
-                new ShoppingItemFiltersDTO(status, tag, title, Boolean.TRUE)));
+                new ShoppingItemFiltersDTO(status, tag, title, listId, Boolean.TRUE)));
   }
 
   @GetMapping("/shopping-lists")

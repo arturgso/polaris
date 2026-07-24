@@ -16,6 +16,8 @@ public interface ShoppingItemService
         ShoppingItem,
         Long,
         ShoppingItemFiltersDTO> {
+  ShoppingItemDTO create(NewShoppingItemDTO dto, String vaultPassword);
+
   List<ShoppingItemDTO> listRecent();
 
   List<ShoppingItemDTO> listAllInVault();

@@ -37,7 +37,7 @@ class VaultControllerTests {
     when(vaultService.listGifts(any())).thenReturn(List.of());
 
     ResponseEntity<List<GiftDTO>> response =
-        controller.listGifts("idea", "birthday", "book", "link");
+        controller.listGifts("idea", "birthday", "book", "link", 7L);
 
     assertThat(response.getBody()).isEmpty();
 
@@ -48,6 +48,7 @@ class VaultControllerTests {
     assertThat(captor.getValue().event()).isEqualTo("birthday");
     assertThat(captor.getValue().title()).isEqualTo("book");
     assertThat(captor.getValue().link()).isEqualTo("link");
+    assertThat(captor.getValue().giftListId()).isEqualTo(7L);
     assertThat(captor.getValue().inVault()).isTrue();
   }
 
@@ -76,7 +77,7 @@ class VaultControllerTests {
   void shouldForwardVaultShoppingItemFiltersWithVaultFlag() {
     when(vaultService.listShoppingItems(any())).thenReturn(List.of());
 
-    controller.listShoppingItems("planned", "tech", "mouse");
+    controller.listShoppingItems("planned", "tech", "mouse", 8L);
 
     ArgumentCaptor<ShoppingItemFiltersDTO> captor =
         ArgumentCaptor.forClass(ShoppingItemFiltersDTO.class);
@@ -84,6 +85,7 @@ class VaultControllerTests {
     assertThat(captor.getValue().status()).isEqualTo("planned");
     assertThat(captor.getValue().tag()).isEqualTo("tech");
     assertThat(captor.getValue().title()).isEqualTo("mouse");
+    assertThat(captor.getValue().listId()).isEqualTo(8L);
     assertThat(captor.getValue().inVault()).isTrue();
   }
 

@@ -102,7 +102,7 @@ class VaultServiceImplTests {
   void shouldDelegateVaultListOperationsToUnderlyingServices() {
     GiftListDTO giftListDTO = new GiftListDTO();
     ShoppingListDTO shoppingListDTO = new ShoppingListDTO();
-    GiftDTO giftDTO = new GiftDTO(null, null, null, null, null, null, null, null);
+    GiftDTO giftDTO = new GiftDTO(null, null, null, null, null, null, null, null, null);
     ShoppingItemDTO shoppingItemDTO =
         new ShoppingItemDTO(null, null, null, null, null, null, null, null, null);
 
@@ -112,9 +112,9 @@ class VaultServiceImplTests {
         .thenReturn(List.of(shoppingListDTO));
     when(giftsService.list(
             new io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO(
-                null, "status", "event", "title", "link", true)))
+                null, "status", "event", "title", "link", null, true)))
         .thenReturn(List.of(giftDTO));
-    when(shoppingItemService.list(new ShoppingItemFiltersDTO("status", "tag", "title", true)))
+    when(shoppingItemService.list(new ShoppingItemFiltersDTO("status", "tag", "title", null, true)))
         .thenReturn(List.of(shoppingItemDTO));
 
     assertThat(vaultService.listGiftLists(new ListEntityFiltersDTO("title", true)))
@@ -124,11 +124,11 @@ class VaultServiceImplTests {
     assertThat(
             vaultService.listGifts(
                 new io.vexis.polaris.domain.models.dtos.filters.GiftFiltersDTO(
-                    null, "status", "event", "title", "link", true)))
+                    null, "status", "event", "title", "link", null, true)))
         .containsExactly(giftDTO);
     assertThat(
             vaultService.listShoppingItems(
-                new ShoppingItemFiltersDTO("status", "tag", "title", true)))
+                new ShoppingItemFiltersDTO("status", "tag", "title", null, true)))
         .containsExactly(shoppingItemDTO);
   }
 }

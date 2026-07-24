@@ -13,7 +13,9 @@ import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.NewShopping
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.ShoppingItemDTO;
 import io.vexis.polaris.domain.models.dtos.shoppinglist.shoppingitem.UpdateShoppingItemDTO;
 import io.vexis.polaris.domain.models.entities.ShoppingItem;
+import io.vexis.polaris.domain.models.entities.ShoppingList;
 import io.vexis.polaris.domain.specs.ShoppingItemsSpec;
+import io.vexis.polaris.shared.ListConstants;
 import io.vexis.polaris.shared.ListMapper;
 import io.vexis.polaris.shared.TextUtils;
 import jakarta.transaction.Transactional;
@@ -38,9 +40,19 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
 
   @Override
   public ShoppingItemDTO create(NewShoppingItemDTO dto) {
+    return create(dto, null);
+  }
+
+  @Override
+  public ShoppingItemDTO create(NewShoppingItemDTO dto, String vaultPassword) {
     log.info(
         "Creating shopping item with categoryId={} and status={}", dto.category(), dto.status());
     var item = factory.create(dto.title(), dto.link(), dto.category(), dto.price(), dto.status());
+    ShoppingList shoppingList = resolveShoppingList(dto.listId(), vaultPassword);
+    if (shoppingList != null) {
+      item.setShoppingList(shoppingList);
+      item.setInVault(shoppingList.getInVault());
+    }
 
     item = repository.save(item);
     log.info("Shopping item created with id={}", item.getId());
@@ -110,8 +122,12 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
       item.setCategory(categoriesService.getEntity(dto.category()));
     }
 
-    if (dto.listId() != null) {
-      item.setShoppingList(shoppingListService.getEntity(dto.listId()));
+    if (ListConstants.NO_LIST_ID.equals(dto.listId())) {
+      item.setShoppingList(null);
+    } else if (dto.listId() != null) {
+      ShoppingList shoppingList = resolveShoppingList(dto.listId(), vaultPassword);
+      item.setShoppingList(shoppingList);
+      item.setInVault(shoppingList.getInVault());
     }
 
     repository.save(item);
@@ -154,5 +170,17 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
   @Override
   public List<ShoppingItemDTO> listAllInVault() {
     return repository.findAllByInVaultTrue().stream().map(mapper::toDTO).toList();
+  }
+
+  private ShoppingList resolveShoppingList(Long listId, String vaultPassword) {
+    if (listId == null || ListConstants.NO_LIST_ID.equals(listId)) {
+      return null;
+    }
+
+    ShoppingList shoppingList = shoppingListService.getEntity(listId);
+    if (Boolean.TRUE.equals(shoppingList.getInVault())) {
+      vaultPasswordValidator.validate(vaultPassword);
+    }
+    return shoppingList;
   }
 }

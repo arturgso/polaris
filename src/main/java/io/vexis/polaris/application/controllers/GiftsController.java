@@ -19,8 +19,10 @@ public class GiftsController {
   private final GiftsService service;
 
   @PostMapping
-  public ResponseEntity<GiftDTO> create(@RequestBody @Valid NewGiftDTO dto) {
-    return ResponseEntity.status(201).body(service.create(dto));
+  public ResponseEntity<GiftDTO> create(
+      @RequestBody @Valid NewGiftDTO dto,
+      @RequestHeader(value = "X-Vault-Password", required = false) String vaultPassword) {
+    return ResponseEntity.status(201).body(service.create(dto, vaultPassword));
   }
 
   @GetMapping
@@ -28,9 +30,10 @@ public class GiftsController {
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String event,
       @RequestParam(required = false) String title,
-      @RequestParam(required = false) String link) {
+      @RequestParam(required = false) String link,
+      @RequestParam(required = false) Long giftListId) {
     return ResponseEntity.ok(
-        service.list(new GiftFiltersDTO(null, status, event, title, link, null)));
+        service.list(new GiftFiltersDTO(null, status, event, title, link, giftListId, null)));
   }
 
   @GetMapping("by-person")
@@ -39,9 +42,11 @@ public class GiftsController {
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String event,
       @RequestParam(required = false) String title,
-      @RequestParam(required = false) String link) {
+      @RequestParam(required = false) String link,
+      @RequestParam(required = false) Long giftListId) {
     return ResponseEntity.ok(
-        service.listByPerson(new GiftFiltersDTO(personId, status, event, title, link, null)));
+        service.listByPerson(
+            new GiftFiltersDTO(personId, status, event, title, link, giftListId, null)));
   }
 
   @PatchMapping("{id}")

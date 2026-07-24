@@ -33,7 +33,7 @@ class GiftsServiceIntegrationTests {
     var gift =
         giftsService.create(
             new NewGiftDTO(
-                "book", "http://example.com", person.id(), "birthday", GiftStatus.COMPRADO));
+                "book", "http://example.com", person.id(), "birthday", GiftStatus.COMPRADO, null));
 
     assertEquals("BIRTHDAY", gift.event());
     assertEquals(GiftStatus.COMPRADO.name(), gift.status().value());
@@ -45,7 +45,7 @@ class GiftsServiceIntegrationTests {
   void shouldCreateGiftUsingPersistedDefaultsWhenEventAndStatusAreNull() {
     var person = personsService.create(new NewPersonDTO("alice", (short) 10, (short) 1));
 
-    var gift = giftsService.create(new NewGiftDTO("book", null, person.id(), null, null));
+    var gift = giftsService.create(new NewGiftDTO("book", null, person.id(), null, null, null));
 
     assertEquals("NONE", gift.event());
     assertEquals(GiftStatus.IDEIA.name(), gift.status().value());
@@ -55,7 +55,7 @@ class GiftsServiceIntegrationTests {
   @Test
   void shouldUpdateGiftEventAndStatusByName() {
     var person = personsService.create(new NewPersonDTO("alice", (short) 10, (short) 1));
-    var created = giftsService.create(new NewGiftDTO("book", null, person.id(), null, null));
+    var created = giftsService.create(new NewGiftDTO("book", null, person.id(), null, null, null));
 
     giftsService.update(
         new UpdateGiftDTO(null, null, null, null, "christmas", GiftStatus.ENTREGUE), created.id());
@@ -74,6 +74,7 @@ class GiftsServiceIntegrationTests {
     assertThrows(
         RuntimeException.class,
         () ->
-            giftsService.create(new NewGiftDTO("book", null, person.id(), "unknown-event", null)));
+            giftsService.create(
+                new NewGiftDTO("book", null, person.id(), "unknown-event", null, null)));
   }
 }

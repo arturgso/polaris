@@ -109,15 +109,29 @@ public class GiftListServiceImpl implements GiftListService {
   @Transactional
   @Override
   public void delete(Long id, String vaultPassword) {
+    delete(id, false, vaultPassword);
+  }
+
+  @Transactional
+  @Override
+  public void delete(Long id, boolean deleteItems, String vaultPassword) {
     log.info("Deleting gift list id={}", id);
-    if (!repository.existsById(id)) {
-      throw new GiftListNotFoundException();
-    }
-    var giftList = EntityUtils.findOrThrow(repository, id);
-    if (Boolean.TRUE.equals(giftList.getInVault())) {
+    var giftList = getEntity(id);
+    var gifts = giftsRepository.findAllByGiftListId(id);
+    boolean containsVaultGifts =
+        gifts.stream().anyMatch(gift -> Boolean.TRUE.equals(gift.getInVault()));
+    if (Boolean.TRUE.equals(giftList.getInVault()) || containsVaultGifts) {
       vaultPasswordValidator.validate(vaultPassword);
     }
-    repository.deleteById(id);
+
+    if (deleteItems) {
+      giftsRepository.deleteAll(gifts);
+    } else {
+      gifts.forEach(gift -> gift.setGiftList(null));
+      giftsRepository.saveAll(gifts);
+    }
+
+    repository.delete(giftList);
     log.info("Gift list deleted id={}", id);
   }
 }
